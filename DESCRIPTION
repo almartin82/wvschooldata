@@ -1,0 +1,36 @@
+Package: wvschooldata
+Title: Fetch and Process West Virginia School Data
+Version: 0.2.0
+Authors@R:
+    person("Al", "Martin", , "almartin@example.com", role = c("aut", "cre"))
+Description: Downloads and processes school enrollment data from the West Virginia
+    Department of Education (WVDE). Provides functions for fetching Fall
+    Membership (2nd month) enrollment data from WVDE School Finance Data PDFs
+    and transforming it into tidy format for analysis. Supports data from
+    2014-2025 covering all 55 West Virginia county school districts.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.0)
+Imports:
+    dplyr,
+    readr,
+    purrr,
+    stringr,
+    tidyr,
+    rlang,
+    httr,
+    pdftools,
+    rappdirs
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    ggplot2,
+    scales
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+URL: https://github.com/almartin82/wvschooldata
+BugReports: https://github.com/almartin82/wvschooldata/issues
