@@ -90,35 +90,37 @@ get_wvde_pdf_url <- function(end_year, type = "FTE") {
   # These are verified URLs from WVDE
   # Note: FTE PDFs for 2010-2013 are no longer available on WVDE website
   # Only 2013 headcount is available from pre-2014 years
+  # URLs verified as of January 2026
+  # WVDE migrated from wp-content/uploads to sites/default/files
   url_map <- list(
     "FTE" = list(
       "25" = "https://wvde.us/sites/default/files/2024/12/FTE-Enrollment-2nd-Mo-25.pdf",
-      "24" = "https://wvde.us/wp-content/uploads/2024/01/FTE-Enrollment-2nd-Mo-24.pdf",
+      "24" = "https://wvde.us/sites/default/files/2024/01/FTE-Enrollment-2nd-Mo-24.pdf",
       "23" = "https://wvde.us/sites/default/files/2023/12/FTE-Enrollment-2nd-Mo-23.pdf",
-      "22" = "https://wvde.us/sites/default/files/2023/12/FTE-Enrollment-2nd-Mo-22.pdf",
+      "22" = "https://wvde.us/sites/default/files/2022/12/FTE-Enrollment-2nd-Mo-22.pdf",
       "21" = "https://wvde.us/sites/default/files/2022/01/FTE-Enrollment-2nd-Mo-21.pdf",
-      "20" = "https://wvde.us/wp-content/uploads/2019/12/FTE-Enrollment-2nd-Mo-20.pdf",
+      "20" = "https://wvde.us/sites/default/files/2019/12/FTE-Enrollment-2nd-Mo-20.pdf",
       "19" = "https://wvde.us/sites/default/files/2019/08/FTE-Enrollment-2nd-Mo-19.pdf",
       "18" = "https://wvde.us/sites/default/files/2018/03/FTE-Enrollment-2nd-Mo-18.pdf",
-      "17" = "https://wvde.us/wp-content/uploads/2017/10/FTE-Enrollment-2nd-Mo-17.pdf",
-      "16" = "https://wvde.us/wp-content/uploads/2017/10/FTE-Enrollment-2nd-Mo-16.pdf",
+      "17" = "https://wvde.us/sites/default/files/2017/10/FTE-Enrollment-2nd-Mo-17.pdf",
+      "16" = "https://wvde.us/sites/default/files/2017/10/FTE-Enrollment-2nd-Mo-16.pdf",
       "15" = "https://wvde.us/sites/default/files/2017/10/FTE-Enrollment-2nd-Mo-15.pdf",
-      "14" = "https://wvde.us/wp-content/uploads/2017/10/FTE-Enrollment-2nd-Mo-14.pdf"
+      "14" = "https://wvde.us/sites/default/files/2017/10/FTE-Enrollment-2nd-Mo-14.pdf"
       # Note: FTE PDFs for years 10-13 are no longer available on WVDE website
     ),
     "Headcount" = list(
       "25" = "https://wvde.us/sites/default/files/2024/12/Headcount-Enroll-2nd-Mo-25.pdf",
-      "24" = "https://wvde.us/wp-content/uploads/2024/01/Headcount-Enroll-2nd-Mo-24.pdf",
+      "24" = "https://wvde.us/sites/default/files/2024/01/Headcount-Enroll-2nd-Mo-24.pdf",
       "23" = "https://wvde.us/sites/default/files/2023/12/Headcount-Enroll-2nd-Mo-23.pdf",
       "22" = "https://wvde.us/sites/default/files/2022/12/Headcount-Enroll-2nd-Mo-22.pdf",
       "21" = "https://wvde.us/sites/default/files/2022/01/Headcount-Enroll-2nd-Mo-21.pdf",
-      "20" = "https://wvde.us/wp-content/uploads/2019/12/Headcount-Enroll-2nd-Mo-20.pdf",
+      "20" = "https://wvde.us/sites/default/files/2019/12/Headcount-Enroll-2nd-Mo-20.pdf",
       "19" = "https://wvde.us/sites/default/files/2019/08/Headcount-Enroll-2nd-Mo-19.pdf",
       "18" = "https://wvde.us/sites/default/files/2018/03/Headcount-Enroll-2nd-Mo-18.pdf",
-      "17" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-17.pdf",
-      "16" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-16.pdf",
-      "15" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-15.pdf",
-      "14" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-14.pdf",
+      "17" = "https://wvde.us/sites/default/files/2017/10/Headcount-Enroll-2nd-Mo-17.pdf",
+      "16" = "https://wvde.us/sites/default/files/2017/10/Headcount-Enroll-2nd-Mo-16.pdf",
+      "15" = "https://wvde.us/sites/default/files/2017/10/Headcount-Enroll-2nd-Mo-15.pdf",
+      "14" = "https://wvde.us/sites/default/files/2017/10/Headcount-Enroll-2nd-Mo-14.pdf",
       "13" = "https://wvde.us/sites/default/files/2017/10/Headcount-Enroll-2nd-Mo-13.pdf"
       # Note: Headcount PDFs for years 10-12 are no longer available on WVDE website
     )
