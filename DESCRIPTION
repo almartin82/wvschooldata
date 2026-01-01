@@ -1,13 +1,10 @@
 Package: wvschooldata
-Title: Fetch and Process West Virginia School Data
+Title: West Virginia School Data
 Version: 0.2.0
 Authors@R:
     person("Al", "Martin", , "almartin@example.com", role = c("aut", "cre"))
-Description: Downloads and processes school enrollment data from the West Virginia
-    Department of Education (WVDE). Provides functions for fetching Fall
-    Membership (2nd month) enrollment data from WVDE School Finance Data PDFs
-    and transforming it into tidy format for analysis. Supports data from
-    2013-2025 covering all 55 West Virginia county school districts.
+Description: A simple, consistent interface for accessing West Virginia
+    school data in R.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
