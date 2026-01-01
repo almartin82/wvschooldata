@@ -224,6 +224,18 @@ fetch_enr_multi(seq(1990, 2024, by = 5)) |>
 
 ------------------------------------------------------------------------
 
+## Enrollment Visualizations
+
+![West Virginia statewide enrollment
+trends](https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/statewide-chart-1.png)
+
+![Top West Virginia
+districts](https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/top-districts-chart-1.png)
+
+See the [full
+vignette](https://almartin82.github.io/wvschooldata/articles/enrollment_hooks.html)
+for more insights.
+
 ## Installation
 
 ``` r
@@ -289,17 +301,12 @@ returns tidy (long) format by default:
 
 **38 years total** across ~700 schools and 55 county school districts.
 
-## Part of the 50 State Schooldata Family
+## Part of the State Schooldata Project
 
-This package is part of a family of R packages providing school
-enrollment data for all 50 US states. Each package fetches data directly
-from the state’s Department of Education.
+A simple, consistent interface for accessing state-published school data
+in Python and R.
 
-**See also:**
-[njschooldata](https://github.com/almartin82/njschooldata) - The
-original state schooldata package for New Jersey.
-
-**All packages:**
+**All 50 state packages:**
 [github.com/almartin82](https://github.com/almartin82?tab=repositories&q=schooldata)
 
 ## Author
@@ -338,3 +345,9 @@ MIT
 - [`clear_cache()`](https://almartin82.github.io/wvschooldata/reference/clear_cache.md)
   : Clear the wvschooldata cache
 
+# Articles
+
+### All vignettes
+
+- [10 Insights from West Virginia School Enrollment
+  Data](https://almartin82.github.io/wvschooldata/articles/enrollment_hooks.md):
