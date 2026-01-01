@@ -6,7 +6,7 @@
 
 **[Documentation](https://almartin82.github.io/wvschooldata/)** | [GitHub](https://github.com/almartin82/wvschooldata)
 
-An R package for accessing West Virginia school enrollment data from the West Virginia Department of Education (WVDE). **38 years of data** (1987-2024) for every school, county, and the state via the Urban Institute's Education Data Portal.
+An R package for accessing West Virginia school enrollment data from the West Virginia Department of Education (WVDE). **12 years of data** (2014-2025) for every county and the state.
 
 ## What can you find with wvschooldata?
 
@@ -247,8 +247,8 @@ enr |>
 | Column | Description |
 |--------|-------------|
 | `end_year` | School year end (e.g., 2024 for 2023-24) |
-| `district_id` | NCES LEA ID (7 characters) |
-| `campus_id` | NCES School ID (12 characters) |
+| `district_id` | LEA ID (7 characters) |
+| `campus_id` | School ID (12 characters) |
 | `type` | "State", "District", or "Campus" |
 | `district_name`, `campus_name` | Names |
 | `county` | County name |

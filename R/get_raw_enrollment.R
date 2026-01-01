@@ -37,9 +37,18 @@ get_raw_enr <- function(end_year) {
 
   message(paste("Downloading West Virginia enrollment data for", end_year, "..."))
 
-  # Download FTE enrollment PDF (has grade breakdowns)
-  message("  Downloading FTE enrollment data...")
-  fte_data <- download_fte_enrollment(end_year)
+  # Years with FTE data available (2014+)
+  # Note: FTE PDFs for 2010-2013 are no longer available on WVDE website
+  fte_available_years <- 2014L:2025L
+
+  # Download FTE enrollment PDF (has grade breakdowns) if available
+  if (end_year %in% fte_available_years) {
+    message("  Downloading FTE enrollment data...")
+    fte_data <- download_fte_enrollment(end_year)
+  } else {
+    message("  FTE enrollment data not available for this year (headcount only)")
+    fte_data <- create_empty_fte_df()
+  }
 
   # Download headcount enrollment PDF (has total counts)
   message("  Downloading headcount enrollment data...")
@@ -77,7 +86,10 @@ get_wvde_pdf_url <- function(end_year, type = "FTE") {
   }
 
   # Known URL mappings based on research
+
   # These are verified URLs from WVDE
+  # Note: FTE PDFs for 2010-2013 are no longer available on WVDE website
+  # Only 2013 headcount is available from pre-2014 years
   url_map <- list(
     "FTE" = list(
       "25" = "https://wvde.us/sites/default/files/2024/12/FTE-Enrollment-2nd-Mo-25.pdf",
@@ -92,6 +104,7 @@ get_wvde_pdf_url <- function(end_year, type = "FTE") {
       "16" = "https://wvde.us/wp-content/uploads/2017/10/FTE-Enrollment-2nd-Mo-16.pdf",
       "15" = "https://wvde.us/sites/default/files/2017/10/FTE-Enrollment-2nd-Mo-15.pdf",
       "14" = "https://wvde.us/wp-content/uploads/2017/10/FTE-Enrollment-2nd-Mo-14.pdf"
+      # Note: FTE PDFs for years 10-13 are no longer available on WVDE website
     ),
     "Headcount" = list(
       "25" = "https://wvde.us/sites/default/files/2024/12/Headcount-Enroll-2nd-Mo-25.pdf",
@@ -105,7 +118,9 @@ get_wvde_pdf_url <- function(end_year, type = "FTE") {
       "17" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-17.pdf",
       "16" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-16.pdf",
       "15" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-15.pdf",
-      "14" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-14.pdf"
+      "14" = "https://wvde.us/wp-content/uploads/2017/10/Headcount-Enroll-2nd-Mo-14.pdf",
+      "13" = "https://wvde.us/sites/default/files/2017/10/Headcount-Enroll-2nd-Mo-13.pdf"
+      # Note: Headcount PDFs for years 10-12 are no longer available on WVDE website
     )
   )
 

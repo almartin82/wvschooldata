@@ -6,19 +6,7 @@
 #
 # ==============================================================================
 
-#' Pipe operator
-#'
-#' See \code{dplyr::\link[dplyr:reexports]{\%>\%}} for details.
-#'
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
-#' @export
-#' @importFrom dplyr %>%
-#' @usage lhs \%>\% rhs
-#' @param lhs A value or the magrittr placeholder.
-#' @param rhs A function call using the magrittr semantics.
-#' @return The result of calling `rhs(lhs)`.
+#' @importFrom rlang .data
 NULL
 
 
@@ -31,19 +19,27 @@ NULL
 #' annually. Historical data availability depends on which years
 #' WVDE has made available on their website.
 #'
-#' @return Integer vector of available years (2014-2025)
+#' Note: For 2013, only headcount enrollment data is available (no grade-level
+#' FTE data). The FTE PDFs for 2010-2013 are no longer available on the
+#' WVDE website.
+#'
+#' @return Integer vector of available years (2013-2025)
 #' @export
 #' @examples
 #' get_available_years()
 get_available_years <- function() {
-  # WVDE School Finance Data PDFs are available from 2014-2025
-  # based on research of https://wvde.us/about-us/finance/school-finance/school-finance-data/
+  # WVDE School Finance Data PDFs availability:
+  # - 2014-2025: Full data (FTE by grade + headcount)
+  # - 2013: Headcount only (FTE PDF no longer available)
+  # - 2010-2012: No longer available on WVDE website
+  #
+  # Based on research of https://wvde.us/about-us/finance/school-finance/school-finance-data/
   #
   # Years represent the end of school year:
   # - 2025 = 2024-25 school year
   # - 2024 = 2023-24 school year
   # etc.
-  2014L:2025L
+  2013L:2025L
 }
 
 

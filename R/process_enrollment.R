@@ -87,7 +87,7 @@ process_district_enr <- function(fte_data, headcount_data, end_year) {
   }
 
   # Standardize column names and add required fields
-  result <- result %>%
+  result <- result |>
     dplyr::mutate(
       end_year = end_year,
       type = "District",
@@ -107,7 +107,7 @@ process_district_enr <- function(fte_data, headcount_data, end_year) {
   }
 
   # Select and order columns
-  result <- result %>%
+  result <- result |>
     dplyr::select(
       end_year, type,
       district_id, campus_id,
