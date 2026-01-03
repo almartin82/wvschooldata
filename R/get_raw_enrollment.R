@@ -313,7 +313,15 @@ parse_fte_pdf <- function(pdf_path, end_year) {
   # Read PDF text
   text <- pdftools::pdf_text(pdf_path)
 
-  # Parse all pages
+  # 2024+ PDFs have a new format with data split across pages 3-4
+  # Check if this is the new format by looking for "Early Childhood" header
+  is_new_format <- any(grepl("Early\\s+Childhood", text, ignore.case = TRUE))
+
+  if (is_new_format && end_year >= 2024) {
+    return(parse_fte_pdf_new_format(text, end_year))
+  }
+
+  # Legacy format parsing for older years
   all_data <- list()
 
   for (page_num in seq_along(text)) {
@@ -353,6 +361,160 @@ parse_fte_pdf <- function(pdf_path, end_year) {
   df <- df[!grepl("^(STATE|TOTAL|State Total)", df$county_name, ignore.case = TRUE), ]
 
   df
+}
+
+
+#' Parse FTE enrollment PDF in new 2024+ format
+#'
+#' The 2024+ PDFs have a different structure:
+#' - Page 3: Early Childhood, Kindergarten, First through Fifth (7 grade columns)
+#' - Page 4: Sixth through Twelfth, Total (8 columns)
+#' Each district appears on both pages and data must be merged.
+#'
+#' @param text Character vector of PDF text (one element per page)
+#' @param end_year School year for context
+#' @return Data frame with enrollment by county and grade
+#' @keywords internal
+parse_fte_pdf_new_format <- function(text, end_year) {
+
+  # West Virginia counties (for validation)
+  wv_counties <- c(
+    "BARBOUR", "BERKELEY", "BOONE", "BRAXTON", "BROOKE",
+    "CABELL", "CALHOUN", "CLAY", "DODDRIDGE", "FAYETTE",
+    "GILMER", "GRANT", "GREENBRIER", "HAMPSHIRE", "HANCOCK",
+    "HARDY", "HARRISON", "JACKSON", "JEFFERSON", "KANAWHA",
+    "LEWIS", "LINCOLN", "LOGAN", "MCDOWELL", "MARION",
+    "MARSHALL", "MASON", "MERCER", "MINERAL", "MINGO",
+    "MONONGALIA", "MONROE", "MORGAN", "NICHOLAS", "OHIO",
+    "PENDLETON", "PLEASANTS", "POCAHONTAS", "PRESTON", "PUTNAM",
+    "RALEIGH", "RANDOLPH", "RITCHIE", "ROANE", "SUMMERS",
+    "TAYLOR", "TUCKER", "TYLER", "UPSHUR", "WAYNE",
+    "WEBSTER", "WETZEL", "WIRT", "WOOD", "WYOMING"
+  )
+
+  # Find the pages with grade-level data
+  # Page 3 has "Early Childhood" through "Fifth"
+  # Page 4 has "Sixth" through "Twelfth" and "Total"
+
+  page3_data <- list()
+  page4_data <- list()
+
+  for (page_num in seq_along(text)) {
+    page_text <- text[page_num]
+    lines <- strsplit(page_text, "\n")[[1]]
+    lines <- trimws(lines)
+
+    # Check if this is page 3 (EC through 5th) or page 4 (6th through 12th)
+    # Note: Headers can be split across lines, so check for key words
+    # Page 3 has "Childhood" and "garten" (from "Kindergarten") in header
+    # Page 4 has "Sixth" and "Seventh" in header
+    is_page3_type <- any(grepl("Childhood", lines, ignore.case = TRUE)) &&
+                     any(grepl("(garten|First|Second)", lines, ignore.case = TRUE))
+    is_page4_type <- any(grepl("Sixth", lines, ignore.case = TRUE)) &&
+                     any(grepl("Seventh", lines, ignore.case = TRUE))
+
+    for (line in lines) {
+      # Skip header/title lines
+      if (grepl("^(WEST VIRGINIA|FULL-TIME|CERTIFIED|\\d{4}-\\d{2}|District\\s+Early|District\\s+Sixth|^\\s*$)", line, ignore.case = TRUE)) {
+        next
+      }
+
+      # Try to extract county name from beginning of line
+      # Counties have data that starts with the county name followed by numbers
+      county_match <- regmatches(line, regexpr("^[A-Za-z]+", line))
+      if (length(county_match) == 0) next
+
+      county_name <- toupper(county_match)
+      if (!county_name %in% wv_counties) next
+
+      # Extract all numbers from the line
+      nums <- extract_numbers_from_line(line)
+
+      if (is_page3_type && length(nums) >= 7) {
+        # Page 3: EC, K, 1, 2, 3, 4, 5 (7 values)
+        page3_data[[county_name]] <- nums[1:7]
+      } else if (is_page4_type && length(nums) >= 8) {
+        # Page 4: 6, 7, 8, 9, 10, 11, 12, Total (8 values)
+        page4_data[[county_name]] <- nums[1:8]
+      }
+    }
+  }
+
+  if (length(page3_data) == 0 && length(page4_data) == 0) {
+    warning("No data could be parsed from FTE PDF for year ", end_year)
+    return(create_empty_fte_df())
+  }
+
+  # Merge data from both pages
+  all_counties <- unique(c(names(page3_data), names(page4_data)))
+  results <- list()
+
+  for (county in all_counties) {
+    p3 <- page3_data[[county]]
+    p4 <- page4_data[[county]]
+
+    # Default NAs if page data missing
+    if (is.null(p3)) p3 <- rep(NA_real_, 7)
+    if (is.null(p4)) p4 <- rep(NA_real_, 8)
+
+    results[[county]] <- data.frame(
+      county_name = county,
+      grade_pk = p3[1],      # Early Childhood
+      grade_k = p3[2],       # Kindergarten
+      grade_01 = p3[3],      # First
+      grade_02 = p3[4],      # Second
+      grade_03 = p3[5],      # Third
+      grade_04 = p3[6],      # Fourth
+      grade_05 = p3[7],      # Fifth
+      grade_06 = p4[1],      # Sixth
+      grade_07 = p4[2],      # Seventh
+      grade_08 = p4[3],      # Eighth
+      grade_09 = p4[4],      # Ninth
+      grade_10 = p4[5],      # Tenth
+      grade_11 = p4[6],      # Eleventh
+      grade_12 = p4[7],      # Twelfth
+      row_total = p4[8],     # Total
+      stringsAsFactors = FALSE
+    )
+  }
+
+  df <- dplyr::bind_rows(results)
+
+  # Validate totals - calculate sum and compare
+  grade_cols <- c("grade_pk", "grade_k", paste0("grade_", sprintf("%02d", 1:12)))
+  df$calc_total <- rowSums(df[, grade_cols], na.rm = TRUE)
+
+  # If row_total is NA or 0, use calculated total
+  df$row_total <- ifelse(is.na(df$row_total) | df$row_total == 0,
+                         df$calc_total, df$row_total)
+  df$calc_total <- NULL
+
+  df
+}
+
+
+#' Extract numbers from a PDF line
+#'
+#' Handles various number formats including decimals and commas.
+#'
+#' @param line Character string from PDF
+#' @return Numeric vector of extracted numbers
+#' @keywords internal
+extract_numbers_from_line <- function(line) {
+  # Remove county name from beginning
+  line_no_county <- sub("^[A-Za-z]+\\s+", "", line)
+
+  # Find all number patterns (with optional commas and decimals)
+  num_matches <- gregexpr("[0-9,]+\\.?[0-9]*", line_no_county)
+  num_strings <- regmatches(line_no_county, num_matches)[[1]]
+
+  # Convert to numeric
+  nums <- sapply(num_strings, function(x) {
+    x <- gsub(",", "", x)  # Remove commas
+    as.numeric(x)
+  }, USE.NAMES = FALSE)
+
+  nums[!is.na(nums)]
 }
 
 
