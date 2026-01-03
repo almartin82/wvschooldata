@@ -23,7 +23,7 @@ NULL
 #' FTE data). The FTE PDFs for 2010-2013 are no longer available on the
 #' WVDE website.
 #'
-#' @return Integer vector of available years (2013-2025)
+#' @return Integer vector of available years (2013-2024)
 #' @export
 #' @examples
 #' get_available_years()
