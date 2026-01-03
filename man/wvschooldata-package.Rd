@@ -78,6 +78,7 @@ For school-level or demographic data, see ZoomWV: \url{https://zoomwv.k12.wv.us/
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://almartin82.github.io/wvschooldata}
   \item \url{https://github.com/almartin82/wvschooldata}
   \item Report bugs at \url{https://github.com/almartin82/wvschooldata/issues}
 }
