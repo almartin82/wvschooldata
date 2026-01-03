@@ -16,6 +16,7 @@
 <url><loc>https://almartin82.github.io/wvschooldata/reference/download_fte_enrollment.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/download_headcount_enrollment.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/enr_grade_aggs.html</loc></url>
+<url><loc>https://almartin82.github.io/wvschooldata/reference/extract_numbers_from_line.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/fetch_enr.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/fetch_enr_multi.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/format_district_name.html</loc></url>
@@ -30,6 +31,7 @@
 <url><loc>https://almartin82.github.io/wvschooldata/reference/index.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/parse_fte_line.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/parse_fte_pdf.html</loc></url>
+<url><loc>https://almartin82.github.io/wvschooldata/reference/parse_fte_pdf_new_format.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/parse_headcount_line.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/parse_headcount_pdf.html</loc></url>
 <url><loc>https://almartin82.github.io/wvschooldata/reference/process_district_enr.html</loc></url>
