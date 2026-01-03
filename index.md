@@ -3,9 +3,9 @@
 **[Documentation](https://almartin82.github.io/wvschooldata/)** \|
 [GitHub](https://github.com/almartin82/wvschooldata)
 
-An R package for accessing West Virginia school enrollment data from the
-West Virginia Department of Education (WVDE). **12 years of data**
-(2014-2025) for every county and the state.
+Fetch and analyze West Virginia school enrollment data from
+[WVDE](https://wvde.us/about-us/finance/school-finance/school-finance-data/)
+in R or Python.
 
 ## What can you find with wvschooldata?
 
@@ -245,6 +245,8 @@ devtools::install_github("almartin82/wvschooldata")
 
 ## Quick Start
 
+### R
+
 ``` r
 library(wvschooldata)
 library(dplyr)
@@ -264,6 +266,28 @@ enr |>
   arrange(desc(n_students)) |>
   select(district_name, n_students) |>
   head(5)
+```
+
+### Python
+
+``` python
+import pywvschooldata as wv
+
+# Fetch 2024 data (2023-24 school year)
+enr = wv.fetch_enr(2024)
+
+# Statewide total
+total = enr[enr['is_state'] & (enr['grade_level'] == 'TOTAL') & (enr['subgroup'] == 'total_enrollment')]['n_students'].sum()
+print(f"{total:,} students")
+#> 252,345 students
+
+# Get multiple years
+enr_multi = wv.fetch_enr_multi([2020, 2021, 2022, 2023, 2024])
+
+# Check available years
+years = wv.get_available_years()
+print(f"Data available: {years['min_year']}-{years['max_year']}")
+#> Data available: 2014-2025
 ```
 
 ## Data Format
