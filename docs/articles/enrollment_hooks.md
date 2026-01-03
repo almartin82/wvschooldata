@@ -1,27 +1,10 @@
----
-title: "10 Insights from West Virginia School Enrollment Data"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{10 Insights from West Virginia School Enrollment Data}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
+# 10 Insights from West Virginia School Enrollment Data
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  message = FALSE,
-  warning = FALSE,
-  fig.width = 8,
-  fig.height = 5,
-  eval = FALSE
-)
-```
+**Note:** Code examples in this vignette require network access to
+download data from the West Virginia Department of Education. Set
+`eval = TRUE` in the setup chunk to run the examples.
 
-**Note:** Code examples in this vignette require network access to download data from the West Virginia Department of Education. Set `eval = TRUE` in the setup chunk to run the examples.
-
-```{r load-packages}
+``` r
 library(wvschooldata)
 library(dplyr)
 library(tidyr)
@@ -30,15 +13,19 @@ library(ggplot2)
 theme_set(theme_minimal(base_size = 14))
 ```
 
-This vignette explores West Virginia's public school enrollment data, surfacing key trends across the Mountain State's 55 county school districts.
+This vignette explores West Virginia’s public school enrollment data,
+surfacing key trends across the Mountain State’s 55 county school
+districts.
 
----
+------------------------------------------------------------------------
 
 ## 1. West Virginia educates around 250,000 students
 
-West Virginia's public schools serve roughly a quarter million students across 55 county-based school districts -- one of the simplest administrative structures in the nation.
+West Virginia’s public schools serve roughly a quarter million students
+across 55 county-based school districts – one of the simplest
+administrative structures in the nation.
 
-```{r statewide-data, cache=TRUE}
+``` r
 # Note: 2022 and 2025 PDFs are not available from WVDE
 enr <- fetch_enr_multi(c(2014:2021, 2023:2024))
 
@@ -51,7 +38,7 @@ state_totals <- enr |>
 state_totals
 ```
 
-```{r statewide-chart}
+``` r
 ggplot(state_totals, aes(x = end_year, y = n_students)) +
   geom_line(linewidth = 1.2, color = "#002855") +
   geom_point(size = 3, color = "#002855") +
@@ -65,13 +52,15 @@ ggplot(state_totals, aes(x = end_year, y = n_students)) +
   )
 ```
 
----
+------------------------------------------------------------------------
 
 ## 2. Kanawha County is the largest district
 
-Kanawha County, home to the state capital Charleston, is West Virginia's largest school district -- though even it would be considered mid-sized in many states.
+Kanawha County, home to the state capital Charleston, is West Virginia’s
+largest school district – though even it would be considered mid-sized
+in many states.
 
-```{r top-districts-data, cache=TRUE}
+``` r
 enr_2024 <- fetch_enr(2024)
 
 top_10 <- enr_2024 |>
@@ -83,7 +72,7 @@ top_10 <- enr_2024 |>
 top_10
 ```
 
-```{r top-districts-chart}
+``` r
 top_10 |>
   mutate(district_name = forcats::fct_reorder(district_name, n_students)) |>
   ggplot(aes(x = n_students, y = district_name)) +
@@ -97,13 +86,14 @@ top_10 |>
   )
 ```
 
----
+------------------------------------------------------------------------
 
 ## 3. Small counties dominate the landscape
 
-West Virginia's county-based system means many very small districts. Several counties have fewer than 1,000 students total.
+West Virginia’s county-based system means many very small districts.
+Several counties have fewer than 1,000 students total.
 
-```{r demographics-data}
+``` r
 # Since WV data lacks demographic breakdowns, we'll analyze district size distribution
 size_distribution <- enr_2024 |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -127,7 +117,7 @@ size_distribution <- enr_2024 |>
 size_distribution
 ```
 
-```{r demographics-chart}
+``` r
 size_distribution |>
   ggplot(aes(x = size_category, y = n_districts, fill = size_category)) +
   geom_col(show.legend = FALSE) +
@@ -141,13 +131,15 @@ size_distribution |>
   )
 ```
 
----
+------------------------------------------------------------------------
 
 ## 4. The Eastern Panhandle is growing
 
-While most of West Virginia loses population, the Eastern Panhandle -- Berkeley, Jefferson, and Morgan counties near Washington, D.C. -- has experienced growth from suburban spillover.
+While most of West Virginia loses population, the Eastern Panhandle –
+Berkeley, Jefferson, and Morgan counties near Washington, D.C. – has
+experienced growth from suburban spillover.
 
-```{r regional-data}
+``` r
 # Eastern Panhandle counties (DC suburbs)
 panhandle <- c("BERKELEY", "JEFFERSON", "MORGAN")
 
@@ -164,7 +156,7 @@ regional_comparison |>
   pivot_wider(names_from = region, values_from = n_students)
 ```
 
-```{r regional-chart}
+``` r
 regional_indexed <- regional_comparison |>
   group_by(region) |>
   mutate(index = n_students / first(n_students) * 100)
@@ -185,13 +177,15 @@ ggplot(regional_indexed, aes(x = end_year, y = index, color = region)) +
   theme(legend.position = "bottom")
 ```
 
----
+------------------------------------------------------------------------
 
 ## 5. Coal country continues to decline
 
-The southern coalfield counties -- McDowell, Wyoming, Mingo, Logan, and Boone -- have experienced severe enrollment declines as the coal industry has contracted.
+The southern coalfield counties – McDowell, Wyoming, Mingo, Logan, and
+Boone – have experienced severe enrollment declines as the coal industry
+has contracted.
 
-```{r growth-data}
+``` r
 # Coal counties
 coal_counties <- c("MCDOWELL", "WYOMING", "MINGO", "LOGAN", "BOONE")
 
@@ -214,7 +208,7 @@ declining_10 <- head(growth_analysis, 10)
 declining_10
 ```
 
-```{r growth-chart}
+``` r
 declining_10 |>
   mutate(county = forcats::fct_reorder(county, pct_change)) |>
   ggplot(aes(x = pct_change, y = county)) +
@@ -228,13 +222,15 @@ declining_10 |>
   )
 ```
 
----
+------------------------------------------------------------------------
 
 ## 6. McDowell County exemplifies Appalachian decline
 
-McDowell County, once a coal mining powerhouse with over 100,000 residents, now has fewer than 2,500 students -- one of the starkest examples of Appalachian population decline.
+McDowell County, once a coal mining powerhouse with over 100,000
+residents, now has fewer than 2,500 students – one of the starkest
+examples of Appalachian population decline.
 
-```{r mcdowell}
+``` r
 mcdowell_trend <- enr |>
   filter(is_district, county == "MCDOWELL",
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -244,13 +240,15 @@ mcdowell_trend <- enr |>
 mcdowell_trend
 ```
 
----
+------------------------------------------------------------------------
 
 ## 7. High school enrollment is shrinking faster
 
-Analyzing enrollment by grade level reveals that high school grades are shrinking faster than elementary grades, suggesting accelerating population decline.
+Analyzing enrollment by grade level reveals that high school grades are
+shrinking faster than elementary grades, suggesting accelerating
+population decline.
 
-```{r grade-level}
+``` r
 grade_trends <- enr |>
   filter(is_state, subgroup == "total_enrollment",
          grade_level %in% c("K", "05", "09", "12")) |>
@@ -260,13 +258,15 @@ grade_trends <- enr |>
 grade_trends
 ```
 
----
+------------------------------------------------------------------------
 
 ## 8. Some counties are holding steady
 
-Despite statewide decline, a few counties have maintained or grown enrollment, primarily those near job centers or in the Eastern Panhandle.
+Despite statewide decline, a few counties have maintained or grown
+enrollment, primarily those near job centers or in the Eastern
+Panhandle.
 
-```{r growing}
+``` r
 growing <- growth_analysis |>
   filter(pct_change >= 0) |>
   arrange(desc(pct_change))
@@ -274,28 +274,20 @@ growing <- growth_analysis |>
 growing
 ```
 
----
-## 9. Kindergarten signals future challenges
-
-Kindergarten enrollment serves as a leading indicator. Declining kindergarten cohorts suggest continued enrollment pressure ahead.
-
-```{r kindergarten}
-k_trend <- enr |>
-  filter(is_state, subgroup == "total_enrollment",
-         grade_level == "K") |>
-  select(end_year, n_students) |>
-  mutate(change = n_students - lag(n_students))
-
-k_trend
-```
-
----
+|                                                                                                                                                                                         |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| \## 9. Kindergarten signals future challenges                                                                                                                                           |
+| Kindergarten enrollment serves as a leading indicator. Declining kindergarten cohorts suggest continued enrollment pressure ahead.                                                      |
+| \`\`\` r k_trend \<- enr \|\> filter(is_state, subgroup == “total_enrollment”, grade_level == “K”) \|\> select(end_year, n_students) \|\> mutate(change = n_students - lag(n_students)) |
+| k_trend \`\`\`                                                                                                                                                                          |
 
 ## 10. 55 districts create administrative challenges
 
-West Virginia's county-based system means even tiny counties maintain full district operations. Several counties have student populations smaller than individual schools in other states.
+West Virginia’s county-based system means even tiny counties maintain
+full district operations. Several counties have student populations
+smaller than individual schools in other states.
 
-```{r smallest}
+``` r
 smallest <- enr_2024 |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
   arrange(n_students) |>
@@ -305,21 +297,26 @@ smallest <- enr_2024 |>
 smallest
 ```
 
-Counties like Wirt, Calhoun, and Pocahontas each maintain a full school district despite having fewer students than many individual elementary schools elsewhere.
+Counties like Wirt, Calhoun, and Pocahontas each maintain a full school
+district despite having fewer students than many individual elementary
+schools elsewhere.
 
----
+------------------------------------------------------------------------
 
 ## Summary
 
-West Virginia's school enrollment data reveals:
-- **Persistent decline**: Statewide enrollment has fallen consistently over the past decade
-- **Coal country crisis**: Southern coalfield counties have lost 25-40% of students
-- **Eastern Panhandle exception**: DC suburb spillover has brought modest growth
-- **Small-district challenges**: Many counties have under 2,000 students
-- **Future pressure**: Declining kindergarten enrollment signals more challenges ahead
+West Virginia’s school enrollment data reveals: - **Persistent
+decline**: Statewide enrollment has fallen consistently over the past
+decade - **Coal country crisis**: Southern coalfield counties have lost
+25-40% of students - **Eastern Panhandle exception**: DC suburb
+spillover has brought modest growth - **Small-district challenges**:
+Many counties have under 2,000 students - **Future pressure**: Declining
+kindergarten enrollment signals more challenges ahead
 
-These patterns reflect broader demographic and economic forces reshaping Appalachia.
+These patterns reflect broader demographic and economic forces reshaping
+Appalachia.
 
----
+------------------------------------------------------------------------
 
-*Data sourced from West Virginia Department of Education (WVDE) School Finance Data.*
+*Data sourced from West Virginia Department of Education (WVDE) School
+Finance Data.*

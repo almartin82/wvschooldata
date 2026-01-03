@@ -29,17 +29,18 @@ NULL
 #' get_available_years()
 get_available_years <- function() {
   # WVDE School Finance Data PDFs availability:
-  # - 2014-2025: Full data (FTE by grade + headcount)
-  # - 2013: Headcount only (FTE PDF no longer available)
+  # - 2013-2021, 2023-2024: Available
+  # - 2022: PDF not published by WVDE
+  # - 2025: PDF not yet available (check back later in school year)
   # - 2010-2012: No longer available on WVDE website
   #
   # Based on research of https://wvde.us/about-us/finance/school-finance/school-finance-data/
   #
   # Years represent the end of school year:
-  # - 2025 = 2024-25 school year
   # - 2024 = 2023-24 school year
+  # - 2023 = 2022-23 school year
   # etc.
-  2013L:2025L
+  c(2013L:2021L, 2023L:2024L)
 }
 
 
