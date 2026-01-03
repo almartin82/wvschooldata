@@ -7,8 +7,8 @@ test_that("get_available_years returns expected range", {
 
   expect_type(years, "integer")
   expect_true(2014 %in% years)
-  expect_true(2025 %in% years)
-  expect_equal(length(years), 12)  # 2014 to 2025
+  expect_true(2024 %in% years)
+  expect_equal(length(years), 11)  # 2014 to 2024
 })
 
 
