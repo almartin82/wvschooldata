@@ -11,13 +11,17 @@ get_available_years()
 
 ## Value
 
-Integer vector of available years (2014-2025)
+Integer vector of available years (2013-2024)
 
 ## Details
 
 Data comes from WVDE School Finance Data PDFs which are published
 annually. Historical data availability depends on which years WVDE has
 made available on their website.
+
+Note: For 2013, only headcount enrollment data is available (no
+grade-level FTE data). The FTE PDFs for 2010-2013 are no longer
+available on the WVDE website.
 
 ## Examples
 
