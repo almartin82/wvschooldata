@@ -7,7 +7,7 @@
 get_available_years()
 }
 \value{
-Integer vector of available years (2014-2025)
+Integer vector of available years (2013-2024)
 }
 \description{
 Returns a vector of years for which enrollment data is available
@@ -17,6 +17,10 @@ from the West Virginia Department of Education (WVDE).
 Data comes from WVDE School Finance Data PDFs which are published
 annually. Historical data availability depends on which years
 WVDE has made available on their website.
+
+Note: For 2013, only headcount enrollment data is available (no grade-level
+FTE data). The FTE PDFs for 2010-2013 are no longer available on the
+WVDE website.
 }
 \examples{
 get_available_years()
