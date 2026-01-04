@@ -1,9 +1,5 @@
 # 10 Insights from West Virginia School Enrollment Data
 
-**Note:** Code examples in this vignette require network access to
-download data from the West Virginia Department of Education. Set
-`eval = TRUE` in the setup chunk to run the examples.
-
 ``` r
 library(wvschooldata)
 library(dplyr)
@@ -26,8 +22,9 @@ across 55 county-based school districts – one of the simplest
 administrative structures in the nation.
 
 ``` r
-# Note: 2022 and 2025 PDFs are not available from WVDE
-enr <- fetch_enr_multi(c(2014:2021, 2023:2024))
+# Get all available years (2013-2021, 2023-2024; 2022 PDF was not published)
+available_years <- get_available_years()
+enr <- fetch_enr_multi(available_years)
 
 state_totals <- enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -36,6 +33,10 @@ state_totals <- enr |>
          pct_change = round(change / lag(n_students) * 100, 2))
 
 state_totals
+#> # A tibble: 1 x 4
+#>   end_year n_students change pct_change
+#>      <dbl>      <dbl>  <dbl>      <dbl>
+#> 1     2024    1101913     NA         NA
 ```
 
 ``` r
@@ -51,6 +52,8 @@ ggplot(state_totals, aes(x = end_year, y = n_students)) +
     y = "Total Enrollment"
   )
 ```
+
+![](enrollment_hooks_files/figure-html/statewide-chart-1.png)
 
 ------------------------------------------------------------------------
 
@@ -70,6 +73,17 @@ top_10 <- enr_2024 |>
   select(district_name, county, n_students)
 
 top_10
+#>              district_name   county n_students
+#> 1   KANAWHA COUNTY SCHOOLS  KANAWHA      23437
+#> 2   KANAWHA COUNTY SCHOOLS  KANAWHA      23437
+#> 3   KANAWHA COUNTY SCHOOLS  KANAWHA      23437
+#> 4   KANAWHA COUNTY SCHOOLS  KANAWHA      23437
+#> 5   KANAWHA COUNTY SCHOOLS  KANAWHA      23437
+#> 6  BERKELEY COUNTY SCHOOLS BERKELEY      19871
+#> 7  BERKELEY COUNTY SCHOOLS BERKELEY      19871
+#> 8  BERKELEY COUNTY SCHOOLS BERKELEY      19871
+#> 9  BERKELEY COUNTY SCHOOLS BERKELEY      19871
+#> 10   CABELL COUNTY SCHOOLS   CABELL      11436
 ```
 
 ``` r
@@ -85,6 +99,8 @@ top_10 |>
     y = NULL
   )
 ```
+
+![](enrollment_hooks_files/figure-html/top-districts-chart-1.png)
 
 ------------------------------------------------------------------------
 
@@ -115,6 +131,14 @@ size_distribution <- enr_2024 |>
   )
 
 size_distribution
+#> # A tibble: 5 x 3
+#>   size_category n_districts total_students
+#>   <fct>               <int>          <dbl>
+#> 1 Under 1,000           230          53528
+#> 2 1,000-2,499            78         134216
+#> 3 2,500-4,999            68         252836
+#> 4 5,000-9,999            31         242144
+#> 5 10,000+                29         419189
 ```
 
 ``` r
@@ -130,6 +154,8 @@ size_distribution |>
     y = "Number of Districts"
   )
 ```
+
+![](enrollment_hooks_files/figure-html/demographics-chart-1.png)
 
 ------------------------------------------------------------------------
 
@@ -154,6 +180,10 @@ regional_comparison <- enr |>
 
 regional_comparison |>
   pivot_wider(names_from = region, values_from = n_students)
+#> # A tibble: 1 x 3
+#>   end_year `Eastern Panhandle` `Rest of State`
+#>      <dbl>               <dbl>           <dbl>
+#> 1     2024              126543          975370
 ```
 
 ``` r
@@ -176,6 +206,8 @@ ggplot(regional_indexed, aes(x = end_year, y = index, color = region)) +
   ) +
   theme(legend.position = "bottom")
 ```
+
+![](enrollment_hooks_files/figure-html/regional-chart-1.png)
 
 ------------------------------------------------------------------------
 
@@ -206,6 +238,9 @@ growth_analysis <- enr |>
 # Show the most declining districts
 declining_10 <- head(growth_analysis, 10)
 declining_10
+#> # A tibble: 0 x 6
+#> # i 6 variables: district_name <chr>, county <chr>, y2014 <dbl>, y2024 <dbl>,
+#> #   change <dbl>, pct_change <dbl>
 ```
 
 ``` r
@@ -221,6 +256,8 @@ declining_10 |>
     y = NULL
   )
 ```
+
+![](enrollment_hooks_files/figure-html/growth-chart-1.png)
 
 ------------------------------------------------------------------------
 
@@ -238,6 +275,17 @@ mcdowell_trend <- enr |>
   mutate(pct_of_2014 = round(n_students / first(n_students) * 100, 1))
 
 mcdowell_trend
+#> # A tibble: 8 x 3
+#>   end_year n_students pct_of_2014
+#>      <dbl>      <dbl>       <dbl>
+#> 1     2024       2353       100  
+#> 2     2024        194         8.2
+#> 3     2024       2353       100  
+#> 4     2024       2353       100  
+#> 5     2024       2353       100  
+#> 6     2024        119         5.1
+#> 7     2024          3         0.1
+#> 8     2024          3         0.1
 ```
 
 ------------------------------------------------------------------------
@@ -256,6 +304,10 @@ grade_trends <- enr |>
   pivot_wider(names_from = grade_level, values_from = n_students)
 
 grade_trends
+#> # A tibble: 1 x 5
+#>   end_year       K    `05`    `09`    `12`
+#>      <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
+#> 1     2024 135565. 146345. 167927. 134707.
 ```
 
 ------------------------------------------------------------------------
@@ -272,14 +324,33 @@ growing <- growth_analysis |>
   arrange(desc(pct_change))
 
 growing
+#> # A tibble: 0 x 6
+#> # i 6 variables: district_name <chr>, county <chr>, y2014 <dbl>, y2024 <dbl>,
+#> #   change <dbl>, pct_change <dbl>
 ```
 
-|                                                                                                                                                                                         |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| \## 9. Kindergarten signals future challenges                                                                                                                                           |
-| Kindergarten enrollment serves as a leading indicator. Declining kindergarten cohorts suggest continued enrollment pressure ahead.                                                      |
-| \`\`\` r k_trend \<- enr \|\> filter(is_state, subgroup == “total_enrollment”, grade_level == “K”) \|\> select(end_year, n_students) \|\> mutate(change = n_students - lag(n_students)) |
-| k_trend \`\`\`                                                                                                                                                                          |
+------------------------------------------------------------------------
+
+## 9. Kindergarten signals future challenges
+
+Kindergarten enrollment serves as a leading indicator. Declining
+kindergarten cohorts suggest continued enrollment pressure ahead.
+
+``` r
+k_trend <- enr |>
+  filter(is_state, subgroup == "total_enrollment",
+         grade_level == "K") |>
+  select(end_year, n_students) |>
+  mutate(change = n_students - lag(n_students))
+
+k_trend
+#> # A tibble: 1 x 3
+#>   end_year n_students change
+#>      <dbl>      <dbl>  <dbl>
+#> 1     2024    135565.     NA
+```
+
+------------------------------------------------------------------------
 
 ## 10. 55 districts create administrative challenges
 
@@ -295,6 +366,17 @@ smallest <- enr_2024 |>
   select(district_name, county, n_students)
 
 smallest
+#>               district_name    county n_students
+#> 1      BOONE COUNTY SCHOOLS     BOONE          1
+#> 2       CLAY COUNTY SCHOOLS      CLAY          1
+#> 3      GRANT COUNTY SCHOOLS     GRANT          1
+#> 4      ROANE COUNTY SCHOOLS     ROANE          1
+#> 5      ROANE COUNTY SCHOOLS     ROANE          1
+#> 6    WEBSTER COUNTY SCHOOLS   WEBSTER          1
+#> 7       WOOD COUNTY SCHOOLS      WOOD          1
+#> 8       WOOD COUNTY SCHOOLS      WOOD          1
+#> 9    BRAXTON COUNTY SCHOOLS   BRAXTON          2
+#> 10 HAMPSHIRE COUNTY SCHOOLS HAMPSHIRE          2
 ```
 
 Counties like Wirt, Calhoun, and Pocahontas each maintain a full school
