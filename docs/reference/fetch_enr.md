@@ -47,7 +47,7 @@ enr_wide <- fetch_enr(2024, tidy = FALSE)
 enr_fresh <- fetch_enr(2024, use_cache = FALSE)
 
 # Filter to specific county
-kanawha <- enr_2024 %>%
+kanawha <- enr_2024 |>
   dplyr::filter(district_name == "KANAWHA COUNTY SCHOOLS")
 } # }
 ```
