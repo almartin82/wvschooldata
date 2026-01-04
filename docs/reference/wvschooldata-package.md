@@ -91,6 +91,8 @@ For school-level or demographic data, see ZoomWV:
 
 Useful links:
 
+- <https://almartin82.github.io/wvschooldata>
+
 - <https://github.com/almartin82/wvschooldata>
 
 - Report bugs at <https://github.com/almartin82/wvschooldata/issues>
