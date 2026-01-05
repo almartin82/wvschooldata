@@ -114,7 +114,14 @@ tidy_enr <- function(df) {
   }
 
   result |>
-    dplyr::filter(!is.na(n_students))
+    dplyr::filter(!is.na(n_students)) |>
+    dplyr::mutate(
+      aggregation_flag = dplyr::case_when(
+        !is.na(district_id) & !is.na(campus_id) & district_id != "" & campus_id != "" ~ "campus",
+        !is.na(district_id) & district_id != "" ~ "district",
+        TRUE ~ "state"
+      )
+    )
 }
 
 
