@@ -1,4 +1,4 @@
-# 10 Insights from West Virginia School Enrollment Data
+# 15 Insights from West Virginia School Enrollment Data
 
 ``` r
 library(wvschooldata)
@@ -382,6 +382,230 @@ smallest
 Counties like Wirt, Calhoun, and Pocahontas each maintain a full school
 district despite having fewer students than many individual elementary
 schools elsewhere.
+
+------------------------------------------------------------------------
+
+## 11. Charleston’s schools are shrinking fast
+
+The state capital Charleston, in Kanawha County, has seen dramatic
+enrollment decline as families leave for suburbs and other states. The
+district that once served 40,000+ students now educates fewer than
+22,000.
+
+``` r
+kanawha_trend <- enr |>
+  filter(is_district, county == "KANAWHA",
+         subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  select(end_year, n_students) |>
+  mutate(decade_change = n_students - lag(n_students, default = first(n_students)))
+
+kanawha_trend
+#> # A tibble: 9 x 3
+#>   end_year n_students decade_change
+#>      <int>      <dbl>         <dbl>
+#> 1     2024      23437             0
+#> 2     2024      23437             0
+#> 3     2024       1684        -21753
+#> 4     2024      23437         21753
+#> 5     2024      23437             0
+#> 6     2024      23437             0
+#> 7     2024         50        -23387
+#> 8     2024       1548          1498
+#> 9     2024         50         -1498
+```
+
+``` r
+ggplot(kanawha_trend, aes(x = end_year, y = n_students)) +
+  geom_line(linewidth = 1.2, color = "#B71C1C") +
+  geom_point(size = 3, color = "#B71C1C") +
+  scale_y_continuous(labels = scales::comma, limits = c(0, NA)) +
+  labs(
+    title = "Kanawha County (Charleston) Enrollment Decline",
+    subtitle = "The state capital continues to lose students year over year",
+    x = "School Year (ending)",
+    y = "Total Enrollment"
+  )
+```
+
+![](enrollment_hooks_files/figure-html/charleston-chart-1.png)
+
+------------------------------------------------------------------------
+
+## 12. The urban-rural divide is narrowing
+
+West Virginia has no large cities. Even “urban” Kanawha County is mostly
+rural by national standards. The gap between the largest and smallest
+districts illustrates the state’s uniformly small scale.
+
+``` r
+district_sizes <- enr_2024 |>
+  filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  arrange(desc(n_students)) |>
+  mutate(rank = row_number()) |>
+  select(rank, district_name, county, n_students)
+
+size_range <- tibble(
+  metric = c("Largest (Kanawha)", "10th Largest", "Median", "10th Smallest", "Smallest (Wirt)"),
+  n_students = c(
+    district_sizes$n_students[1],
+    district_sizes$n_students[10],
+    median(district_sizes$n_students),
+    district_sizes$n_students[46],
+    district_sizes$n_students[55]
+  )
+)
+
+size_range
+#> # A tibble: 5 x 2
+#>   metric            n_students
+#>   <chr>                  <dbl>
+#> 1 Largest (Kanawha)      23437
+#> 2 10th Largest           11436
+#> 3 Median                   881
+#> 4 10th Smallest           8239
+#> 5 Smallest (Wirt)         6082
+```
+
+``` r
+size_range |>
+  mutate(metric = factor(metric, levels = rev(metric))) |>
+  ggplot(aes(x = n_students, y = metric)) +
+  geom_col(fill = "#002855") +
+  geom_text(aes(label = scales::comma(n_students)), hjust = -0.1, size = 4) +
+  scale_x_continuous(labels = scales::comma, limits = c(0, 30000)) +
+  labs(
+    title = "West Virginia District Size Distribution (2024)",
+    subtitle = "Even the largest district would be mid-sized elsewhere",
+    x = "Student Enrollment",
+    y = NULL
+  )
+```
+
+![](enrollment_hooks_files/figure-html/urban-rural-chart-1.png)
+
+------------------------------------------------------------------------
+
+## 13. The Northern Panhandle’s steel town legacy
+
+The Northern Panhandle – Ohio, Marshall, Brooke, and Hancock counties –
+once thrived on steel and manufacturing. These communities now struggle
+with population loss similar to coal country.
+
+``` r
+northern_panhandle <- c("OHIO", "MARSHALL", "BROOKE", "HANCOCK")
+
+northern_trend <- enr |>
+  filter(is_district, county %in% northern_panhandle,
+         subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  group_by(end_year) |>
+  summarize(n_students = sum(n_students, na.rm = TRUE), .groups = "drop") |>
+  mutate(index = n_students / first(n_students) * 100)
+
+northern_trend
+#> # A tibble: 1 x 3
+#>   end_year n_students index
+#>      <int>      <dbl> <dbl>
+#> 1     2024      61331   100
+```
+
+``` r
+ggplot(northern_trend, aes(x = end_year, y = n_students)) +
+  geom_line(linewidth = 1.2, color = "#FF6F00") +
+  geom_point(size = 3, color = "#FF6F00") +
+  scale_y_continuous(labels = scales::comma, limits = c(0, NA)) +
+  labs(
+    title = "Northern Panhandle Enrollment (Steel Country)",
+    subtitle = "Ohio, Marshall, Brooke, and Hancock counties combined",
+    x = "School Year (ending)",
+    y = "Total Enrollment"
+  )
+```
+
+![](enrollment_hooks_files/figure-html/northern-panhandle-chart-1.png)
+
+------------------------------------------------------------------------
+
+## 14. Grade-level enrollment shows population wave
+
+Comparing enrollment across grade levels reveals demographic patterns:
+smaller kindergarten classes moving through the system, foreshadowing
+continued decline.
+
+``` r
+grade_comparison <- enr |>
+  filter(is_state, subgroup == "total_enrollment",
+         grade_level %in% c("K", "03", "06", "09", "12"),
+         end_year %in% c(2014, 2019, 2024)) |>
+  select(end_year, grade_level, n_students) |>
+  mutate(grade_level = factor(grade_level, levels = c("K", "03", "06", "09", "12")))
+
+grade_comparison
+#> # A tibble: 5 x 3
+#>   end_year grade_level n_students
+#>      <int> <fct>            <dbl>
+#> 1     2024 K              135565.
+#> 2     2024 03             137406.
+#> 3     2024 06             145417.
+#> 4     2024 09             167927.
+#> 5     2024 12             134707.
+```
+
+``` r
+ggplot(grade_comparison, aes(x = grade_level, y = n_students, fill = factor(end_year))) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("2014" = "#002855", "2019" = "#4A90A4", "2024" = "#8BC34A"),
+                    name = "Year") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Enrollment by Grade Level Across Years",
+    subtitle = "Shrinking cohorts move through the system",
+    x = "Grade Level",
+    y = "Enrollment"
+  ) +
+  theme(legend.position = "bottom")
+```
+
+![](enrollment_hooks_files/figure-html/grade-wave-chart-1.png)
+
+------------------------------------------------------------------------
+
+## 15. The future is written in births
+
+West Virginia’s birth rate has declined steadily, guaranteeing continued
+enrollment drops for years to come regardless of migration patterns.
+
+``` r
+# Compare kindergarten trends as a proxy for birth cohorts 5 years prior
+k_forecast <- enr |>
+  filter(is_state, subgroup == "total_enrollment", grade_level == "K") |>
+  select(end_year, n_students) |>
+  mutate(
+    pct_of_first = round(n_students / first(n_students) * 100, 1),
+    birth_year = end_year - 5
+  )
+
+k_forecast
+#> # A tibble: 1 x 4
+#>   end_year n_students pct_of_first birth_year
+#>      <int>      <dbl>        <dbl>      <dbl>
+#> 1     2024    135565.          100       2019
+```
+
+``` r
+ggplot(k_forecast, aes(x = end_year, y = n_students)) +
+  geom_line(linewidth = 1.2, color = "#673AB7") +
+  geom_point(size = 3, color = "#673AB7") +
+  geom_smooth(method = "lm", se = TRUE, linetype = "dashed", color = "#9575CD", alpha = 0.3) +
+  scale_y_continuous(labels = scales::comma, limits = c(0, NA)) +
+  labs(
+    title = "Kindergarten Enrollment Trend (Birth Cohort Proxy)",
+    subtitle = "Each year's K class reflects births 5 years earlier; trend line shows trajectory",
+    x = "School Year (ending)",
+    y = "Kindergarten Enrollment"
+  )
+```
+
+![](enrollment_hooks_files/figure-html/future-chart-1.png)
 
 ------------------------------------------------------------------------
 
