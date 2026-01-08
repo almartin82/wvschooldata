@@ -6,6 +6,8 @@
   : Fetch West Virginia enrollment data
 - [`fetch_enr_multi()`](https://almartin82.github.io/wvschooldata/reference/fetch_enr_multi.md)
   : Fetch enrollment data for multiple years
+- [`fetch_directory()`](https://almartin82.github.io/wvschooldata/reference/fetch_directory.md)
+  : Fetch West Virginia school directory data
 - [`get_available_years()`](https://almartin82.github.io/wvschooldata/reference/get_available_years.md)
   : Get available years of West Virginia enrollment data
 
@@ -24,3 +26,5 @@
   : Show cache status
 - [`clear_cache()`](https://almartin82.github.io/wvschooldata/reference/clear_cache.md)
   : Clear the wvschooldata cache
+- [`clear_directory_cache()`](https://almartin82.github.io/wvschooldata/reference/clear_directory_cache.md)
+  : Clear school directory cache

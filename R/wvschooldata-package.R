@@ -63,3 +63,16 @@
 #' @keywords internal
 "_PACKAGE"
 
+# Global variable declarations to avoid R CMD CHECK notes
+# These are column names used in dplyr NSE operations
+utils::globalVariables(c(
+  # Directory columns
+  "address", "city", "county", "county_join", "district_name", "fax",
+  "grades_served", "phone", "school_name", "school_type", "state",
+  "state_district_id", "state_school_id", "superintendent_email",
+  "superintendent_name", "website", "zip",
+  # Enrollment columns (existing)
+  "campus_id", "campus_name", "charter_flag", "county_name", "district_id",
+  "grade_level", "n_students", "row_total", "subgroup", "type"
+))
+

@@ -16,7 +16,6 @@ Imports:
     readr,
     purrr,
     stringr,
-    tidyr,
     rlang,
     httr,
     pdftools,
@@ -27,7 +26,9 @@ Suggests:
     rmarkdown,
     ggplot2,
     scales,
-    forcats
+    forcats,
+    readxl,
+    tidyr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 URL: https://almartin82.github.io/wvschooldata, https://github.com/almartin82/wvschooldata
