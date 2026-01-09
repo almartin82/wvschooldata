@@ -248,9 +248,16 @@ enr |>
 # Top 5 county districts
 enr |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  distinct(district_name, .keep_all = TRUE) |>
   arrange(desc(n_students)) |>
   select(district_name, n_students) |>
   head(5)
+#>       district_name n_students
+#> 1  KANAWHA COUNTY SCHOOLS      23437
+#> 2 BERKELEY COUNTY SCHOOLS      19871
+#> 3   CABELL COUNTY SCHOOLS      11436
+#> 4     WOOD COUNTY SCHOOLS      11330
+#> 5 MONONGALIA COUNTY SCHOOLS      11201
 ```
 
 ### Python
