@@ -276,9 +276,16 @@
 <span><span class="co"># Top 5 county districts</span></span>
 <span><span class="va">enr</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">district_name</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       district_name n_students</span></span>
+<span><span class="co">#&gt; 1  KANAWHA COUNTY SCHOOLS      23437</span></span>
+<span><span class="co">#&gt; 2 BERKELEY COUNTY SCHOOLS      19871</span></span>
+<span><span class="co">#&gt; 3   CABELL COUNTY SCHOOLS      11436</span></span>
+<span><span class="co">#&gt; 4     WOOD COUNTY SCHOOLS      11330</span></span>
+<span><span class="co">#&gt; 5 MONONGALIA COUNTY SCHOOLS      11201</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="python">Python<a class="anchor" aria-label="anchor" href="#python"></a>
