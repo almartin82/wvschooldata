@@ -13,7 +13,7 @@ Fetch and analyze West Virginia school enrollment data from [WVDE](https://wvde.
 
 ## What can you find with wvschooldata?
 
-West Virginia educates **252,000 students** across 55 county school districts, one for each county. From the coalfields of McDowell to the Eastern Panhandle suburbs of DC, here are ten stories hiding in the data:
+West Virginia educates students across 55 county school districts, one for each county. From the coalfields of McDowell to the Eastern Panhandle suburbs of DC, here are ten stories hiding in the data:
 
 ---
 
@@ -243,7 +243,7 @@ enr <- fetch_enr(2024)
 enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
   pull(n_students)
-#> 252,345
+#> 1,101,913
 
 # Top 5 county districts
 enr |>
@@ -271,7 +271,7 @@ enr = wv.fetch_enr(2024)
 # Statewide total
 total = enr[enr['is_state'] & (enr['grade_level'] == 'TOTAL') & (enr['subgroup'] == 'total_enrollment')]['n_students'].sum()
 print(f"{total:,} students")
-#> 252,345 students
+#> 1,101,913 students
 
 # Get multiple years
 enr_multi = wv.fetch_enr_multi([2020, 2021, 2022, 2023, 2024])

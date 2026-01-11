@@ -9,10 +9,9 @@ in R or Python.
 
 ## What can you find with wvschooldata?
 
-West Virginia educates **252,000 students** across 55 county school
-districts, one for each county. From the coalfields of McDowell to the
-Eastern Panhandle suburbs of DC, here are ten stories hiding in the
-data:
+West Virginia educates students across 55 county school districts, one
+for each county. From the coalfields of McDowell to the Eastern
+Panhandle suburbs of DC, here are ten stories hiding in the data:
 
 ------------------------------------------------------------------------
 
@@ -258,14 +257,21 @@ enr <- fetch_enr(2024)
 enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
   pull(n_students)
-#> 252,345
+#> 1,101,913
 
 # Top 5 county districts
 enr |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
+  distinct(district_name, .keep_all = TRUE) |>
   arrange(desc(n_students)) |>
   select(district_name, n_students) |>
   head(5)
+#>       district_name n_students
+#> 1  KANAWHA COUNTY SCHOOLS      23437
+#> 2 BERKELEY COUNTY SCHOOLS      19871
+#> 3   CABELL COUNTY SCHOOLS      11436
+#> 4     WOOD COUNTY SCHOOLS      11330
+#> 5 MONONGALIA COUNTY SCHOOLS      11201
 ```
 
 ### Python
@@ -279,7 +285,7 @@ enr = wv.fetch_enr(2024)
 # Statewide total
 total = enr[enr['is_state'] & (enr['grade_level'] == 'TOTAL') & (enr['subgroup'] == 'total_enrollment')]['n_students'].sum()
 print(f"{total:,} students")
-#> 252,345 students
+#> 1,101,913 students
 
 # Get multiple years
 enr_multi = wv.fetch_enr_multi([2020, 2021, 2022, 2023, 2024])

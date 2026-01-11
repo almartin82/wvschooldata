@@ -7,8 +7,5 @@ src/*.so
 src/*.dll
 vignettes/*_files/
 *.Rcheck/
-cache/
-figure/
-vignettes/*_cache/
 Meta/
 doc/
