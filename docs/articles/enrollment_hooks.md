@@ -24,7 +24,7 @@ administrative structures in the nation.
 ``` r
 # Get all available years (2013-2021, 2023-2024; 2022 PDF was not published)
 available_years <- get_available_years()
-enr <- fetch_enr_multi(available_years)
+enr <- fetch_enr_multi(available_years, use_cache = TRUE)
 
 state_totals <- enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -64,7 +64,7 @@ largest school district – though even it would be considered mid-sized
 in many states.
 
 ``` r
-enr_2024 <- fetch_enr(2024)
+enr_2024 <- fetch_enr(2024, use_cache = TRUE)
 
 top_10 <- enr_2024 |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
