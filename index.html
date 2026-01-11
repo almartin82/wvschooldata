@@ -61,7 +61,7 @@
 <div class="section level2">
 <h2 id="what-can-you-find-with-wvschooldata">What can you find with wvschooldata?<a class="anchor" aria-label="anchor" href="#what-can-you-find-with-wvschooldata"></a>
 </h2>
-<p>West Virginia educates <strong>252,000 students</strong> across 55 county school districts, one for each county. From the coalfields of McDowell to the Eastern Panhandle suburbs of DC, here are ten stories hiding in the data:</p>
+<p>West Virginia educates students across 55 county school districts, one for each county. From the coalfields of McDowell to the Eastern Panhandle suburbs of DC, here are ten stories hiding in the data:</p>
 <hr>
 <div class="section level3">
 <h3 id="id_1-the-state-that-lost-a-generation">1. The State That Lost a Generation<a class="anchor" aria-label="anchor" href="#id_1-the-state-that-lost-a-generation"></a>
@@ -271,7 +271,7 @@
 <span><span class="va">enr</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 252,345</span></span>
+<span><span class="co">#&gt; 1,101,913</span></span>
 <span></span>
 <span><span class="co"># Top 5 county districts</span></span>
 <span><span class="va">enr</span> <span class="op">|&gt;</span></span>
@@ -298,7 +298,7 @@
 <span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># Statewide total</span></span>
 <span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>total <span class="op">=</span> enr[enr[<span class="st">'is_state'</span>] <span class="op">&amp;</span> (enr[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>) <span class="op">&amp;</span> (enr[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>)][<span class="st">'n_students'</span>].<span class="bu">sum</span>()</span>
 <span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>total<span class="sc">:,}</span><span class="ss"> students"</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; 252,345 students</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; 1,101,913 students</span></span>
 <span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a></span>
 <span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co"># Get multiple years</span></span>
 <span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>enr_multi <span class="op">=</span> wv.fetch_enr_multi([<span class="dv">2020</span>, <span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>, <span class="dv">2024</span>])</span>
