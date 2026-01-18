@@ -30,3 +30,17 @@ reference:
   contents:
   - cache_status
   - starts_with("clear")
+
+articles:
+- title: Vignettes
+  navbar: ~
+  contents:
+  - enrollment_hooks
+- title: Internal
+  navbar: ~
+  contents:
+  - CLAUDE
+  - EXPANSION
+  - ERRATA
+  - TODO
+  - PRD

@@ -502,3 +502,9 @@ These patterns reflect broader demographic and economic forces reshaping Appalac
 ***
 
 *Data sourced from West Virginia Department of Education (WVDE) School Finance Data.*
+
+## Session Info
+
+```{r session-info}
+sessionInfo()
+```
