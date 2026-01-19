@@ -72,9 +72,18 @@ process_district_enr <- function(fte_data, headcount_data, end_year) {
 
   # Merge headcount data if available
   if (!is.null(headcount_data) && nrow(headcount_data) > 0) {
+    # Aggregate headcount to county level first
+    # The headcount PDF may have school-level rows that need to be summed
+    headcount_agg <- headcount_data |>
+      dplyr::group_by(.data$county_name) |>
+      dplyr::summarize(
+        headcount = max(.data$headcount, na.rm = TRUE),  # Use max (county total) not sum
+        .groups = "drop"
+      )
+
     result <- dplyr::left_join(
       result,
-      headcount_data,
+      headcount_agg,
       by = "county_name"
     )
 

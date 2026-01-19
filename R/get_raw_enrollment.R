@@ -313,11 +313,11 @@ parse_fte_pdf <- function(pdf_path, end_year) {
   # Read PDF text
   text <- pdftools::pdf_text(pdf_path)
 
-  # 2024+ PDFs have a new format with data split across pages 3-4
+  # 2023+ PDFs have a new format with data split across pages 3-4
   # Check if this is the new format by looking for "Early Childhood" header
   is_new_format <- any(grepl("Early\\s+Childhood", text, ignore.case = TRUE))
 
-  if (is_new_format && end_year >= 2024) {
+  if (is_new_format && end_year >= 2023) {
     return(parse_fte_pdf_new_format(text, end_year))
   }
 

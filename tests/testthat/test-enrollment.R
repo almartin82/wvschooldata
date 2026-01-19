@@ -6,9 +6,9 @@ test_that("get_available_years returns expected range", {
   years <- get_available_years()
 
   expect_type(years, "integer")
-  expect_true(2014 %in% years)
+  expect_true(2023 %in% years)
   expect_true(2024 %in% years)
-  expect_equal(length(years), 11)  # 2014 to 2024
+  expect_equal(length(years), 2)  # 2023-2024 (older PDFs removed from WVDE)
 })
 
 

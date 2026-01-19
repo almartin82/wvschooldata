@@ -7,7 +7,7 @@
 get_available_years()
 }
 \value{
-Integer vector of available years (2013-2024)
+Integer vector of available years (2023-2024)
 }
 \description{
 Returns a vector of years for which enrollment data is available
