@@ -11,7 +11,7 @@ get_available_years()
 
 ## Value
 
-Integer vector of available years (2013-2024)
+Integer vector of available years (2023-2024)
 
 ## Details
 
@@ -27,5 +27,5 @@ available on the WVDE website.
 
 ``` r
 get_available_years()
-#>  [1] 2013 2014 2015 2016 2017 2018 2019 2020 2021 2023 2024
+#> [1] 2023 2024
 ```

@@ -58,199 +58,427 @@
 
 <p><strong><a href="https://almartin82.github.io/wvschooldata/">Documentation</a></strong> | <a href="https://github.com/almartin82/wvschooldata" class="external-link">GitHub</a></p>
 <p>Fetch and analyze West Virginia school enrollment data from <a href="https://wvde.us/about-us/finance/school-finance/school-finance-data/" class="external-link">WVDE</a> in R or Python.</p>
+<p>Part of the <a href="https://github.com/almartin82/njschooldata" class="external-link">njschooldata</a> family of state education data packages.</p>
 <div class="section level2">
 <h2 id="what-can-you-find-with-wvschooldata">What can you find with wvschooldata?<a class="anchor" aria-label="anchor" href="#what-can-you-find-with-wvschooldata"></a>
 </h2>
-<p>West Virginia educates students across 55 county school districts, one for each county. From the coalfields of McDowell to the Eastern Panhandle suburbs of DC, here are ten stories hiding in the data:</p>
+<p>West Virginia educates roughly 250,000 students across 55 county school districts – one for each county. From the coalfields of McDowell to the Eastern Panhandle suburbs of DC, here are fifteen stories hiding in the data:</p>
 <hr>
 <div class="section level3">
-<h3 id="id_1-the-state-that-lost-a-generation">1. The State That Lost a Generation<a class="anchor" aria-label="anchor" href="#id_1-the-state-that-lost-a-generation"></a>
+<h3 id="id_1-west-virginia-educates-around-250000-students">1. West Virginia educates around 250,000 students<a class="anchor" aria-label="anchor" href="#id_1-west-virginia-educates-around-250000-students"></a>
 </h3>
-<p>West Virginia has lost <strong>30% of its students</strong> since 1990. From 335,000 to 252,000, it is the steepest decline of any state in America.</p>
+<p>West Virginia’s public schools serve roughly a quarter million students across 55 county-based school districts – one of the simplest administrative structures in the nation.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://almartin82.github.io/wvschooldata">wvschooldata</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># West Virginia's decline</span></span>
-<span><span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1990</span>, <span class="fl">2000</span>, <span class="fl">2010</span>, <span class="fl">2020</span>, <span class="fl">2024</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   end_year n_students</span></span>
-<span><span class="co">#&gt; 1     1990     335234</span></span>
-<span><span class="co">#&gt; 2     2000     294567</span></span>
-<span><span class="co">#&gt; 3     2010     282456</span></span>
-<span><span class="co">#&gt; 4     2020     261234</span></span>
-<span><span class="co">#&gt; 5     2024     252345</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_2-the-mcdowell-county-collapse">2. The McDowell County Collapse<a class="anchor" aria-label="anchor" href="#id_2-the-mcdowell-county-collapse"></a>
-</h3>
-<p><strong>McDowell County</strong> was once a coal powerhouse. Population: 100,000 in 1950. Today, its schools have <strong>2,200 students</strong>, down from 8,000 in 1990.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1990</span>, <span class="fl">2000</span>, <span class="fl">2010</span>, <span class="fl">2024</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"McDowell"</span>, <span class="va">district_name</span><span class="op">)</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   end_year n_students</span></span>
-<span><span class="co">#&gt; 1     1990       8234</span></span>
-<span><span class="co">#&gt; 2     2000       5678</span></span>
-<span><span class="co">#&gt; 3     2010       3456</span></span>
-<span><span class="co">#&gt; 4     2024       2234</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_3-the-eastern-panhandle-boom">3. The Eastern Panhandle Boom<a class="anchor" aria-label="anchor" href="#id_3-the-eastern-panhandle-boom"></a>
-</h3>
-<p>While southern West Virginia collapses, <strong>Berkeley and Jefferson counties</strong> are growing, DC commuter exurbs adding thousands of students.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2010</span>, <span class="fl">2024</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Berkeley|Jefferson"</span>, <span class="va">district_name</span><span class="op">)</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">end_year</span>, values_from <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      district_name `2000` `2010` `2024`</span></span>
-<span><span class="co">#&gt; 1 Berkeley County   12456  16234  19456</span></span>
-<span><span class="co">#&gt; 2 Jefferson County   6789   8234  10234</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_4-the-homogeneity-challenge">4. The Homogeneity Challenge<a class="anchor" aria-label="anchor" href="#id_4-the-homogeneity-challenge"></a>
-</h3>
-<p>West Virginia is <strong>93% white</strong>, one of the least diverse states in the nation. Only Wyoming and Vermont have higher white percentages.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/fetch_enr.html">fetch_enr</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span>, <span class="st">"hispanic"</span>, <span class="st">"multiracial"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subgroup</span>, <span class="va">n_students</span>, <span class="va">pct</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      subgroup n_students   pct</span></span>
-<span><span class="co">#&gt; 1       white     234567  0.93</span></span>
-<span><span class="co">#&gt; 2       black      10234  0.04</span></span>
-<span><span class="co">#&gt; 3    hispanic       5678  0.02</span></span>
-<span><span class="co">#&gt; 4  multiracial      4567  0.02</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_5-the-covid-accelerator">5. The COVID Accelerator<a class="anchor" aria-label="anchor" href="#id_5-the-covid-accelerator"></a>
-</h3>
-<p>COVID accelerated West Virginia’s decline. The state lost <strong>12,000 students</strong> from 2019 to 2022, more than a decade’s typical loss.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fl">2019</span><span class="op">:</span><span class="fl">2024</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   end_year n_students</span></span>
-<span><span class="co">#&gt; 1     2019     265678</span></span>
-<span><span class="co">#&gt; 2     2020     261234</span></span>
-<span><span class="co">#&gt; 3     2021     254567</span></span>
-<span><span class="co">#&gt; 4     2022     253234</span></span>
-<span><span class="co">#&gt; 5     2023     252567</span></span>
-<span><span class="co">#&gt; 6     2024     252345</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_6-kanawha-the-anchor">6. Kanawha: The Anchor<a class="anchor" aria-label="anchor" href="#id_6-kanawha-the-anchor"></a>
-</h3>
-<p><strong>Kanawha County</strong> (Charleston) is West Virginia’s largest district, but has lost 20,000 students since 1990, from 42,000 to 22,000.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1990</span>, <span class="fl">2000</span>, <span class="fl">2010</span>, <span class="fl">2024</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Kanawha"</span>, <span class="va">district_name</span><span class="op">)</span>,</span>
-<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   end_year n_students</span></span>
-<span><span class="co">#&gt; 1     1990      42345</span></span>
-<span><span class="co">#&gt; 2     2000      32456</span></span>
-<span><span class="co">#&gt; 3     2010      27234</span></span>
-<span><span class="co">#&gt; 4     2024      22345</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_7-economic-disadvantage-is-universal">7. Economic Disadvantage is Universal<a class="anchor" aria-label="anchor" href="#id_7-economic-disadvantage-is-universal"></a>
-</h3>
-<p><strong>54% of West Virginia students</strong> qualify for free or reduced-price lunch. Some southern counties exceed 75%.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/fetch_enr.html">fetch_enr</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">subgroup</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">subgroup</span>, values_from <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct_econ <span class="op">=</span> <span class="va">econ_disadv</span> <span class="op">/</span> <span class="va">total_enrollment</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">pct_econ</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">pct_econ</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      district_name pct_econ</span></span>
-<span><span class="co">#&gt; 1  McDowell County     0.82</span></span>
-<span><span class="co">#&gt; 2    Mingo County      0.78</span></span>
-<span><span class="co">#&gt; 3   Webster County     0.76</span></span>
-<span><span class="co">#&gt; 4    Logan County      0.75</span></span>
-<span><span class="co">#&gt; 5  Wyoming County      0.74</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_8-the-kindergarten-collapse">8. The Kindergarten Collapse<a class="anchor" aria-label="anchor" href="#id_8-the-kindergarten-collapse"></a>
-</h3>
-<p>West Virginia kindergarten enrollment has dropped <strong>25%</strong> since 2000, a leading indicator of the population crisis.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2010</span>, <span class="fl">2024</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"K"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   end_year n_students</span></span>
-<span><span class="co">#&gt; 1     2000      23456</span></span>
-<span><span class="co">#&gt; 2     2010      20123</span></span>
-<span><span class="co">#&gt; 3     2024      17567</span></span></code></pre></div>
-<hr>
-</div>
-<div class="section level3">
-<h3 id="id_9-consolidation-not-an-option">9. Consolidation Not an Option<a class="anchor" aria-label="anchor" href="#id_9-consolidation-not-an-option"></a>
-</h3>
-<p>West Virginia’s <strong>55 county school districts</strong> are constitutionally mandated, one per county. Even as enrollment plummets, consolidation is impossible without a constitutional amendment.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Every county has exactly one district</span></span>
-<span><span class="fu"><a href="reference/fetch_enr.html">fetch_enr</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n_districts <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   n_districts</span></span>
-<span><span class="co">#&gt; 1          55</span></span>
+<span><span class="co"># Get available years (2023-2024)</span></span>
+<span><span class="va">available_years</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_available_years.html">get_available_years</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="va">available_years</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Smallest districts</span></span>
-<span><span class="fu"><a href="reference/fetch_enr.html">fetch_enr</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">state_totals</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>change <span class="op">=</span> <span class="va">n_students</span> <span class="op">-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span>,</span>
+<span>         pct_change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">change</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">state_totals</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 4</span></span>
+<span><span class="co">#&gt;   end_year n_students change pct_change</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;      &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2023     248801     NA      NA</span></span>
+<span><span class="co">#&gt; 2     2024     242777  -6024      -2.42</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/statewide-chart-1.png" alt="Statewide enrollment chart"><div class="figcaption">Statewide enrollment chart</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_2-kanawha-county-is-the-largest-district">2. Kanawha County is the largest district<a class="anchor" aria-label="anchor" href="#id_2-kanawha-county-is-the-largest-district"></a>
+</h3>
+<p>Kanawha County, home to the state capital Charleston, is West Virginia’s largest school district – though even it would be considered mid-sized in many states.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">enr_2024</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetch_enr.html">fetch_enr</a></span><span class="op">(</span><span class="fl">2024</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">top_10</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">top_10</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span><span class="co">#&gt;    district_name              county     n_students</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                      &lt;chr&gt;           &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 KANAWHA COUNTY SCHOOLS     KANAWHA         23437</span></span>
+<span><span class="co">#&gt;  2 BERKELEY COUNTY SCHOOLS    BERKELEY        19871</span></span>
+<span><span class="co">#&gt;  3 CABELL COUNTY SCHOOLS      CABELL          11436</span></span>
+<span><span class="co">#&gt;  4 WOOD COUNTY SCHOOLS        WOOD            11330</span></span>
+<span><span class="co">#&gt;  5 MONONGALIA COUNTY SCHOOLS  MONONGALIA      11201</span></span>
+<span><span class="co">#&gt;  6 RALEIGH COUNTY SCHOOLS     RALEIGH         10537</span></span>
+<span><span class="co">#&gt;  7 HARRISON COUNTY SCHOOLS    HARRISON         9635</span></span>
+<span><span class="co">#&gt;  8 PUTNAM COUNTY SCHOOLS      PUTNAM           8806</span></span>
+<span><span class="co">#&gt;  9 MERCER COUNTY SCHOOLS      MERCER           8415</span></span>
+<span><span class="co">#&gt; 10 JEFFERSON COUNTY SCHOOLS   JEFFERSON        8239</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/top-districts-chart-1.png" alt="Top districts chart"><div class="figcaption">Top districts chart</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_3-small-counties-dominate-the-landscape">3. Small counties dominate the landscape<a class="anchor" aria-label="anchor" href="#id_3-small-counties-dominate-the-landscape"></a>
+</h3>
+<p>West Virginia’s county-based system means many very small districts. Several counties have fewer than 1,000 students total.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Analyze district size distribution</span></span>
+<span><span class="va">size_distribution</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>size_category <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">1000</span> <span class="op">~</span> <span class="st">"Under 1,000"</span>,</span>
+<span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">2500</span> <span class="op">~</span> <span class="st">"1,000-2,499"</span>,</span>
+<span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">5000</span> <span class="op">~</span> <span class="st">"2,500-4,999"</span>,</span>
+<span>    <span class="va">n_students</span> <span class="op">&lt;</span> <span class="fl">10000</span> <span class="op">~</span> <span class="st">"5,000-9,999"</span>,</span>
+<span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"10,000+"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>size_category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">size_category</span>,</span>
+<span>                                 levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Under 1,000"</span>, <span class="st">"1,000-2,499"</span>,</span>
+<span>                                           <span class="st">"2,500-4,999"</span>, <span class="st">"5,000-9,999"</span>, <span class="st">"10,000+"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">size_category</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    n_districts <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    total_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">size_distribution</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt;   size_category n_districts total_students</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;               &lt;int&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Under 1,000             6           5195</span></span>
+<span><span class="co">#&gt; 2 1,000-2,499            19          32739</span></span>
+<span><span class="co">#&gt; 3 2,500-4,999            17          63209</span></span>
+<span><span class="co">#&gt; 4 5,000-9,999             7          53822</span></span>
+<span><span class="co">#&gt; 5 10,000+                 6          87812</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/demographics-chart-1.png" alt="District size distribution"><div class="figcaption">District size distribution</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_4-the-eastern-panhandle-has-the-largest-suburban-districts">4. The Eastern Panhandle has the largest suburban districts<a class="anchor" aria-label="anchor" href="#id_4-the-eastern-panhandle-has-the-largest-suburban-districts"></a>
+</h3>
+<p>The Eastern Panhandle – Berkeley, Jefferson, and Morgan counties near Washington, D.C. – benefits from suburban spillover and has some of the state’s fastest-growing areas.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Eastern Panhandle counties (DC suburbs)</span></span>
+<span><span class="va">panhandle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BERKELEY"</span>, <span class="st">"JEFFERSON"</span>, <span class="st">"MORGAN"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">regional_comparison</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="va">county</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">panhandle</span> <span class="op">~</span> <span class="st">"Eastern Panhandle"</span>,</span>
+<span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Rest of State"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">region</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    n_districts <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    total_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_district_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">regional_comparison</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 4</span></span>
+<span><span class="co">#&gt;   region            n_districts total_students avg_district_size</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                   &lt;int&gt;          &lt;dbl&gt;             &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Eastern Panhandle           3          30173             10058</span></span>
+<span><span class="co">#&gt; 2 Rest of State              52         212604              4088</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/regional-chart-1.png" alt="Eastern Panhandle districts"><div class="figcaption">Eastern Panhandle districts</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_5-coal-country-has-the-smallest-districts">5. Coal country has the smallest districts<a class="anchor" aria-label="anchor" href="#id_5-coal-country-has-the-smallest-districts"></a>
+</h3>
+<p>The southern coalfield counties – McDowell, Wyoming, Mingo, Logan, and Boone – have experienced decades of population loss as the coal industry contracted.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Coal counties</span></span>
+<span><span class="va">coal_counties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MCDOWELL"</span>, <span class="st">"WYOMING"</span>, <span class="st">"MINGO"</span>, <span class="st">"LOGAN"</span>, <span class="st">"BOONE"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">coal_districts</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">coal_counties</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">coal_districts</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt;   district_name            county   n_students</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                    &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 MCDOWELL COUNTY SCHOOLS  MCDOWELL       2393</span></span>
+<span><span class="co">#&gt; 2 WYOMING COUNTY SCHOOLS   WYOMING        3172</span></span>
+<span><span class="co">#&gt; 3 BOONE COUNTY SCHOOLS     BOONE          3100</span></span>
+<span><span class="co">#&gt; 4 MINGO COUNTY SCHOOLS     MINGO          3573</span></span>
+<span><span class="co">#&gt; 5 LOGAN COUNTY SCHOOLS     LOGAN          4771</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/growth-chart-1.png" alt="Coal country districts"><div class="figcaption">Coal country districts</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_6-mcdowell-county-exemplifies-appalachian-decline">6. McDowell County exemplifies Appalachian decline<a class="anchor" aria-label="anchor" href="#id_6-mcdowell-county-exemplifies-appalachian-decline"></a>
+</h3>
+<p>McDowell County, once a coal mining powerhouse with over 100,000 residents in 1950, now has fewer than 2,500 students – one of the starkest examples of Appalachian population decline.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mcdowell</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op">==</span> <span class="st">"MCDOWELL"</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mcdowell</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span><span class="co">#&gt;   end_year n_students</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2023       2454</span></span>
+<span><span class="co">#&gt; 2     2024       2393</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_7-high-school-enrollment-patterns">7. High school enrollment patterns<a class="anchor" aria-label="anchor" href="#id_7-high-school-enrollment-patterns"></a>
+</h3>
+<p>Analyzing enrollment by grade level reveals the pipeline of students moving through the system.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">grade_trends</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>,</span>
+<span>         <span class="va">grade_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"05"</span>, <span class="st">"09"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">grade_trends</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span><span class="co">#&gt;   grade_level n_students</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 K                17331</span></span>
+<span><span class="co">#&gt; 2 05               17925</span></span>
+<span><span class="co">#&gt; 3 09               19461</span></span>
+<span><span class="co">#&gt; 4 12               16776</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_8-berkeley-county-is-the-fastest-growing-region">8. Berkeley County is the fastest-growing region<a class="anchor" aria-label="anchor" href="#id_8-berkeley-county-is-the-fastest-growing-region"></a>
+</h3>
+<p>Berkeley County in the Eastern Panhandle is West Virginia’s second-largest district and one of its few growing areas.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Compare Berkeley to state average</span></span>
+<span><span class="va">berkeley</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op">==</span> <span class="st">"BERKELEY"</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">state_avg</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>avg_enrollment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Berkeley County enrollment:"</span>, <span class="va">berkeley</span><span class="op">$</span><span class="va">n_students</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Berkeley County enrollment: 19871</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"State average district enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">state_avg</span><span class="op">$</span><span class="va">avg_enrollment</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; State average district enrollment: 4414</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Berkeley is"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">berkeley</span><span class="op">$</span><span class="va">n_students</span> <span class="op">/</span> <span class="va">state_avg</span><span class="op">$</span><span class="va">avg_enrollment</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"x the state average\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Berkeley is 4.5x the state average</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_9-kindergarten-enrollment-signals-future-trends">9. Kindergarten enrollment signals future trends<a class="anchor" aria-label="anchor" href="#id_9-kindergarten-enrollment-signals-future-trends"></a>
+</h3>
+<p>Kindergarten enrollment serves as a leading indicator. Current K enrollment suggests what high school classes will look like in 12 years.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">k_enrollment</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"K"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">grade12_enrollment</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"12"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Current Kindergarten enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">k_enrollment</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Current Kindergarten enrollment: 17,331</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Current 12th grade enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">grade12_enrollment</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Current 12th grade enrollment: 16,776</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_10-55-districts-create-administrative-structure">10. 55 districts create administrative structure<a class="anchor" aria-label="anchor" href="#id_10-55-districts-create-administrative-structure"></a>
+</h3>
+<p>West Virginia’s county-based system means even tiny counties maintain full district operations.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">smallest</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      district_name n_students</span></span>
-<span><span class="co">#&gt; 1  Wirt County           1234</span></span>
-<span><span class="co">#&gt; 2  Calhoun County        1345</span></span>
-<span><span class="co">#&gt; 3  Webster County        1456</span></span>
-<span><span class="co">#&gt; 4  Pendleton County      1567</span></span>
-<span><span class="co">#&gt; 5  Pocahontas County     1678</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">smallest</span></span>
+<span><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span><span class="co">#&gt;    district_name              county     n_students</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                      &lt;chr&gt;           &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 WIRT COUNTY SCHOOLS        WIRT              768</span></span>
+<span><span class="co">#&gt;  2 GILMER COUNTY SCHOOLS      GILMER            761</span></span>
+<span><span class="co">#&gt;  3 CALHOUN COUNTY SCHOOLS     CALHOUN           829</span></span>
+<span><span class="co">#&gt;  4 POCAHONTAS COUNTY SCHOOLS  POCAHONTAS        956</span></span>
+<span><span class="co">#&gt;  5 TUCKER COUNTY SCHOOLS      TUCKER            997</span></span>
+<span><span class="co">#&gt;  6 PENDLETON COUNTY SCHOOLS   PENDLETON         942</span></span>
+<span><span class="co">#&gt;  7 DODDRIDGE COUNTY SCHOOLS   DODDRIDGE        1156</span></span>
+<span><span class="co">#&gt;  8 WEBSTER COUNTY SCHOOLS     WEBSTER          1168</span></span>
+<span><span class="co">#&gt;  9 CLAY COUNTY SCHOOLS        CLAY             1510</span></span>
+<span><span class="co">#&gt; 10 RITCHIE COUNTY SCHOOLS     RITCHIE          1408</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level3">
-<h3 id="id_10-38-years-of-mountain-state-education">10. 38 Years of Mountain State Education<a class="anchor" aria-label="anchor" href="#id_10-38-years-of-mountain-state-education"></a>
+<h3 id="id_11-kanawha-county-charleston-is-the-state-capitals-district">11. Kanawha County (Charleston) is the state capital’s district<a class="anchor" aria-label="anchor" href="#id_11-kanawha-county-charleston-is-the-state-capitals-district"></a>
 </h3>
-<p>This package provides <strong>38 years</strong> of West Virginia enrollment data, documenting one of America’s most dramatic demographic shifts.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Years available</span></span>
-<span><span class="fu"><a href="reference/get_available_years.html">get_available_years</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 1987 1988 1989 ... 2022 2023 2024</span></span>
+<p>The state capital Charleston, in Kanawha County, is West Virginia’s largest school district.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">kanawha</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op">==</span> <span class="st">"KANAWHA"</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># The long decline</span></span>
-<span><span class="fu"><a href="reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1990</span>, <span class="fl">2024</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">kanawha</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span><span class="co">#&gt;   end_year n_students</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2023      23827</span></span>
+<span><span class="co">#&gt; 2     2024      23437</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/charleston-chart-1.png" alt="Kanawha enrollment chart"><div class="figcaption">Kanawha enrollment chart</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_12-the-urban-rural-divide-is-minimal">12. The urban-rural divide is minimal<a class="anchor" aria-label="anchor" href="#id_12-the-urban-rural-divide-is-minimal"></a>
+</h3>
+<p>West Virginia has no large cities. Even “urban” Kanawha County is mostly rural by national standards.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">district_sizes</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rank <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">rank</span>, <span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">size_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Largest (Kanawha)"</span>, <span class="st">"10th Largest"</span>, <span class="st">"Median"</span>, <span class="st">"10th Smallest"</span>, <span class="st">"Smallest (Wirt)"</span><span class="op">)</span>,</span>
+<span>  n_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">district_sizes</span><span class="op">$</span><span class="va">n_students</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    <span class="va">district_sizes</span><span class="op">$</span><span class="va">n_students</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">district_sizes</span><span class="op">$</span><span class="va">n_students</span><span class="op">)</span>,</span>
+<span>    <span class="va">district_sizes</span><span class="op">$</span><span class="va">n_students</span><span class="op">[</span><span class="fl">46</span><span class="op">]</span>,</span>
+<span>    <span class="va">district_sizes</span><span class="op">$</span><span class="va">n_students</span><span class="op">[</span><span class="fl">55</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">size_range</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 2</span></span>
+<span><span class="co">#&gt;   metric            n_students</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Largest (Kanawha)      23437</span></span>
+<span><span class="co">#&gt; 2 10th Largest            8239</span></span>
+<span><span class="co">#&gt; 3 Median                  3172</span></span>
+<span><span class="co">#&gt; 4 10th Smallest           1168</span></span>
+<span><span class="co">#&gt; 5 Smallest (Wirt)          768</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/urban-rural-chart-1.png" alt="Urban-rural comparison"><div class="figcaption">Urban-rural comparison</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_13-the-northern-panhandle-steel-town-legacy">13. The Northern Panhandle steel town legacy<a class="anchor" aria-label="anchor" href="#id_13-the-northern-panhandle-steel-town-legacy"></a>
+</h3>
+<p>The Northern Panhandle – Ohio, Marshall, Brooke, and Hancock counties – once thrived on steel and manufacturing.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">northern_panhandle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"OHIO"</span>, <span class="st">"MARSHALL"</span>, <span class="st">"BROOKE"</span>, <span class="st">"HANCOCK"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">northern_districts</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">northern_panhandle</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">northern_districts</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span><span class="co">#&gt;   district_name            county   n_students</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                    &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 OHIO COUNTY SCHOOLS      OHIO           4986</span></span>
+<span><span class="co">#&gt; 2 MARSHALL COUNTY SCHOOLS  MARSHALL       4228</span></span>
+<span><span class="co">#&gt; 3 HANCOCK COUNTY SCHOOLS   HANCOCK        3374</span></span>
+<span><span class="co">#&gt; 4 BROOKE COUNTY SCHOOLS    BROOKE         2336</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/northern-panhandle-chart-1.png" alt="Northern Panhandle chart"><div class="figcaption">Northern Panhandle chart</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_14-grade-level-enrollment-by-benchmark-grades">14. Grade-level enrollment by benchmark grades<a class="anchor" aria-label="anchor" href="#id_14-grade-level-enrollment-by-benchmark-grades"></a>
+</h3>
+<p>Comparing enrollment across key grade levels shows the flow of students through the system.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">grade_comparison</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>,</span>
+<span>         <span class="va">grade_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"03"</span>, <span class="st">"06"</span>, <span class="st">"09"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">grade_level</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"03"</span>, <span class="st">"06"</span>, <span class="st">"09"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">grade_comparison</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 2</span></span>
+<span><span class="co">#&gt;   grade_level n_students</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 K                17331</span></span>
+<span><span class="co">#&gt; 2 03               17375</span></span>
+<span><span class="co">#&gt; 3 06               17868</span></span>
+<span><span class="co">#&gt; 4 09               19461</span></span>
+<span><span class="co">#&gt; 5 12               16776</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/grade-wave-chart-1.png" alt="Grade wave chart"><div class="figcaption">Grade wave chart</div>
+</div>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="id_15-the-future-is-written-in-demographics">15. The future is written in demographics<a class="anchor" aria-label="anchor" href="#id_15-the-future-is-written-in-demographics"></a>
+</h3>
+<p>West Virginia’s birth rate has declined steadily, reflected in smaller kindergarten cohorts.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Compare K to total to show pipeline</span></span>
+<span><span class="va">k_data</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"K"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="st">"Kindergarten"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">total_data</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="st">"All Grades"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">k_pct_of_total</span> <span class="op">&lt;-</span> <span class="va">k_data</span><span class="op">$</span><span class="va">n_students</span> <span class="op">/</span> <span class="va">total_data</span><span class="op">$</span><span class="va">n_students</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Kindergarten enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">k_data</span><span class="op">$</span><span class="va">n_students</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Kindergarten enrollment: 17,331</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Total enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">total_data</span><span class="op">$</span><span class="va">n_students</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Total enrollment: 242,777</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Kindergarten is"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">k_pct_of_total</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"% of total enrollment\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Kindergarten is 7.1% of total enrollment</span></span></code></pre></div>
+<div class="float">
+<img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/future-chart-1.png" alt="Future enrollment chart"><div class="figcaption">Future enrollment chart</div>
+</div>
 <hr>
 </div>
 </div>
 <div class="section level2">
 <h2 id="enrollment-visualizations">Enrollment Visualizations<a class="anchor" aria-label="anchor" href="#enrollment-visualizations"></a>
 </h2>
-<p><img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/statewide-chart-1.png" alt="West Virginia statewide enrollment trends" width="600"></p>
-<p><img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/top-districts-chart-1.png" alt="Top West Virginia districts" width="600"></p>
 <p>See the <a href="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks.html">full vignette</a> for more insights.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"almartin82/wvschooldata"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -260,7 +488,7 @@
 <div class="section level3">
 <h3 id="r">R<a class="anchor" aria-label="anchor" href="#r"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://almartin82.github.io/wvschooldata">wvschooldata</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -271,42 +499,41 @@
 <span><span class="va">enr</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 1,101,913</span></span>
+<span><span class="co">#&gt; 242777</span></span>
 <span></span>
 <span><span class="co"># Top 5 county districts</span></span>
 <span><span class="va">enr</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">district_name</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       district_name n_students</span></span>
+<span><span class="co">#&gt;        district_name n_students</span></span>
 <span><span class="co">#&gt; 1  KANAWHA COUNTY SCHOOLS      23437</span></span>
 <span><span class="co">#&gt; 2 BERKELEY COUNTY SCHOOLS      19871</span></span>
 <span><span class="co">#&gt; 3   CABELL COUNTY SCHOOLS      11436</span></span>
 <span><span class="co">#&gt; 4     WOOD COUNTY SCHOOLS      11330</span></span>
-<span><span class="co">#&gt; 5 MONONGALIA COUNTY SCHOOLS      11201</span></span></code></pre></div>
+<span><span class="co">#&gt; 5 MONONGALIA COUNTY SCHOOLS   11201</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="python">Python<a class="anchor" aria-label="anchor" href="#python"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="im">import</span> pywvschooldata <span class="im">as</span> wv</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co"># Fetch 2024 data (2023-24 school year)</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>enr <span class="op">=</span> wv.fetch_enr(<span class="dv">2024</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co"># Statewide total</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>total <span class="op">=</span> enr[enr[<span class="st">'is_state'</span>] <span class="op">&amp;</span> (enr[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>) <span class="op">&amp;</span> (enr[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>)][<span class="st">'n_students'</span>].<span class="bu">sum</span>()</span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>total<span class="sc">:,}</span><span class="ss"> students"</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; 1,101,913 students</span></span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co"># Get multiple years</span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>enr_multi <span class="op">=</span> wv.fetch_enr_multi([<span class="dv">2020</span>, <span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>, <span class="dv">2024</span>])</span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co"># Check available years</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>years <span class="op">=</span> wv.get_available_years()</span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Data available: </span><span class="sc">{</span>years[<span class="st">'min_year'</span>]<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>years[<span class="st">'max_year'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; Data available: 2014-2025</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="im">import</span> pywvschooldata <span class="im">as</span> wv</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="co"># Fetch 2024 data (2023-24 school year)</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>enr <span class="op">=</span> wv.fetch_enr(<span class="dv">2024</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co"># Statewide total</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>total <span class="op">=</span> enr[enr[<span class="st">'is_state'</span>] <span class="op">&amp;</span> (enr[<span class="st">'grade_level'</span>] <span class="op">==</span> <span class="st">'TOTAL'</span>) <span class="op">&amp;</span> (enr[<span class="st">'subgroup'</span>] <span class="op">==</span> <span class="st">'total_enrollment'</span>)][<span class="st">'n_students'</span>].<span class="bu">sum</span>()</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>total<span class="sc">:,}</span><span class="ss"> students"</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="co">#&gt; 242,777 students</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="co"># Get multiple years</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>enr_multi <span class="op">=</span> wv.fetch_enr_multi([<span class="dv">2023</span>, <span class="dv">2024</span>])</span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co"># Check available years</span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>years <span class="op">=</span> wv.get_available_years()</span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Data available: </span><span class="sc">{</span><span class="bu">min</span>(years)<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span><span class="bu">max</span>(years)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a><span class="co">#&gt; Data available: 2023-2024</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -325,15 +552,15 @@
 </tr>
 <tr class="even">
 <td><code>district_id</code></td>
-<td>LEA ID (7 characters)</td>
+<td>District ID (5 characters)</td>
 </tr>
 <tr class="odd">
 <td><code>campus_id</code></td>
-<td>School ID (12 characters)</td>
+<td>School ID (not available in WV data)</td>
 </tr>
 <tr class="even">
 <td><code>type</code></td>
-<td>“State”, “District”, or “Campus”</td>
+<td>“State” or “District”</td>
 </tr>
 <tr class="odd">
 <td>
@@ -351,7 +578,7 @@
 </tr>
 <tr class="even">
 <td><code>subgroup</code></td>
-<td>Demographic group</td>
+<td>Demographic group (currently only “total_enrollment”)</td>
 </tr>
 <tr class="odd">
 <td><code>n_students</code></td>
@@ -363,51 +590,22 @@
 </tr>
 </tbody>
 </table>
-<div class="section level3">
-<h3 id="subgroups-available">Subgroups Available<a class="anchor" aria-label="anchor" href="#subgroups-available"></a>
-</h3>
-<p><strong>Demographics</strong>: <code>white</code>, <code>black</code>, <code>hispanic</code>, <code>asian</code>, <code>pacific_islander</code>, <code>native_american</code>, <code>multiracial</code></p>
-<p><strong>Other</strong>: <code>male</code>, <code>female</code></p>
-</div>
 </div>
 <div class="section level2">
-<h2 id="data-availability">Data Availability<a class="anchor" aria-label="anchor" href="#data-availability"></a>
+<h2 id="data-notes">Data Notes<a class="anchor" aria-label="anchor" href="#data-notes"></a>
 </h2>
-<table class="table">
-<colgroup>
-<col width="17%">
-<col width="24%">
-<col width="58%">
-</colgroup>
-<thead><tr class="header">
-<th>Era</th>
-<th>Years</th>
-<th>Race Categories</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Pre-1998</td>
-<td>1987-1997</td>
-<td>5 categories (Asian/Pacific Islander combined)</td>
-</tr>
-<tr class="even">
-<td>5-Race Era</td>
-<td>1998-2010</td>
-<td>White, Black, Hispanic, Asian/PI, American Indian</td>
-</tr>
-<tr class="odd">
-<td>7-Race Era</td>
-<td>2011-2024</td>
-<td>Added Pacific Islander (separate), Two or More Races</td>
-</tr>
-</tbody>
-</table>
-<p><strong>38 years total</strong> across ~700 schools and 55 county school districts.</p>
+<p><strong>Data Source:</strong> <a href="https://wvde.us/about-us/finance/school-finance/school-finance-data/" class="external-link">West Virginia Department of Education School Finance Data</a></p>
+<p><strong>Available Years:</strong> 2023-2024 (older PDFs removed from WVDE website)</p>
+<p><strong>Data Collection:</strong> October 1st (2nd month) of each school year</p>
+<p><strong>Structure:</strong> - 55 county school districts (one per county, constitutionally mandated) - District-level data only (no school-level data in PDFs) - Grade-level FTE enrollment with headcount totals</p>
+<p><strong>Suppression:</strong> No suppression rules noted in the data</p>
+<p><strong>Known Issues:</strong> - 2022 data was never published by WVDE - Historical PDFs (2013-2021) removed from WVDE website - FTE counts may have decimals due to part-time enrollment</p>
 </div>
 <div class="section level2">
 <h2 id="part-of-the-state-schooldata-project">Part of the State Schooldata Project<a class="anchor" aria-label="anchor" href="#part-of-the-state-schooldata-project"></a>
 </h2>
 <p>A simple, consistent interface for accessing state-published school data in Python and R.</p>
+<p>This package is part of the <a href="https://github.com/almartin82/njschooldata" class="external-link">njschooldata</a> family.</p>
 <p><strong>All 50 state packages:</strong> <a href="https://github.com/almartin82?tab=repositories&amp;q=schooldata" class="external-link">github.com/almartin82</a></p>
 </div>
 <div class="section level2">

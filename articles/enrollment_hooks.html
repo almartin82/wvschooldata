@@ -82,7 +82,7 @@ districts.</p>
 students across 55 county-based school districts – one of the simplest
 administrative structures in the nation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get all available years (2013-2021, 2023-2024; 2022 PDF was not published)</span></span>
+<code class="sourceCode R"><span><span class="co"># Get available years (2023-2024)</span></span>
 <span><span class="va">available_years</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_available_years.html">get_available_years</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetch_enr_multi.html">fetch_enr_multi</a></span><span class="op">(</span><span class="va">available_years</span>, use_cache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -93,10 +93,9 @@ administrative structures in the nation.</p>
 <span>         pct_change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">change</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">state_totals</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 4</span></span></span>
 <span><span class="co">#&gt;   end_year n_students change pct_change</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024    1<span style="text-decoration: underline;">101</span>913     <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
+<span><span class="co">#&gt; 1     2023     248801     NA         NA</span></span>
+<span><span class="co">#&gt; 2     2024     242777  -6024      -2.42</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">state_totals</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span>, color <span class="op">=</span> <span class="st">"#002855"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -104,8 +103,8 @@ administrative structures in the nation.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span>,</span>
 <span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"West Virginia Public School Enrollment (2014-2024)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"The Mountain State has seen consistent enrollment decline"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"West Virginia Public School Enrollment (2023-2024)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"The Mountain State continues to see enrollment decline"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"School Year (ending)"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Total Enrollment"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -128,17 +127,17 @@ mid-sized in many states.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">top_10</span></span>
-<span><span class="co">#&gt;              district_name   county n_students</span></span>
-<span><span class="co">#&gt; 1   KANAWHA COUNTY SCHOOLS  KANAWHA      23437</span></span>
-<span><span class="co">#&gt; 2   KANAWHA COUNTY SCHOOLS  KANAWHA      23437</span></span>
-<span><span class="co">#&gt; 3   KANAWHA COUNTY SCHOOLS  KANAWHA      23437</span></span>
-<span><span class="co">#&gt; 4   KANAWHA COUNTY SCHOOLS  KANAWHA      23437</span></span>
-<span><span class="co">#&gt; 5   KANAWHA COUNTY SCHOOLS  KANAWHA      23437</span></span>
-<span><span class="co">#&gt; 6  BERKELEY COUNTY SCHOOLS BERKELEY      19871</span></span>
-<span><span class="co">#&gt; 7  BERKELEY COUNTY SCHOOLS BERKELEY      19871</span></span>
-<span><span class="co">#&gt; 8  BERKELEY COUNTY SCHOOLS BERKELEY      19871</span></span>
-<span><span class="co">#&gt; 9  BERKELEY COUNTY SCHOOLS BERKELEY      19871</span></span>
-<span><span class="co">#&gt; 10   CABELL COUNTY SCHOOLS   CABELL      11436</span></span></code></pre></div>
+<span><span class="co">#&gt;                district_name     county n_students</span></span>
+<span><span class="co">#&gt; 1     KANAWHA COUNTY SCHOOLS    KANAWHA      23437</span></span>
+<span><span class="co">#&gt; 2    BERKELEY COUNTY SCHOOLS   BERKELEY      19871</span></span>
+<span><span class="co">#&gt; 3      CABELL COUNTY SCHOOLS     CABELL      11436</span></span>
+<span><span class="co">#&gt; 4        WOOD COUNTY SCHOOLS       WOOD      11330</span></span>
+<span><span class="co">#&gt; 5  MONONGALIA COUNTY SCHOOLS MONONGALIA      11201</span></span>
+<span><span class="co">#&gt; 6     RALEIGH COUNTY SCHOOLS    RALEIGH      10537</span></span>
+<span><span class="co">#&gt; 7    HARRISON COUNTY SCHOOLS   HARRISON       9635</span></span>
+<span><span class="co">#&gt; 8      PUTNAM COUNTY SCHOOLS     PUTNAM       8806</span></span>
+<span><span class="co">#&gt; 9      MERCER COUNTY SCHOOLS     MERCER       8415</span></span>
+<span><span class="co">#&gt; 10  JEFFERSON COUNTY SCHOOLS  JEFFERSON       8239</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">top_10</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>district_name <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html" class="external-link">fct_reorder</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -147,7 +146,7 @@ mid-sized in many states.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"West Virginia's 10 Largest School Districts (2024)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Kanawha County leads, but no district exceeds 30,000 students"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Kanawha County leads, but no district exceeds 25,000 students"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Total Enrollment"</span>,</span>
 <span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -160,7 +159,7 @@ mid-sized in many states.</p>
 <p>West Virginia’s county-based system means many very small districts.
 Several counties have fewer than 1,000 students total.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Since WV data lacks demographic breakdowns, we'll analyze district size distribution</span></span>
+<code class="sourceCode R"><span><span class="co"># Analyze district size distribution</span></span>
 <span><span class="va">size_distribution</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>size_category <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
@@ -184,11 +183,11 @@ Several counties have fewer than 1,000 students total.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 x 3</span></span></span>
 <span><span class="co">#&gt;   size_category n_districts total_students</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Under 1,000           230          <span style="text-decoration: underline;">53</span>528</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1,000-2,499            78         <span style="text-decoration: underline;">134</span>216</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2,500-4,999            68         <span style="text-decoration: underline;">252</span>836</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 5,000-9,999            31         <span style="text-decoration: underline;">242</span>144</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 10,000+                29         <span style="text-decoration: underline;">419</span>189</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Under 1,000             6           <span style="text-decoration: underline;">5</span>195</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1,000-2,499            19          <span style="text-decoration: underline;">32</span>739</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2,500-4,999            17          <span style="text-decoration: underline;">63</span>209</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 5,000-9,999             7          <span style="text-decoration: underline;">53</span>822</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 10,000+                 6          <span style="text-decoration: underline;">87</span>812</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">size_distribution</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">size_category</span>, y <span class="op">=</span> <span class="va">n_districts</span>, fill <span class="op">=</span> <span class="va">size_category</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -205,92 +204,88 @@ Several counties have fewer than 1,000 students total.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="the-eastern-panhandle-is-growing">4. The Eastern Panhandle is growing<a class="anchor" aria-label="anchor" href="#the-eastern-panhandle-is-growing"></a>
+<h2 id="the-eastern-panhandle-has-the-largest-suburban-districts">4. The Eastern Panhandle has the largest suburban districts<a class="anchor" aria-label="anchor" href="#the-eastern-panhandle-has-the-largest-suburban-districts"></a>
 </h2>
-<p>While most of West Virginia loses population, the Eastern Panhandle –
-Berkeley, Jefferson, and Morgan counties near Washington, D.C. – has
-experienced growth from suburban spillover.</p>
+<p>The Eastern Panhandle – Berkeley, Jefferson, and Morgan counties near
+Washington, D.C. – benefits from suburban spillover and has some of the
+state’s fastest-growing areas.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Eastern Panhandle counties (DC suburbs)</span></span>
 <span><span class="va">panhandle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BERKELEY"</span>, <span class="st">"JEFFERSON"</span>, <span class="st">"MORGAN"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">regional_comparison</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<span><span class="va">regional_comparison</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>region <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>    <span class="va">county</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">panhandle</span> <span class="op">~</span> <span class="st">"Eastern Panhandle"</span>,</span>
 <span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Rest of State"</span></span>
 <span>  <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">region</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">regional_comparison</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">region</span>, values_from <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 3</span></span></span>
-<span><span class="co">#&gt;   end_year `Eastern Panhandle` `Rest of State`</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024              <span style="text-decoration: underline;">126</span>543          <span style="text-decoration: underline;">975</span>370</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">regional_indexed</span> <span class="op">&lt;-</span> <span class="va">regional_comparison</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">region</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index <span class="op">=</span> <span class="va">n_students</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    n_districts <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    total_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_district_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">regional_indexed</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">index</span>, color <span class="op">=</span> <span class="va">region</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">100</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Eastern Panhandle"</span> <span class="op">=</span> <span class="st">"#4CAF50"</span>,</span>
-<span>                                 <span class="st">"Rest of State"</span> <span class="op">=</span> <span class="st">"#F44336"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">regional_comparison</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 x 4</span></span></span>
+<span><span class="co">#&gt;   region            n_districts total_students avg_district_size</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Eastern Panhandle           3          <span style="text-decoration: underline;">30</span>254             <span style="text-decoration: underline;">10</span>085</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Rest of State              52         <span style="text-decoration: underline;">212</span>523              <span style="text-decoration: underline;">4</span>087</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">panhandle_districts</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">panhandle</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">panhandle_districts</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>district_name <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html" class="external-link">fct_reorder</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n_students</span>, y <span class="op">=</span> <span class="va">district_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#4CAF50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Enrollment Trends: Eastern Panhandle vs. Rest of State"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Indexed to 2014 = 100"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"School Year"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Enrollment Index"</span>,</span>
-<span>    color <span class="op">=</span> <span class="cn">NULL</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<span>    title <span class="op">=</span> <span class="st">"Eastern Panhandle Districts (DC Suburbs)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Berkeley County is the state's second-largest district"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Total Enrollment"</span>,</span>
+<span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="enrollment_hooks_files/figure-html/regional-chart-1.png" class="r-plt" alt="" width="768"></p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="coal-country-continues-to-decline">5. Coal country continues to decline<a class="anchor" aria-label="anchor" href="#coal-country-continues-to-decline"></a>
+<h2 id="coal-country-has-the-smallest-districts">5. Coal country has the smallest districts<a class="anchor" aria-label="anchor" href="#coal-country-has-the-smallest-districts"></a>
 </h2>
 <p>The southern coalfield counties – McDowell, Wyoming, Mingo, Logan,
-and Boone – have experienced severe enrollment declines as the coal
-industry has contracted.</p>
+and Boone – have experienced decades of population loss as the coal
+industry contracted.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coal counties</span></span>
 <span><span class="va">coal_counties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MCDOWELL"</span>, <span class="st">"WYOMING"</span>, <span class="st">"MINGO"</span>, <span class="st">"LOGAN"</span>, <span class="st">"BOONE"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">growth_analysis</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span>,</span>
-<span>         <span class="va">end_year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2014</span>, <span class="fl">2024</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
-<span>    y2014 <span class="op">=</span> <span class="va">n_students</span><span class="op">[</span><span class="va">end_year</span> <span class="op">==</span> <span class="fl">2014</span><span class="op">]</span>,</span>
-<span>    y2024 <span class="op">=</span> <span class="va">n_students</span><span class="op">[</span><span class="va">end_year</span> <span class="op">==</span> <span class="fl">2024</span><span class="op">]</span>,</span>
-<span>    change <span class="op">=</span> <span class="va">y2024</span> <span class="op">-</span> <span class="va">y2014</span>,</span>
-<span>    pct_change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">y2024</span> <span class="op">/</span> <span class="va">y2014</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">pct_change</span><span class="op">)</span></span>
+<span><span class="va">coal_districts</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">coal_counties</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Show the most declining districts</span></span>
-<span><span class="va">declining_10</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">growth_analysis</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">declining_10</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 x 6</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># i 6 variables: district_name &lt;chr&gt;, county &lt;chr&gt;, y2014 &lt;dbl&gt;, y2024 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   change &lt;dbl&gt;, pct_change &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="va">coal_districts</span></span>
+<span><span class="co">#&gt;             district_name   county n_students</span></span>
+<span><span class="co">#&gt; 1 MCDOWELL COUNTY SCHOOLS MCDOWELL       2353</span></span>
+<span><span class="co">#&gt; 2    BOONE COUNTY SCHOOLS    BOONE       3100</span></span>
+<span><span class="co">#&gt; 3  WYOMING COUNTY SCHOOLS  WYOMING       3366</span></span>
+<span><span class="co">#&gt; 4    MINGO COUNTY SCHOOLS    MINGO       3404</span></span>
+<span><span class="co">#&gt; 5    LOGAN COUNTY SCHOOLS    LOGAN       4804</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">declining_10</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>county <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html" class="external-link">fct_reorder</a></span><span class="op">(</span><span class="va">county</span>, <span class="va">pct_change</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pct_change</span>, y <span class="op">=</span> <span class="va">county</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">coal_districts</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>county <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html" class="external-link">fct_reorder</a></span><span class="op">(</span><span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n_students</span>, y <span class="op">=</span> <span class="va">county</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#B71C1C"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">pct_change</span>, <span class="st">"%"</span><span class="op">)</span><span class="op">)</span>, hjust <span class="op">=</span> <span class="fl">1.1</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Fastest-Declining West Virginia Counties (2014-2024)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Coal country leads population loss"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"Percent Change"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Coal Country School Districts (2024)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Former coal powerhouses now have small student populations"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Total Enrollment"</span>,</span>
 <span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="enrollment_hooks_files/figure-html/growth-chart-1.png" class="r-plt" alt="" width="768"></p>
@@ -300,87 +295,88 @@ industry has contracted.</p>
 <h2 id="mcdowell-county-exemplifies-appalachian-decline">6. McDowell County exemplifies Appalachian decline<a class="anchor" aria-label="anchor" href="#mcdowell-county-exemplifies-appalachian-decline"></a>
 </h2>
 <p>McDowell County, once a coal mining powerhouse with over 100,000
-residents, now has fewer than 2,500 students – one of the starkest
-examples of Appalachian population decline.</p>
+residents in 1950, now has fewer than 2,500 students – one of the
+starkest examples of Appalachian population decline.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mcdowell_trend</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">mcdowell</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op">==</span> <span class="st">"MCDOWELL"</span>,</span>
 <span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct_of_2014 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">n_students</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">mcdowell_trend</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 x 3</span></span></span>
-<span><span class="co">#&gt;   end_year n_students pct_of_2014</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024       <span style="text-decoration: underline;">2</span>353       100  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     <span style="text-decoration: underline;">2</span>024        194         8.2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     <span style="text-decoration: underline;">2</span>024       <span style="text-decoration: underline;">2</span>353       100  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     <span style="text-decoration: underline;">2</span>024       <span style="text-decoration: underline;">2</span>353       100  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     <span style="text-decoration: underline;">2</span>024       <span style="text-decoration: underline;">2</span>353       100  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     <span style="text-decoration: underline;">2</span>024        119         5.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     <span style="text-decoration: underline;">2</span>024          3         0.1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>     <span style="text-decoration: underline;">2</span>024          3         0.1</span></span></code></pre></div>
+<span><span class="va">mcdowell</span></span>
+<span><span class="co">#&gt;   end_year n_students</span></span>
+<span><span class="co">#&gt; 1     2023       2455</span></span>
+<span><span class="co">#&gt; 2     2024       2353</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="high-school-enrollment-is-shrinking-faster">7. High school enrollment is shrinking faster<a class="anchor" aria-label="anchor" href="#high-school-enrollment-is-shrinking-faster"></a>
+<h2 id="high-school-enrollment-patterns">7. High school enrollment patterns<a class="anchor" aria-label="anchor" href="#high-school-enrollment-patterns"></a>
 </h2>
-<p>Analyzing enrollment by grade level reveals that high school grades
-are shrinking faster than elementary grades, suggesting accelerating
-population decline.</p>
+<p>Analyzing enrollment by grade level reveals the pipeline of students
+moving through the system.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">grade_trends</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">grade_trends</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>,</span>
 <span>         <span class="va">grade_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"05"</span>, <span class="st">"09"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">grade_level</span>, values_from <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">grade_trends</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 5</span></span></span>
-<span><span class="co">#&gt;   end_year       K    `05`    `09`    `12`</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024 <span style="text-decoration: underline;">135</span>565. <span style="text-decoration: underline;">146</span>345. <span style="text-decoration: underline;">167</span>927. <span style="text-decoration: underline;">134</span>707.</span></span></code></pre></div>
+<span><span class="co">#&gt;   grade_level n_students</span></span>
+<span><span class="co">#&gt; 1           K   16473.84</span></span>
+<span><span class="co">#&gt; 2          05   17791.03</span></span>
+<span><span class="co">#&gt; 3          09   20379.53</span></span>
+<span><span class="co">#&gt; 4          12   16400.89</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="some-counties-are-holding-steady">8. Some counties are holding steady<a class="anchor" aria-label="anchor" href="#some-counties-are-holding-steady"></a>
+<h2 id="berkeley-county-is-the-fastest-growing-region">8. Berkeley County is the fastest-growing region<a class="anchor" aria-label="anchor" href="#berkeley-county-is-the-fastest-growing-region"></a>
 </h2>
-<p>Despite statewide decline, a few counties have maintained or grown
-enrollment, primarily those near job centers or in the Eastern
-Panhandle.</p>
+<p>Berkeley County in the Eastern Panhandle is West Virginia’s
+second-largest district and one of its few growing areas.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">growing</span> <span class="op">&lt;-</span> <span class="va">growth_analysis</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">pct_change</span> <span class="op">&gt;=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">pct_change</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Compare Berkeley to state average</span></span>
+<span><span class="va">berkeley</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op">==</span> <span class="st">"BERKELEY"</span>,</span>
+<span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">growing</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 x 6</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># i 6 variables: district_name &lt;chr&gt;, county &lt;chr&gt;, y2014 &lt;dbl&gt;, y2024 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   change &lt;dbl&gt;, pct_change &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="va">state_avg</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>avg_enrollment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Berkeley County enrollment:"</span>, <span class="va">berkeley</span><span class="op">$</span><span class="va">n_students</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Berkeley County enrollment: 19871</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"State average district enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">state_avg</span><span class="op">$</span><span class="va">avg_enrollment</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; State average district enrollment: 4414</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Berkeley is"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">berkeley</span><span class="op">$</span><span class="va">n_students</span> <span class="op">/</span> <span class="va">state_avg</span><span class="op">$</span><span class="va">avg_enrollment</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"x the state average\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Berkeley is 4.5 x the state average</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="kindergarten-signals-future-challenges">9. Kindergarten signals future challenges<a class="anchor" aria-label="anchor" href="#kindergarten-signals-future-challenges"></a>
+<h2 id="kindergarten-enrollment-signals-future-trends">9. Kindergarten enrollment signals future trends<a class="anchor" aria-label="anchor" href="#kindergarten-enrollment-signals-future-trends"></a>
 </h2>
-<p>Kindergarten enrollment serves as a leading indicator. Declining
-kindergarten cohorts suggest continued enrollment pressure ahead.</p>
+<p>Kindergarten enrollment serves as a leading indicator. Current K
+enrollment suggests what high school classes will look like in 12
+years.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">k_trend</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>,</span>
-<span>         <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"K"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>change <span class="op">=</span> <span class="va">n_students</span> <span class="op">-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">k_enrollment</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"K"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">k_trend</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 3</span></span></span>
-<span><span class="co">#&gt;   end_year n_students change</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024    <span style="text-decoration: underline;">135</span>565.     <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
+<span><span class="va">grade12_enrollment</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"12"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Current Kindergarten enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">k_enrollment</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Current Kindergarten enrollment: 16,473.84</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Current 12th grade enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">grade12_enrollment</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Current 12th grade enrollment: 16,400.89</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"K is"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">k_enrollment</span><span class="op">/</span><span class="va">grade12_enrollment</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"% different from 12th grade\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; K is 0.4 % different from 12th grade</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="districts-create-administrative-challenges">10. 55 districts create administrative challenges<a class="anchor" aria-label="anchor" href="#districts-create-administrative-challenges"></a>
+<h2 id="districts-create-administrative-structure">10. 55 districts create administrative structure<a class="anchor" aria-label="anchor" href="#districts-create-administrative-structure"></a>
 </h2>
 <p>West Virginia’s county-based system means even tiny counties maintain
 full district operations. Several counties have student populations
@@ -393,57 +389,45 @@ smaller than individual schools in other states.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">smallest</span></span>
-<span><span class="co">#&gt;               district_name    county n_students</span></span>
-<span><span class="co">#&gt; 1      BOONE COUNTY SCHOOLS     BOONE          1</span></span>
-<span><span class="co">#&gt; 2       CLAY COUNTY SCHOOLS      CLAY          1</span></span>
-<span><span class="co">#&gt; 3      GRANT COUNTY SCHOOLS     GRANT          1</span></span>
-<span><span class="co">#&gt; 4      ROANE COUNTY SCHOOLS     ROANE          1</span></span>
-<span><span class="co">#&gt; 5      ROANE COUNTY SCHOOLS     ROANE          1</span></span>
-<span><span class="co">#&gt; 6    WEBSTER COUNTY SCHOOLS   WEBSTER          1</span></span>
-<span><span class="co">#&gt; 7       WOOD COUNTY SCHOOLS      WOOD          1</span></span>
-<span><span class="co">#&gt; 8       WOOD COUNTY SCHOOLS      WOOD          1</span></span>
-<span><span class="co">#&gt; 9    BRAXTON COUNTY SCHOOLS   BRAXTON          2</span></span>
-<span><span class="co">#&gt; 10 HAMPSHIRE COUNTY SCHOOLS HAMPSHIRE          2</span></span></code></pre></div>
+<span><span class="co">#&gt;                district_name     county n_students</span></span>
+<span><span class="co">#&gt; 1      GILMER COUNTY SCHOOLS     GILMER        761</span></span>
+<span><span class="co">#&gt; 2     CALHOUN COUNTY SCHOOLS    CALHOUN        829</span></span>
+<span><span class="co">#&gt; 3   PENDLETON COUNTY SCHOOLS  PENDLETON        846</span></span>
+<span><span class="co">#&gt; 4        WIRT COUNTY SCHOOLS       WIRT        899</span></span>
+<span><span class="co">#&gt; 5  POCAHONTAS COUNTY SCHOOLS POCAHONTAS        918</span></span>
+<span><span class="co">#&gt; 6      TUCKER COUNTY SCHOOLS     TUCKER        942</span></span>
+<span><span class="co">#&gt; 7   PLEASANTS COUNTY SCHOOLS  PLEASANTS       1051</span></span>
+<span><span class="co">#&gt; 8     WEBSTER COUNTY SCHOOLS    WEBSTER       1116</span></span>
+<span><span class="co">#&gt; 9   DODDRIDGE COUNTY SCHOOLS  DODDRIDGE       1156</span></span>
+<span><span class="co">#&gt; 10    RITCHIE COUNTY SCHOOLS    RITCHIE       1157</span></span></code></pre></div>
 <p>Counties like Wirt, Calhoun, and Pocahontas each maintain a full
 school district despite having fewer students than many individual
 elementary schools elsewhere.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="charlestons-schools-are-shrinking-fast">11. Charleston’s schools are shrinking fast<a class="anchor" aria-label="anchor" href="#charlestons-schools-are-shrinking-fast"></a>
+<h2 id="kanawha-county-charleston-is-the-state-capitals-district">11. Kanawha County (Charleston) is the state capital’s district<a class="anchor" aria-label="anchor" href="#kanawha-county-charleston-is-the-state-capitals-district"></a>
 </h2>
-<p>The state capital Charleston, in Kanawha County, has seen dramatic
-enrollment decline as families leave for suburbs and other states. The
-district that once served 40,000+ students now educates fewer than
-22,000.</p>
+<p>The state capital Charleston, in Kanawha County, is West Virginia’s
+largest school district with over 23,000 students.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">kanawha_trend</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">kanawha</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op">==</span> <span class="st">"KANAWHA"</span>,</span>
 <span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>decade_change <span class="op">=</span> <span class="va">n_students</span> <span class="op">-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">n_students</span>, default <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">kanawha_trend</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 x 3</span></span></span>
-<span><span class="co">#&gt;   end_year n_students decade_change</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024      <span style="text-decoration: underline;">23</span>437             0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     <span style="text-decoration: underline;">2</span>024      <span style="text-decoration: underline;">23</span>437             0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     <span style="text-decoration: underline;">2</span>024       <span style="text-decoration: underline;">1</span>684        -<span style="color: #BB0000; text-decoration: underline;">21</span><span style="color: #BB0000;">753</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     <span style="text-decoration: underline;">2</span>024      <span style="text-decoration: underline;">23</span>437         <span style="text-decoration: underline;">21</span>753</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     <span style="text-decoration: underline;">2</span>024      <span style="text-decoration: underline;">23</span>437             0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     <span style="text-decoration: underline;">2</span>024      <span style="text-decoration: underline;">23</span>437             0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     <span style="text-decoration: underline;">2</span>024         50        -<span style="color: #BB0000; text-decoration: underline;">23</span><span style="color: #BB0000;">387</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span>     <span style="text-decoration: underline;">2</span>024       <span style="text-decoration: underline;">1</span>548          <span style="text-decoration: underline;">1</span>498</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span>     <span style="text-decoration: underline;">2</span>024         50         -<span style="color: #BB0000; text-decoration: underline;">1</span><span style="color: #BB0000;">498</span></span></span></code></pre></div>
+<span><span class="va">kanawha</span></span>
+<span><span class="co">#&gt;   end_year n_students</span></span>
+<span><span class="co">#&gt; 1     2023      23974</span></span>
+<span><span class="co">#&gt; 2     2024      23437</span></span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">kanawha_trend</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">kanawha</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span>, color <span class="op">=</span> <span class="st">"#B71C1C"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"#B71C1C"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Kanawha County (Charleston) Enrollment Decline"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"The state capital continues to lose students year over year"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Kanawha County (Charleston) Enrollment"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"The state capital district continues to lose students"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"School Year (ending)"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Total Enrollment"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
@@ -451,7 +435,7 @@ district that once served 40,000+ students now educates fewer than
 <hr>
 </div>
 <div class="section level2">
-<h2 id="the-urban-rural-divide-is-narrowing">12. The urban-rural divide is narrowing<a class="anchor" aria-label="anchor" href="#the-urban-rural-divide-is-narrowing"></a>
+<h2 id="the-urban-rural-divide-is-minimal">12. The urban-rural divide is minimal<a class="anchor" aria-label="anchor" href="#the-urban-rural-divide-is-minimal"></a>
 </h2>
 <p>West Virginia has no large cities. Even “urban” Kanawha County is
 mostly rural by national standards. The gap between the largest and
@@ -479,10 +463,10 @@ smallest districts illustrates the state’s uniformly small scale.</p>
 <span><span class="co">#&gt;   metric            n_students</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Largest (Kanawha)      <span style="text-decoration: underline;">23</span>437</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 10th Largest           <span style="text-decoration: underline;">11</span>436</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Median                   881</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 10th Smallest           <span style="text-decoration: underline;">8</span>239</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Smallest (Wirt)         <span style="text-decoration: underline;">6</span>082</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 10th Largest            <span style="text-decoration: underline;">8</span>239</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Median                  <span style="text-decoration: underline;">3</span>100</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 10th Smallest           <span style="text-decoration: underline;">1</span>157</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Smallest (Wirt)          761</span></span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">size_range</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">metric</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">metric</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -500,111 +484,117 @@ smallest districts illustrates the state’s uniformly small scale.</p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="the-northern-panhandles-steel-town-legacy">13. The Northern Panhandle’s steel town legacy<a class="anchor" aria-label="anchor" href="#the-northern-panhandles-steel-town-legacy"></a>
+<h2 id="the-northern-panhandle-steel-town-legacy">13. The Northern Panhandle steel town legacy<a class="anchor" aria-label="anchor" href="#the-northern-panhandle-steel-town-legacy"></a>
 </h2>
 <p>The Northern Panhandle – Ohio, Marshall, Brooke, and Hancock counties
-– once thrived on steel and manufacturing. These communities now
-struggle with population loss similar to coal country.</p>
+– once thrived on steel and manufacturing. These communities now have
+small to mid-sized districts.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">northern_panhandle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"OHIO"</span>, <span class="st">"MARSHALL"</span>, <span class="st">"BROOKE"</span>, <span class="st">"HANCOCK"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">northern_trend</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<span><span class="va">northern_districts</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_district</span>, <span class="va">county</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">northern_panhandle</span>,</span>
 <span>         <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">end_year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_students</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index <span class="op">=</span> <span class="va">n_students</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">northern_trend</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 3</span></span></span>
-<span><span class="co">#&gt;   end_year n_students index</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024      <span style="text-decoration: underline;">61</span>331   100</span></span></code></pre></div>
+<span><span class="va">northern_districts</span></span>
+<span><span class="co">#&gt;             district_name   county n_students</span></span>
+<span><span class="co">#&gt; 1     OHIO COUNTY SCHOOLS     OHIO       4903</span></span>
+<span><span class="co">#&gt; 2 MARSHALL COUNTY SCHOOLS MARSHALL       4124</span></span>
+<span><span class="co">#&gt; 3  HANCOCK COUNTY SCHOOLS  HANCOCK       3374</span></span>
+<span><span class="co">#&gt; 4   BROOKE COUNTY SCHOOLS   BROOKE       2336</span></span></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">northern_trend</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span>, color <span class="op">=</span> <span class="st">"#FF6F00"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"#FF6F00"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">northern_districts</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>county <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html" class="external-link">fct_reorder</a></span><span class="op">(</span><span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n_students</span>, y <span class="op">=</span> <span class="va">county</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#FF6F00"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Northern Panhandle Enrollment (Steel Country)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Ohio, Marshall, Brooke, and Hancock counties combined"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"School Year (ending)"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Total Enrollment"</span></span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Former industrial centers maintain mid-sized districts"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Total Enrollment"</span>,</span>
+<span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="enrollment_hooks_files/figure-html/northern-panhandle-chart-1.png" class="r-plt" alt="" width="768"></p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="grade-level-enrollment-shows-population-wave">14. Grade-level enrollment shows population wave<a class="anchor" aria-label="anchor" href="#grade-level-enrollment-shows-population-wave"></a>
+<h2 id="grade-level-enrollment-by-benchmark-grades">14. Grade-level enrollment by benchmark grades<a class="anchor" aria-label="anchor" href="#grade-level-enrollment-by-benchmark-grades"></a>
 </h2>
-<p>Comparing enrollment across grade levels reveals demographic
-patterns: smaller kindergarten classes moving through the system,
-foreshadowing continued decline.</p>
+<p>Comparing enrollment across key grade levels (K, 3, 6, 9, 12) shows
+the flow of students through the system.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">grade_comparison</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">grade_comparison</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>,</span>
-<span>         <span class="va">grade_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"03"</span>, <span class="st">"06"</span>, <span class="st">"09"</span>, <span class="st">"12"</span><span class="op">)</span>,</span>
-<span>         <span class="va">end_year</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2014</span>, <span class="fl">2019</span>, <span class="fl">2024</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>         <span class="va">grade_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"03"</span>, <span class="st">"06"</span>, <span class="st">"09"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">grade_level</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"03"</span>, <span class="st">"06"</span>, <span class="st">"09"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">grade_comparison</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 x 3</span></span></span>
-<span><span class="co">#&gt;   end_year grade_level n_students</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024 K              <span style="text-decoration: underline;">135</span>565.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     <span style="text-decoration: underline;">2</span>024 03             <span style="text-decoration: underline;">137</span>406.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     <span style="text-decoration: underline;">2</span>024 06             <span style="text-decoration: underline;">145</span>417.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     <span style="text-decoration: underline;">2</span>024 09             <span style="text-decoration: underline;">167</span>927.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     <span style="text-decoration: underline;">2</span>024 12             <span style="text-decoration: underline;">134</span>707.</span></span></code></pre></div>
+<span><span class="co">#&gt;   grade_level n_students</span></span>
+<span><span class="co">#&gt; 1           K   16473.84</span></span>
+<span><span class="co">#&gt; 2          03   16683.61</span></span>
+<span><span class="co">#&gt; 3          06   17685.46</span></span>
+<span><span class="co">#&gt; 4          09   20379.53</span></span>
+<span><span class="co">#&gt; 5          12   16400.89</span></span></code></pre></div>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">grade_comparison</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">grade_level</span>, y <span class="op">=</span> <span class="va">n_students</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">end_year</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2014"</span> <span class="op">=</span> <span class="st">"#002855"</span>, <span class="st">"2019"</span> <span class="op">=</span> <span class="st">"#4A90A4"</span>, <span class="st">"2024"</span> <span class="op">=</span> <span class="st">"#8BC34A"</span><span class="op">)</span>,</span>
-<span>                    name <span class="op">=</span> <span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">grade_comparison</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">grade_level</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#002855"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Enrollment by Grade Level Across Years"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Shrinking cohorts move through the system"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Enrollment by Key Grade Levels (2024)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Shows student pipeline through the K-12 system"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Grade Level"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Enrollment"</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="enrollment_hooks_files/figure-html/grade-wave-chart-1.png" class="r-plt" alt="" width="768"></p>
 <hr>
 </div>
 <div class="section level2">
-<h2 id="the-future-is-written-in-births">15. The future is written in births<a class="anchor" aria-label="anchor" href="#the-future-is-written-in-births"></a>
+<h2 id="the-future-is-written-in-demographics">15. The future is written in demographics<a class="anchor" aria-label="anchor" href="#the-future-is-written-in-demographics"></a>
 </h2>
-<p>West Virginia’s birth rate has declined steadily, guaranteeing
-continued enrollment drops for years to come regardless of migration
-patterns.</p>
+<p>West Virginia’s birth rate has declined steadily, reflected in
+smaller kindergarten cohorts entering the system each year.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Compare kindergarten trends as a proxy for birth cohorts 5 years prior</span></span>
-<span><span class="va">k_forecast</span> <span class="op">&lt;-</span> <span class="va">enr</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="co"># Compare K to total to show pipeline</span></span>
+<span><span class="va">k_data</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"K"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    pct_of_first <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">n_students</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>    birth_year <span class="op">=</span> <span class="va">end_year</span> <span class="op">-</span> <span class="fl">5</span></span>
-<span>  <span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="st">"Kindergarten"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">k_forecast</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 x 4</span></span></span>
-<span><span class="co">#&gt;   end_year n_students pct_of_first birth_year</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     <span style="text-decoration: underline;">2</span>024    <span style="text-decoration: underline;">135</span>565.          100       <span style="text-decoration: underline;">2</span>019</span></span></code></pre></div>
+<span><span class="va">total_data</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"TOTAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="st">"All Grades"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">k_pct_of_total</span> <span class="op">&lt;-</span> <span class="va">k_data</span><span class="op">$</span><span class="va">n_students</span> <span class="op">/</span> <span class="va">total_data</span><span class="op">$</span><span class="va">n_students</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Kindergarten enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">k_data</span><span class="op">$</span><span class="va">n_students</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Kindergarten enrollment: 16,473.84</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Total enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">total_data</span><span class="op">$</span><span class="va">n_students</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Total enrollment: 242,777</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Kindergarten is"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">k_pct_of_total</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"% of total enrollment\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Kindergarten is 6.8 % of total enrollment</span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">k_forecast</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span>, color <span class="op">=</span> <span class="st">"#673AB7"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"#673AB7"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">TRUE</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"#9575CD"</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="co"># Show all grade levels</span></span>
+<span><span class="va">all_grades</span> <span class="op">&lt;-</span> <span class="va">enr_2024</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>,</span>
+<span>         <span class="va">grade_level</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PK"</span>, <span class="st">"K"</span>, <span class="st">"01"</span>, <span class="st">"02"</span>, <span class="st">"03"</span>, <span class="st">"04"</span>, <span class="st">"05"</span>,</span>
+<span>                           <span class="st">"06"</span>, <span class="st">"07"</span>, <span class="st">"08"</span>, <span class="st">"09"</span>, <span class="st">"10"</span>, <span class="st">"11"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">grade_level</span>,</span>
+<span>                              levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PK"</span>, <span class="st">"K"</span>, <span class="st">"01"</span>, <span class="st">"02"</span>, <span class="st">"03"</span>, <span class="st">"04"</span>, <span class="st">"05"</span>,</span>
+<span>                                        <span class="st">"06"</span>, <span class="st">"07"</span>, <span class="st">"08"</span>, <span class="st">"09"</span>, <span class="st">"10"</span>, <span class="st">"11"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">all_grades</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">grade_level</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#673AB7"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">comma</a></span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Kindergarten Enrollment Trend (Birth Cohort Proxy)"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Each year's K class reflects births 5 years earlier; trend line shows trajectory"</span>,</span>
-<span>    x <span class="op">=</span> <span class="st">"School Year (ending)"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Kindergarten Enrollment"</span></span>
+<span>    title <span class="op">=</span> <span class="st">"West Virginia Enrollment by Grade (2024)"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Grade distribution shows student pipeline"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Grade Level"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Enrollment"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="enrollment_hooks_files/figure-html/future-chart-1.png" class="r-plt" alt="" width="768"></p>
 <hr>
@@ -612,19 +602,62 @@ patterns.</p>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
-<p>West Virginia’s school enrollment data reveals: - <strong>Persistent
-decline</strong>: Statewide enrollment has fallen consistently over the
-past decade - <strong>Coal country crisis</strong>: Southern coalfield
-counties have lost 25-40% of students - <strong>Eastern Panhandle
-exception</strong>: DC suburb spillover has brought modest growth -
-<strong>Small-district challenges</strong>: Many counties have under
-2,000 students - <strong>Future pressure</strong>: Declining
-kindergarten enrollment signals more challenges ahead</p>
+<p>West Virginia’s school enrollment data reveals: - <strong>Quarter
+million students</strong>: ~250,000 students across 55 county school
+districts - <strong>Uniform small scale</strong>: Even the largest
+district (Kanawha) has only ~23,000 students - <strong>Eastern Panhandle
+exception</strong>: DC suburb spillover creates growth areas -
+<strong>Coal country decline</strong>: Southern counties have the
+smallest enrollments - <strong>Simple structure</strong>: One district
+per county, mandated by the state constitution</p>
 <p>These patterns reflect broader demographic and economic forces
 reshaping Appalachia.</p>
 <hr>
 <p><em>Data sourced from West Virginia Department of Education (WVDE)
 School Finance Data.</em></p>
+</div>
+<div class="section level2">
+<h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h2>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; R version 4.5.2 (2025-10-31)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 24.04.3 LTS</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Matrix products: default</span></span>
+<span><span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
+<span><span class="co">#&gt; LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; locale:</span></span>
+<span><span class="co">#&gt;  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
+<span><span class="co">#&gt;  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
+<span><span class="co">#&gt;  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
+<span><span class="co">#&gt; [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; time zone: UTC</span></span>
+<span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attached base packages:</span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other attached packages:</span></span>
+<span><span class="co">#&gt; [1] ggplot2_4.0.1      tidyr_1.3.2        dplyr_1.1.4        wvschooldata_0.2.0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span><span class="co">#&gt;  [1] gtable_0.3.6       jsonlite_2.0.0     qpdf_1.4.1         compiler_4.5.2    </span></span>
+<span><span class="co">#&gt;  [5] pdftools_3.6.0     Rcpp_1.1.1         tidyselect_1.2.1   jquerylib_0.1.4   </span></span>
+<span><span class="co">#&gt;  [9] systemfonts_1.3.1  scales_1.4.0       textshaping_1.0.4  yaml_2.3.12       </span></span>
+<span><span class="co">#&gt; [13] fastmap_1.2.0      R6_2.6.1           labeling_0.4.3     generics_0.1.4    </span></span>
+<span><span class="co">#&gt; [17] curl_7.0.0         knitr_1.51         forcats_1.0.1      tibble_3.3.1      </span></span>
+<span><span class="co">#&gt; [21] desc_1.4.3         bslib_0.9.0        pillar_1.11.1      RColorBrewer_1.1-3</span></span>
+<span><span class="co">#&gt; [25] rlang_1.1.7        utf8_1.2.6         cachem_1.1.0       xfun_0.55         </span></span>
+<span><span class="co">#&gt; [29] fs_1.6.6           sass_0.4.10        S7_0.2.1           cli_3.6.5         </span></span>
+<span><span class="co">#&gt; [33] withr_3.0.2        pkgdown_2.2.0      magrittr_2.0.4     digest_0.6.39     </span></span>
+<span><span class="co">#&gt; [37] grid_4.5.2         askpass_1.2.1      rappdirs_0.3.4     lifecycle_1.0.5   </span></span>
+<span><span class="co">#&gt; [41] vctrs_0.7.0        evaluate_1.0.5     glue_1.8.0         farver_2.1.2      </span></span>
+<span><span class="co">#&gt; [45] codetools_0.2-20   ragg_1.5.0         httr_1.4.7         rmarkdown_2.30    </span></span>
+<span><span class="co">#&gt; [49] purrr_1.2.1        tools_4.5.2        pkgconfig_2.0.3    htmltools_0.5.9</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
