@@ -121,6 +121,27 @@ If CI fails, fix the issue and push - auto-merge triggers when checks pass.
 
 ---
 
+## Valid Filter Values (tidy enrollment via `fetch_enr(tidy = TRUE)`)
+
+### subgroup
+`total_enrollment`
+
+**NOT in tidy enrollment:** West Virginia WVDE PDF data provides only grade-level enrollment, NOT demographic breakdowns (`white`, `black`, `hispanic`, etc.), gender (`male`, `female`), or special populations (`special_ed`, `lep`, `econ_disadv`). Demographic data would need to come from ZoomWV or other WVDE sources.
+
+### grade_level
+`PK`, `K`, `01`-`12`, `UG`, `TOTAL`
+
+Grade aggregates from `enr_grade_aggs()`: `K8`, `HS`, `K12`
+
+**West Virginia-specific:** `UG` (Ungraded) is a grade level present in WV data. Raw column names like `grade_k`, `grade_01` etc. are mapped to standard codes. Always filter on the mapped values.
+
+### entity flags
+`is_state`, `is_district`, `is_campus`, `is_charter`
+
+Determined by the `type` column: `"State"`, `"District"`, `"Campus"`. Charter status via `charter_flag` column (`"Y"` = charter). Note: WVDE PDF data may not include campus-level records.
+
+---
+
 ## README Images from Vignettes (REQUIRED)
 
 **NEVER use `man/figures/` or `generate_readme_figs.R` for README images.**
