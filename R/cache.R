@@ -169,3 +169,23 @@ cache_status <- function() {
   print(result)
   invisible(result)
 }
+
+
+#' Read bundled data from inst/extdata
+#'
+#' Falls back to pre-packaged RDS files when network is unavailable.
+#'
+#' @param end_year School year end
+#' @param type Data type ("tidy" or "wide")
+#' @return Data frame or NULL if no bundled data exists
+#' @keywords internal
+read_bundled_data <- function(end_year, type) {
+  filename <- paste0("enr_", type, "_", end_year, ".rds")
+  bundled_path <- system.file("extdata", filename, package = "wvschooldata")
+
+  if (bundled_path == "" || !file.exists(bundled_path)) {
+    return(NULL)
+  }
+
+  readRDS(bundled_path)
+}

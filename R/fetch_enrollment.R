@@ -63,17 +63,26 @@ fetch_enr <- function(end_year, tidy = TRUE, use_cache = TRUE) {
     return(read_cache(end_year, cache_type))
   }
 
-  # Get raw data from WVDE PDFs
-  raw <- get_raw_enr(end_year)
+  # Try to get data from WVDE PDFs, falling back to bundled data
+  processed <- tryCatch({
+    raw <- get_raw_enr(end_year)
+    result <- process_enr(raw, end_year)
 
-  # Process to standard schema
-  processed <- process_enr(raw, end_year)
+    if (tidy) {
+      result <- tidy_enr(result) |>
+        id_enr_aggs()
+    }
 
-  # Optionally tidy
-  if (tidy) {
-    processed <- tidy_enr(processed) |>
-      id_enr_aggs()
-  }
+    result
+  }, error = function(e) {
+    # Fall back to bundled data if network unavailable
+    bundled <- read_bundled_data(end_year, cache_type)
+    if (!is.null(bundled)) {
+      message(paste("Using bundled data for", end_year, "(network unavailable)"))
+      return(bundled)
+    }
+    stop(e)
+  })
 
   # Cache the result
   if (use_cache) {
