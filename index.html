@@ -62,10 +62,10 @@
 <div class="section level2">
 <h2 id="what-can-you-find-with-wvschooldata">What can you find with wvschooldata?<a class="anchor" aria-label="anchor" href="#what-can-you-find-with-wvschooldata"></a>
 </h2>
-<p>West Virginia educates roughly 243,000 students across 55 county school districts – one for each county. From the coalfields of McDowell to the Eastern Panhandle suburbs of DC, here are fifteen stories hiding in the data:</p>
+<p>West Virginia educates roughly 250,000 students across 55 county school districts – one for each county. From the coalfields of McDowell to the Eastern Panhandle suburbs of DC, here are fifteen stories hiding in the data:</p>
 <hr>
 <div class="section level3">
-<h3 id="id_1-west-virginia-educates-around-243000-students">1. West Virginia educates around 243,000 students<a class="anchor" aria-label="anchor" href="#id_1-west-virginia-educates-around-243000-students"></a>
+<h3 id="id_1-west-virginia-educates-around-250000-students">1. West Virginia educates around 250,000 students<a class="anchor" aria-label="anchor" href="#id_1-west-virginia-educates-around-250000-students"></a>
 </h3>
 <p>West Virginia’s public schools serve roughly a quarter million students across 55 county-based school districts – one of the simplest administrative structures in the nation.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -83,8 +83,10 @@
 <span>         pct_change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">change</span> <span class="op">/</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">state_totals</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 4</span></span>
 <span><span class="co">#&gt;   end_year n_students change pct_change</span></span>
-<span><span class="co">#&gt; 1     2023     248801     NA         NA</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;      &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2023     248801     NA      NA</span></span>
 <span><span class="co">#&gt; 2     2024     242777  -6024      -2.42</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/statewide-chart-1.png" alt="Statewide enrollment chart"><div class="figcaption">Statewide enrollment chart</div>
@@ -105,17 +107,19 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">top_10</span></span>
-<span><span class="co">#&gt;                district_name     county n_students</span></span>
-<span><span class="co">#&gt;  1    KANAWHA COUNTY SCHOOLS    KANAWHA      23437</span></span>
-<span><span class="co">#&gt;  2   BERKELEY COUNTY SCHOOLS   BERKELEY      19871</span></span>
-<span><span class="co">#&gt;  3     CABELL COUNTY SCHOOLS     CABELL      11436</span></span>
-<span><span class="co">#&gt;  4       WOOD COUNTY SCHOOLS       WOOD      11330</span></span>
-<span><span class="co">#&gt;  5 MONONGALIA COUNTY SCHOOLS MONONGALIA      11201</span></span>
-<span><span class="co">#&gt;  6    RALEIGH COUNTY SCHOOLS    RALEIGH      10537</span></span>
-<span><span class="co">#&gt;  7   HARRISON COUNTY SCHOOLS   HARRISON       9635</span></span>
-<span><span class="co">#&gt;  8     PUTNAM COUNTY SCHOOLS     PUTNAM       8806</span></span>
-<span><span class="co">#&gt;  9     MERCER COUNTY SCHOOLS     MERCER       8415</span></span>
-<span><span class="co">#&gt; 10  JEFFERSON COUNTY SCHOOLS  JEFFERSON       8239</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span><span class="co">#&gt;    district_name              county     n_students</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                      &lt;chr&gt;           &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 KANAWHA COUNTY SCHOOLS     KANAWHA         23437</span></span>
+<span><span class="co">#&gt;  2 BERKELEY COUNTY SCHOOLS    BERKELEY        19871</span></span>
+<span><span class="co">#&gt;  3 CABELL COUNTY SCHOOLS      CABELL          11436</span></span>
+<span><span class="co">#&gt;  4 WOOD COUNTY SCHOOLS        WOOD            11330</span></span>
+<span><span class="co">#&gt;  5 MONONGALIA COUNTY SCHOOLS  MONONGALIA      11201</span></span>
+<span><span class="co">#&gt;  6 RALEIGH COUNTY SCHOOLS     RALEIGH         10537</span></span>
+<span><span class="co">#&gt;  7 HARRISON COUNTY SCHOOLS    HARRISON         9635</span></span>
+<span><span class="co">#&gt;  8 PUTNAM COUNTY SCHOOLS      PUTNAM           8806</span></span>
+<span><span class="co">#&gt;  9 MERCER COUNTY SCHOOLS      MERCER           8415</span></span>
+<span><span class="co">#&gt; 10 JEFFERSON COUNTY SCHOOLS   JEFFERSON        8239</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/top-districts-chart-1.png" alt="Top districts chart"><div class="figcaption">Top districts chart</div>
 </div>
@@ -186,8 +190,8 @@
 <span><span class="co">#&gt; # A tibble: 2 x 4</span></span>
 <span><span class="co">#&gt;   region            n_districts total_students avg_district_size</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;                   &lt;int&gt;          &lt;dbl&gt;             &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 Eastern Panhandle           3          30254             10085</span></span>
-<span><span class="co">#&gt; 2 Rest of State              52         212523              4087</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 Eastern Panhandle           3          30173             10058</span></span>
+<span><span class="co">#&gt; 2 Rest of State              52         212604              4088</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/regional-chart-1.png" alt="Eastern Panhandle districts"><div class="figcaption">Eastern Panhandle districts</div>
 </div>
@@ -208,12 +212,14 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">coal_districts</span></span>
-<span><span class="co">#&gt;             district_name   county n_students</span></span>
-<span><span class="co">#&gt; 1 MCDOWELL COUNTY SCHOOLS MCDOWELL       2353</span></span>
-<span><span class="co">#&gt; 2    BOONE COUNTY SCHOOLS    BOONE       3100</span></span>
-<span><span class="co">#&gt; 3  WYOMING COUNTY SCHOOLS  WYOMING       3366</span></span>
-<span><span class="co">#&gt; 4    MINGO COUNTY SCHOOLS    MINGO       3404</span></span>
-<span><span class="co">#&gt; 5    LOGAN COUNTY SCHOOLS    LOGAN       4804</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span><span class="co">#&gt;   district_name            county   n_students</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                    &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 MCDOWELL COUNTY SCHOOLS  MCDOWELL       2393</span></span>
+<span><span class="co">#&gt; 2 WYOMING COUNTY SCHOOLS   WYOMING        3172</span></span>
+<span><span class="co">#&gt; 3 BOONE COUNTY SCHOOLS     BOONE          3100</span></span>
+<span><span class="co">#&gt; 4 MINGO COUNTY SCHOOLS     MINGO          3573</span></span>
+<span><span class="co">#&gt; 5 LOGAN COUNTY SCHOOLS     LOGAN          4771</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/growth-chart-1.png" alt="Coal country districts"><div class="figcaption">Coal country districts</div>
 </div>
@@ -230,9 +236,11 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mcdowell</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 2</span></span>
 <span><span class="co">#&gt;   end_year n_students</span></span>
-<span><span class="co">#&gt; 1     2023       2455</span></span>
-<span><span class="co">#&gt; 2     2024       2353</span></span></code></pre></div>
+<span><span class="co">#&gt;      &lt;int&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2023       2454</span></span>
+<span><span class="co">#&gt; 2     2024       2393</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level3">
@@ -246,11 +254,13 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade_level</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">grade_trends</span></span>
+<span><span class="co">#&gt; # A tibble: 4 x 2</span></span>
 <span><span class="co">#&gt;   grade_level n_students</span></span>
-<span><span class="co">#&gt; 1           K   16473.84</span></span>
-<span><span class="co">#&gt; 2          05   17791.03</span></span>
-<span><span class="co">#&gt; 3          09   20379.53</span></span>
-<span><span class="co">#&gt; 4          12   16400.89</span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 K                17331</span></span>
+<span><span class="co">#&gt; 2 05               17925</span></span>
+<span><span class="co">#&gt; 3 09               19461</span></span>
+<span><span class="co">#&gt; 4 12               16776</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level3">
@@ -273,7 +283,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"State average district enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">state_avg</span><span class="op">$</span><span class="va">avg_enrollment</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; State average district enrollment: 4414</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Berkeley is"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">berkeley</span><span class="op">$</span><span class="va">n_students</span> <span class="op">/</span> <span class="va">state_avg</span><span class="op">$</span><span class="va">avg_enrollment</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"x the state average\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Berkeley is 4.5 x the state average</span></span></code></pre></div>
+<span><span class="co">#&gt; Berkeley is 4.5x the state average</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level3">
@@ -289,12 +299,10 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">is_state</span>, <span class="va">subgroup</span> <span class="op">==</span> <span class="st">"total_enrollment"</span>, <span class="va">grade_level</span> <span class="op">==</span> <span class="st">"12"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Current Kindergarten enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">k_enrollment</span><span class="op">)</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Current Kindergarten enrollment: 16,474</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Current 12th grade enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">grade12_enrollment</span><span class="op">)</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Current 12th grade enrollment: 16,401</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"K is"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="va">k_enrollment</span><span class="op">/</span><span class="va">grade12_enrollment</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"% different from 12th grade\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; K is 0.4 % different from 12th grade</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Current Kindergarten enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">k_enrollment</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Current Kindergarten enrollment: 17,331</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Current 12th grade enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">grade12_enrollment</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Current 12th grade enrollment: 16,776</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level3">
@@ -309,17 +317,19 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">smallest</span></span>
-<span><span class="co">#&gt;                district_name     county n_students</span></span>
-<span><span class="co">#&gt;  1     GILMER COUNTY SCHOOLS     GILMER        761</span></span>
-<span><span class="co">#&gt;  2    CALHOUN COUNTY SCHOOLS    CALHOUN        829</span></span>
-<span><span class="co">#&gt;  3  PENDLETON COUNTY SCHOOLS  PENDLETON        846</span></span>
-<span><span class="co">#&gt;  4       WIRT COUNTY SCHOOLS       WIRT        899</span></span>
-<span><span class="co">#&gt;  5 POCAHONTAS COUNTY SCHOOLS POCAHONTAS        918</span></span>
-<span><span class="co">#&gt;  6     TUCKER COUNTY SCHOOLS     TUCKER        942</span></span>
-<span><span class="co">#&gt;  7  PLEASANTS COUNTY SCHOOLS  PLEASANTS       1051</span></span>
-<span><span class="co">#&gt;  8    WEBSTER COUNTY SCHOOLS    WEBSTER       1116</span></span>
-<span><span class="co">#&gt;  9  DODDRIDGE COUNTY SCHOOLS  DODDRIDGE       1156</span></span>
-<span><span class="co">#&gt; 10    RITCHIE COUNTY SCHOOLS    RITCHIE       1157</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span><span class="co">#&gt;    district_name              county     n_students</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;                      &lt;chr&gt;           &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 WIRT COUNTY SCHOOLS        WIRT              768</span></span>
+<span><span class="co">#&gt;  2 GILMER COUNTY SCHOOLS      GILMER            761</span></span>
+<span><span class="co">#&gt;  3 CALHOUN COUNTY SCHOOLS     CALHOUN           829</span></span>
+<span><span class="co">#&gt;  4 POCAHONTAS COUNTY SCHOOLS  POCAHONTAS        956</span></span>
+<span><span class="co">#&gt;  5 TUCKER COUNTY SCHOOLS      TUCKER            997</span></span>
+<span><span class="co">#&gt;  6 PENDLETON COUNTY SCHOOLS   PENDLETON         942</span></span>
+<span><span class="co">#&gt;  7 DODDRIDGE COUNTY SCHOOLS   DODDRIDGE        1156</span></span>
+<span><span class="co">#&gt;  8 WEBSTER COUNTY SCHOOLS     WEBSTER          1168</span></span>
+<span><span class="co">#&gt;  9 CLAY COUNTY SCHOOLS        CLAY             1510</span></span>
+<span><span class="co">#&gt; 10 RITCHIE COUNTY SCHOOLS     RITCHIE          1408</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level3">
@@ -333,8 +343,10 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">end_year</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">kanawha</span></span>
+<span><span class="co">#&gt; # A tibble: 2 x 2</span></span>
 <span><span class="co">#&gt;   end_year n_students</span></span>
-<span><span class="co">#&gt; 1     2023      23974</span></span>
+<span><span class="co">#&gt;      &lt;int&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     2023      23827</span></span>
 <span><span class="co">#&gt; 2     2024      23437</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/charleston-chart-1.png" alt="Kanawha enrollment chart"><div class="figcaption">Kanawha enrollment chart</div>
@@ -353,7 +365,7 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">rank</span>, <span class="va">district_name</span>, <span class="va">county</span>, <span class="va">n_students</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">size_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Largest (Kanawha)"</span>, <span class="st">"10th Largest"</span>, <span class="st">"Median"</span>, <span class="st">"10th Smallest"</span>, <span class="st">"Smallest (Gilmer)"</span><span class="op">)</span>,</span>
+<span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Largest (Kanawha)"</span>, <span class="st">"10th Largest"</span>, <span class="st">"Median"</span>, <span class="st">"10th Smallest"</span>, <span class="st">"Smallest (Wirt)"</span><span class="op">)</span>,</span>
 <span>  n_students <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="va">district_sizes</span><span class="op">$</span><span class="va">n_students</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>    <span class="va">district_sizes</span><span class="op">$</span><span class="va">n_students</span><span class="op">[</span><span class="fl">10</span><span class="op">]</span>,</span>
@@ -369,9 +381,9 @@
 <span><span class="co">#&gt;   &lt;chr&gt;                  &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt; 1 Largest (Kanawha)      23437</span></span>
 <span><span class="co">#&gt; 2 10th Largest            8239</span></span>
-<span><span class="co">#&gt; 3 Median                  3100</span></span>
-<span><span class="co">#&gt; 4 10th Smallest           1157</span></span>
-<span><span class="co">#&gt; 5 Smallest (Gilmer)        761</span></span></code></pre></div>
+<span><span class="co">#&gt; 3 Median                  3172</span></span>
+<span><span class="co">#&gt; 4 10th Smallest           1168</span></span>
+<span><span class="co">#&gt; 5 Smallest (Wirt)          768</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/urban-rural-chart-1.png" alt="Urban-rural comparison"><div class="figcaption">Urban-rural comparison</div>
 </div>
@@ -391,11 +403,13 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">northern_districts</span></span>
-<span><span class="co">#&gt;             district_name   county n_students</span></span>
-<span><span class="co">#&gt; 1     OHIO COUNTY SCHOOLS     OHIO       4903</span></span>
-<span><span class="co">#&gt; 2 MARSHALL COUNTY SCHOOLS MARSHALL       4124</span></span>
-<span><span class="co">#&gt; 3  HANCOCK COUNTY SCHOOLS  HANCOCK       3374</span></span>
-<span><span class="co">#&gt; 4   BROOKE COUNTY SCHOOLS   BROOKE       2336</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span><span class="co">#&gt;   district_name            county   n_students</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                    &lt;chr&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 OHIO COUNTY SCHOOLS      OHIO           4986</span></span>
+<span><span class="co">#&gt; 2 MARSHALL COUNTY SCHOOLS  MARSHALL       4228</span></span>
+<span><span class="co">#&gt; 3 HANCOCK COUNTY SCHOOLS   HANCOCK        3374</span></span>
+<span><span class="co">#&gt; 4 BROOKE COUNTY SCHOOLS    BROOKE         2336</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/northern-panhandle-chart-1.png" alt="Northern Panhandle chart"><div class="figcaption">Northern Panhandle chart</div>
 </div>
@@ -413,12 +427,14 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade_level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">grade_level</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"K"</span>, <span class="st">"03"</span>, <span class="st">"06"</span>, <span class="st">"09"</span>, <span class="st">"12"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">grade_comparison</span></span>
+<span><span class="co">#&gt; # A tibble: 5 x 2</span></span>
 <span><span class="co">#&gt;   grade_level n_students</span></span>
-<span><span class="co">#&gt; 1           K   16473.84</span></span>
-<span><span class="co">#&gt; 2          03   16683.61</span></span>
-<span><span class="co">#&gt; 3          06   17685.46</span></span>
-<span><span class="co">#&gt; 4          09   20379.53</span></span>
-<span><span class="co">#&gt; 5          12   16400.89</span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;fct&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 K                17331</span></span>
+<span><span class="co">#&gt; 2 03               17375</span></span>
+<span><span class="co">#&gt; 3 06               17868</span></span>
+<span><span class="co">#&gt; 4 09               19461</span></span>
+<span><span class="co">#&gt; 5 12               16776</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/grade-wave-chart-1.png" alt="Grade wave chart"><div class="figcaption">Grade wave chart</div>
 </div>
@@ -442,12 +458,12 @@
 <span></span>
 <span><span class="va">k_pct_of_total</span> <span class="op">&lt;-</span> <span class="va">k_data</span><span class="op">$</span><span class="va">n_students</span> <span class="op">/</span> <span class="va">total_data</span><span class="op">$</span><span class="va">n_students</span> <span class="op">*</span> <span class="fl">100</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Kindergarten enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">k_data</span><span class="op">$</span><span class="va">n_students</span><span class="op">)</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Kindergarten enrollment: 16,474</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Total enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">total_data</span><span class="op">$</span><span class="va">n_students</span><span class="op">)</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Kindergarten enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">k_data</span><span class="op">$</span><span class="va">n_students</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Kindergarten enrollment: 17,331</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Total enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">total_data</span><span class="op">$</span><span class="va">n_students</span>, big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Total enrollment: 242,777</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Kindergarten is"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">k_pct_of_total</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"% of total enrollment\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Kindergarten is 6.8% of total enrollment</span></span></code></pre></div>
+<span><span class="co">#&gt; Kindergarten is 7.1% of total enrollment</span></span></code></pre></div>
 <div class="float">
 <img src="https://almartin82.github.io/wvschooldata/articles/enrollment_hooks_files/figure-html/future-chart-1.png" alt="Future enrollment chart"><div class="figcaption">Future enrollment chart</div>
 </div>
@@ -491,12 +507,12 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">district_name</span>, <span class="va">n_students</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt;              district_name n_students</span></span>
-<span><span class="co">#&gt; 1    KANAWHA COUNTY SCHOOLS      23437</span></span>
-<span><span class="co">#&gt; 2   BERKELEY COUNTY SCHOOLS      19871</span></span>
-<span><span class="co">#&gt; 3     CABELL COUNTY SCHOOLS      11436</span></span>
-<span><span class="co">#&gt; 4       WOOD COUNTY SCHOOLS      11330</span></span>
-<span><span class="co">#&gt; 5 MONONGALIA COUNTY SCHOOLS      11201</span></span></code></pre></div>
+<span><span class="co">#&gt;        district_name n_students</span></span>
+<span><span class="co">#&gt; 1  KANAWHA COUNTY SCHOOLS      23437</span></span>
+<span><span class="co">#&gt; 2 BERKELEY COUNTY SCHOOLS      19871</span></span>
+<span><span class="co">#&gt; 3   CABELL COUNTY SCHOOLS      11436</span></span>
+<span><span class="co">#&gt; 4     WOOD COUNTY SCHOOLS      11330</span></span>
+<span><span class="co">#&gt; 5 MONONGALIA COUNTY SCHOOLS   11201</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="python">Python<a class="anchor" aria-label="anchor" href="#python"></a>
@@ -566,7 +582,7 @@
 </tr>
 <tr class="odd">
 <td><code>n_students</code></td>
-<td>Enrollment count (FTE, may have decimals)</td>
+<td>Enrollment count</td>
 </tr>
 <tr class="even">
 <td><code>pct</code></td>
@@ -582,7 +598,6 @@
 <p><strong>Available Years:</strong> 2023-2024 (older PDFs removed from WVDE website)</p>
 <p><strong>Data Collection:</strong> October 1st (2nd month) of each school year</p>
 <p><strong>Structure:</strong> - 55 county school districts (one per county, constitutionally mandated) - District-level data only (no school-level data in PDFs) - Grade-level FTE enrollment with headcount totals</p>
-<p><strong>FTE vs Headcount:</strong> Grade-level enrollment is reported as Full-Time Equivalent (FTE), which may include decimal values for part-time students. The <code>TOTAL</code> grade level uses headcount (integer) when available.</p>
 <p><strong>Suppression:</strong> No suppression rules noted in the data</p>
 <p><strong>Known Issues:</strong> - 2022 data was never published by WVDE - Historical PDFs (2013-2021) removed from WVDE website - FTE counts may have decimals due to part-time enrollment</p>
 </div>

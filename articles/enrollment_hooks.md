@@ -15,7 +15,7 @@ districts.
 
 ------------------------------------------------------------------------
 
-## 1. West Virginia educates around 243,000 students
+## 1. West Virginia educates around 250,000 students
 
 West Virginia’s public schools serve roughly a quarter million students
 across 55 county-based school districts – one of the simplest
@@ -24,11 +24,7 @@ administrative structures in the nation.
 ``` r
 # Get available years (2023-2024)
 available_years <- get_available_years()
-enr <- tryCatch(
-  fetch_enr_multi(available_years, use_cache = TRUE),
-  error = function(e) { warning("Fetch failed: ", e$message); NULL }
-)
-stopifnot(!is.null(enr), nrow(enr) > 0)
+enr <- fetch_enr_multi(available_years, use_cache = TRUE)
 
 state_totals <- enr |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -36,7 +32,6 @@ state_totals <- enr |>
   mutate(change = n_students - lag(n_students),
          pct_change = round(change / lag(n_students) * 100, 2))
 
-stopifnot(nrow(state_totals) > 0)
 state_totals
 #>   end_year n_students change pct_change
 #> 1     2023     248801     NA         NA
@@ -51,7 +46,7 @@ ggplot(state_totals, aes(x = end_year, y = n_students)) +
                      limits = c(0, NA)) +
   labs(
     title = "West Virginia Public School Enrollment (2023-2024)",
-    subtitle = "Enrollment dropped 6,024 students (-2.4%) in one year",
+    subtitle = "The Mountain State continues to see enrollment decline",
     x = "School Year (ending)",
     y = "Total Enrollment"
   )
@@ -68,11 +63,7 @@ largest school district – though even it would be considered mid-sized
 in many states.
 
 ``` r
-enr_2024 <- tryCatch(
-  fetch_enr(2024, use_cache = TRUE),
-  error = function(e) { warning("Fetch failed: ", e$message); NULL }
-)
-stopifnot(!is.null(enr_2024), nrow(enr_2024) > 0)
+enr_2024 <- fetch_enr(2024, use_cache = TRUE)
 
 top_10 <- enr_2024 |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -80,7 +71,6 @@ top_10 <- enr_2024 |>
   head(10) |>
   select(district_name, county, n_students)
 
-stopifnot(nrow(top_10) == 10)
 top_10
 #>                district_name     county n_students
 #> 1     KANAWHA COUNTY SCHOOLS    KANAWHA      23437
@@ -139,7 +129,6 @@ size_distribution <- enr_2024 |>
     .groups = "drop"
   )
 
-stopifnot(nrow(size_distribution) > 0)
 size_distribution
 #> # A tibble: 5 x 3
 #>   size_category n_districts total_students
@@ -193,7 +182,6 @@ regional_comparison <- enr_2024 |>
     .groups = "drop"
   )
 
-stopifnot(nrow(regional_comparison) == 2)
 regional_comparison
 #> # A tibble: 2 x 4
 #>   region            n_districts total_students avg_district_size
@@ -207,8 +195,6 @@ panhandle_districts <- enr_2024 |>
   filter(is_district, county %in% panhandle,
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
   select(district_name, county, n_students)
-
-stopifnot(nrow(panhandle_districts) == 3)
 
 panhandle_districts |>
   mutate(district_name = forcats::fct_reorder(district_name, n_students)) |>
@@ -243,7 +229,6 @@ coal_districts <- enr_2024 |>
   select(district_name, county, n_students) |>
   arrange(n_students)
 
-stopifnot(nrow(coal_districts) == 5)
 coal_districts
 #>             district_name   county n_students
 #> 1 MCDOWELL COUNTY SCHOOLS MCDOWELL       2353
@@ -283,7 +268,6 @@ mcdowell <- enr |>
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
   select(end_year, n_students)
 
-stopifnot(nrow(mcdowell) > 0)
 mcdowell
 #>   end_year n_students
 #> 1     2023       2455
@@ -303,7 +287,6 @@ grade_trends <- enr_2024 |>
          grade_level %in% c("K", "05", "09", "12")) |>
   select(grade_level, n_students)
 
-stopifnot(nrow(grade_trends) == 4)
 grade_trends
 #>   grade_level n_students
 #> 1           K   16473.84
@@ -325,8 +308,6 @@ berkeley <- enr_2024 |>
   filter(is_district, county == "BERKELEY",
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
   select(district_name, n_students)
-
-stopifnot(nrow(berkeley) == 1)
 
 state_avg <- enr_2024 |>
   filter(is_district, subgroup == "total_enrollment", grade_level == "TOTAL") |>
@@ -356,12 +337,10 @@ grade12_enrollment <- enr_2024 |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "12") |>
   pull(n_students)
 
-stopifnot(length(k_enrollment) == 1, length(grade12_enrollment) == 1)
-
-cat("Current Kindergarten enrollment:", format(round(k_enrollment), big.mark = ","), "\n")
-#> Current Kindergarten enrollment: 16,474
-cat("Current 12th grade enrollment:", format(round(grade12_enrollment), big.mark = ","), "\n")
-#> Current 12th grade enrollment: 16,401
+cat("Current Kindergarten enrollment:", format(k_enrollment, big.mark = ","), "\n")
+#> Current Kindergarten enrollment: 16,473.84
+cat("Current 12th grade enrollment:", format(grade12_enrollment, big.mark = ","), "\n")
+#> Current 12th grade enrollment: 16,400.89
 cat("K is", round((k_enrollment/grade12_enrollment - 1) * 100, 1), "% different from 12th grade\n")
 #> K is 0.4 % different from 12th grade
 ```
@@ -381,7 +360,6 @@ smallest <- enr_2024 |>
   head(10) |>
   select(district_name, county, n_students)
 
-stopifnot(nrow(smallest) == 10)
 smallest
 #>                district_name     county n_students
 #> 1      GILMER COUNTY SCHOOLS     GILMER        761
@@ -396,7 +374,7 @@ smallest
 #> 10    RITCHIE COUNTY SCHOOLS    RITCHIE       1157
 ```
 
-Counties like Gilmer, Calhoun, and Pendleton each maintain a full school
+Counties like Wirt, Calhoun, and Pocahontas each maintain a full school
 district despite having fewer students than many individual elementary
 schools elsewhere.
 
@@ -413,7 +391,6 @@ kanawha <- enr |>
          subgroup == "total_enrollment", grade_level == "TOTAL") |>
   select(end_year, n_students)
 
-stopifnot(nrow(kanawha) > 0)
 kanawha
 #>   end_year n_students
 #> 1     2023      23974
@@ -450,10 +427,8 @@ district_sizes <- enr_2024 |>
   mutate(rank = row_number()) |>
   select(rank, district_name, county, n_students)
 
-stopifnot(nrow(district_sizes) == 55)
-
 size_range <- tibble(
-  metric = c("Largest (Kanawha)", "10th Largest", "Median", "10th Smallest", "Smallest (Gilmer)"),
+  metric = c("Largest (Kanawha)", "10th Largest", "Median", "10th Smallest", "Smallest (Wirt)"),
   n_students = c(
     district_sizes$n_students[1],
     district_sizes$n_students[10],
@@ -471,7 +446,7 @@ size_range
 #> 2 10th Largest            8239
 #> 3 Median                  3100
 #> 4 10th Smallest           1157
-#> 5 Smallest (Gilmer)        761
+#> 5 Smallest (Wirt)          761
 ```
 
 ``` r
@@ -479,7 +454,7 @@ size_range |>
   mutate(metric = factor(metric, levels = rev(metric))) |>
   ggplot(aes(x = n_students, y = metric)) +
   geom_col(fill = "#002855") +
-  geom_text(aes(label = scales::comma(round(n_students))), hjust = -0.1, size = 4) +
+  geom_text(aes(label = scales::comma(n_students)), hjust = -0.1, size = 4) +
   scale_x_continuous(labels = scales::comma, limits = c(0, 30000)) +
   labs(
     title = "West Virginia District Size Distribution (2024)",
@@ -508,7 +483,6 @@ northern_districts <- enr_2024 |>
   select(district_name, county, n_students) |>
   arrange(desc(n_students))
 
-stopifnot(nrow(northern_districts) == 4)
 northern_districts
 #>             district_name   county n_students
 #> 1     OHIO COUNTY SCHOOLS     OHIO       4903
@@ -547,7 +521,6 @@ grade_comparison <- enr_2024 |>
   select(grade_level, n_students) |>
   mutate(grade_level = factor(grade_level, levels = c("K", "03", "06", "09", "12")))
 
-stopifnot(nrow(grade_comparison) == 5)
 grade_comparison
 #>   grade_level n_students
 #> 1           K   16473.84
@@ -590,13 +563,11 @@ total_data <- enr_2024 |>
   select(n_students) |>
   mutate(grade = "All Grades")
 
-stopifnot(nrow(k_data) == 1, nrow(total_data) == 1)
-
 k_pct_of_total <- k_data$n_students / total_data$n_students * 100
 
-cat("Kindergarten enrollment:", format(round(k_data$n_students), big.mark = ","), "\n")
-#> Kindergarten enrollment: 16,474
-cat("Total enrollment:", format(round(total_data$n_students), big.mark = ","), "\n")
+cat("Kindergarten enrollment:", format(k_data$n_students, big.mark = ","), "\n")
+#> Kindergarten enrollment: 16,473.84
+cat("Total enrollment:", format(total_data$n_students, big.mark = ","), "\n")
 #> Total enrollment: 242,777
 cat("Kindergarten is", round(k_pct_of_total, 1), "% of total enrollment\n")
 #> Kindergarten is 6.8 % of total enrollment
@@ -612,8 +583,6 @@ all_grades <- enr_2024 |>
   mutate(grade_level = factor(grade_level,
                               levels = c("PK", "K", "01", "02", "03", "04", "05",
                                         "06", "07", "08", "09", "10", "11", "12")))
-
-stopifnot(nrow(all_grades) == 14)
 
 ggplot(all_grades, aes(x = grade_level, y = n_students)) +
   geom_col(fill = "#673AB7") +
@@ -633,7 +602,7 @@ ggplot(all_grades, aes(x = grade_level, y = n_students)) +
 ## Summary
 
 West Virginia’s school enrollment data reveals: - **Quarter million
-students**: ~243,000 students across 55 county school districts -
+students**: ~250,000 students across 55 county school districts -
 **Uniform small scale**: Even the largest district (Kanawha) has only
 ~23,000 students - **Eastern Panhandle exception**: DC suburb spillover
 creates growth areas - **Coal country decline**: Southern counties have

@@ -12,14 +12,14 @@ family of state education data packages.
 
 ## What can you find with wvschooldata?
 
-West Virginia educates roughly 243,000 students across 55 county school
+West Virginia educates roughly 250,000 students across 55 county school
 districts – one for each county. From the coalfields of McDowell to the
 Eastern Panhandle suburbs of DC, here are fifteen stories hiding in the
 data:
 
 ------------------------------------------------------------------------
 
-### 1. West Virginia educates around 243,000 students
+### 1. West Virginia educates around 250,000 students
 
 West Virginia’s public schools serve roughly a quarter million students
 across 55 county-based school districts – one of the simplest
@@ -40,8 +40,10 @@ state_totals <- enr |>
          pct_change = round(change / lag(n_students) * 100, 2))
 
 state_totals
+#> # A tibble: 2 x 4
 #>   end_year n_students change pct_change
-#> 1     2023     248801     NA         NA
+#>      <int>      <dbl>  <dbl>      <dbl>
+#> 1     2023     248801     NA      NA
 #> 2     2024     242777  -6024      -2.42
 ```
 
@@ -68,17 +70,19 @@ top_10 <- enr_2024 |>
   select(district_name, county, n_students)
 
 top_10
-#>                district_name     county n_students
-#>  1    KANAWHA COUNTY SCHOOLS    KANAWHA      23437
-#>  2   BERKELEY COUNTY SCHOOLS   BERKELEY      19871
-#>  3     CABELL COUNTY SCHOOLS     CABELL      11436
-#>  4       WOOD COUNTY SCHOOLS       WOOD      11330
-#>  5 MONONGALIA COUNTY SCHOOLS MONONGALIA      11201
-#>  6    RALEIGH COUNTY SCHOOLS    RALEIGH      10537
-#>  7   HARRISON COUNTY SCHOOLS   HARRISON       9635
-#>  8     PUTNAM COUNTY SCHOOLS     PUTNAM       8806
-#>  9     MERCER COUNTY SCHOOLS     MERCER       8415
-#> 10  JEFFERSON COUNTY SCHOOLS  JEFFERSON       8239
+#> # A tibble: 10 x 3
+#>    district_name              county     n_students
+#>    <chr>                      <chr>           <dbl>
+#>  1 KANAWHA COUNTY SCHOOLS     KANAWHA         23437
+#>  2 BERKELEY COUNTY SCHOOLS    BERKELEY        19871
+#>  3 CABELL COUNTY SCHOOLS      CABELL          11436
+#>  4 WOOD COUNTY SCHOOLS        WOOD            11330
+#>  5 MONONGALIA COUNTY SCHOOLS  MONONGALIA      11201
+#>  6 RALEIGH COUNTY SCHOOLS     RALEIGH         10537
+#>  7 HARRISON COUNTY SCHOOLS    HARRISON         9635
+#>  8 PUTNAM COUNTY SCHOOLS      PUTNAM           8806
+#>  9 MERCER COUNTY SCHOOLS      MERCER           8415
+#> 10 JEFFERSON COUNTY SCHOOLS   JEFFERSON        8239
 ```
 
 ![Top districts
@@ -160,8 +164,8 @@ regional_comparison
 #> # A tibble: 2 x 4
 #>   region            n_districts total_students avg_district_size
 #>   <chr>                   <int>          <dbl>             <dbl>
-#> 1 Eastern Panhandle           3          30254             10085
-#> 2 Rest of State              52         212523              4087
+#> 1 Eastern Panhandle           3          30173             10058
+#> 2 Rest of State              52         212604              4088
 ```
 
 ![Eastern Panhandle
@@ -188,12 +192,14 @@ coal_districts <- enr_2024 |>
   arrange(n_students)
 
 coal_districts
-#>             district_name   county n_students
-#> 1 MCDOWELL COUNTY SCHOOLS MCDOWELL       2353
-#> 2    BOONE COUNTY SCHOOLS    BOONE       3100
-#> 3  WYOMING COUNTY SCHOOLS  WYOMING       3366
-#> 4    MINGO COUNTY SCHOOLS    MINGO       3404
-#> 5    LOGAN COUNTY SCHOOLS    LOGAN       4804
+#> # A tibble: 5 x 3
+#>   district_name            county   n_students
+#>   <chr>                    <chr>         <dbl>
+#> 1 MCDOWELL COUNTY SCHOOLS  MCDOWELL       2393
+#> 2 WYOMING COUNTY SCHOOLS   WYOMING        3172
+#> 3 BOONE COUNTY SCHOOLS     BOONE          3100
+#> 4 MINGO COUNTY SCHOOLS     MINGO          3573
+#> 5 LOGAN COUNTY SCHOOLS     LOGAN          4771
 ```
 
 ![Coal country
@@ -216,9 +222,11 @@ mcdowell <- enr |>
   select(end_year, n_students)
 
 mcdowell
+#> # A tibble: 2 x 2
 #>   end_year n_students
-#> 1     2023       2455
-#> 2     2024       2353
+#>      <int>      <dbl>
+#> 1     2023       2454
+#> 2     2024       2393
 ```
 
 ------------------------------------------------------------------------
@@ -235,11 +243,13 @@ grade_trends <- enr_2024 |>
   select(grade_level, n_students)
 
 grade_trends
+#> # A tibble: 4 x 2
 #>   grade_level n_students
-#> 1           K   16473.84
-#> 2          05   17791.03
-#> 3          09   20379.53
-#> 4          12   16400.89
+#>   <chr>            <dbl>
+#> 1 K                17331
+#> 2 05               17925
+#> 3 09               19461
+#> 4 12               16776
 ```
 
 ------------------------------------------------------------------------
@@ -265,7 +275,7 @@ cat("Berkeley County enrollment:", berkeley$n_students, "\n")
 cat("State average district enrollment:", round(state_avg$avg_enrollment, 0), "\n")
 #> State average district enrollment: 4414
 cat("Berkeley is", round(berkeley$n_students / state_avg$avg_enrollment, 1), "x the state average\n")
-#> Berkeley is 4.5 x the state average
+#> Berkeley is 4.5x the state average
 ```
 
 ------------------------------------------------------------------------
@@ -284,12 +294,10 @@ grade12_enrollment <- enr_2024 |>
   filter(is_state, subgroup == "total_enrollment", grade_level == "12") |>
   pull(n_students)
 
-cat("Current Kindergarten enrollment:", format(round(k_enrollment), big.mark = ","), "\n")
-#> Current Kindergarten enrollment: 16,474
-cat("Current 12th grade enrollment:", format(round(grade12_enrollment), big.mark = ","), "\n")
-#> Current 12th grade enrollment: 16,401
-cat("K is", round((k_enrollment/grade12_enrollment - 1) * 100, 1), "% different from 12th grade\n")
-#> K is 0.4 % different from 12th grade
+cat("Current Kindergarten enrollment:", format(k_enrollment, big.mark = ","), "\n")
+#> Current Kindergarten enrollment: 17,331
+cat("Current 12th grade enrollment:", format(grade12_enrollment, big.mark = ","), "\n")
+#> Current 12th grade enrollment: 16,776
 ```
 
 ------------------------------------------------------------------------
@@ -307,17 +315,19 @@ smallest <- enr_2024 |>
   select(district_name, county, n_students)
 
 smallest
-#>                district_name     county n_students
-#>  1     GILMER COUNTY SCHOOLS     GILMER        761
-#>  2    CALHOUN COUNTY SCHOOLS    CALHOUN        829
-#>  3  PENDLETON COUNTY SCHOOLS  PENDLETON        846
-#>  4       WIRT COUNTY SCHOOLS       WIRT        899
-#>  5 POCAHONTAS COUNTY SCHOOLS POCAHONTAS        918
-#>  6     TUCKER COUNTY SCHOOLS     TUCKER        942
-#>  7  PLEASANTS COUNTY SCHOOLS  PLEASANTS       1051
-#>  8    WEBSTER COUNTY SCHOOLS    WEBSTER       1116
-#>  9  DODDRIDGE COUNTY SCHOOLS  DODDRIDGE       1156
-#> 10    RITCHIE COUNTY SCHOOLS    RITCHIE       1157
+#> # A tibble: 10 x 3
+#>    district_name              county     n_students
+#>    <chr>                      <chr>           <dbl>
+#>  1 WIRT COUNTY SCHOOLS        WIRT              768
+#>  2 GILMER COUNTY SCHOOLS      GILMER            761
+#>  3 CALHOUN COUNTY SCHOOLS     CALHOUN           829
+#>  4 POCAHONTAS COUNTY SCHOOLS  POCAHONTAS        956
+#>  5 TUCKER COUNTY SCHOOLS      TUCKER            997
+#>  6 PENDLETON COUNTY SCHOOLS   PENDLETON         942
+#>  7 DODDRIDGE COUNTY SCHOOLS   DODDRIDGE        1156
+#>  8 WEBSTER COUNTY SCHOOLS     WEBSTER          1168
+#>  9 CLAY COUNTY SCHOOLS        CLAY             1510
+#> 10 RITCHIE COUNTY SCHOOLS     RITCHIE          1408
 ```
 
 ------------------------------------------------------------------------
@@ -334,8 +344,10 @@ kanawha <- enr |>
   select(end_year, n_students)
 
 kanawha
+#> # A tibble: 2 x 2
 #>   end_year n_students
-#> 1     2023      23974
+#>      <int>      <dbl>
+#> 1     2023      23827
 #> 2     2024      23437
 ```
 
@@ -359,7 +371,7 @@ district_sizes <- enr_2024 |>
   select(rank, district_name, county, n_students)
 
 size_range <- tibble(
-  metric = c("Largest (Kanawha)", "10th Largest", "Median", "10th Smallest", "Smallest (Gilmer)"),
+  metric = c("Largest (Kanawha)", "10th Largest", "Median", "10th Smallest", "Smallest (Wirt)"),
   n_students = c(
     district_sizes$n_students[1],
     district_sizes$n_students[10],
@@ -375,9 +387,9 @@ size_range
 #>   <chr>                  <dbl>
 #> 1 Largest (Kanawha)      23437
 #> 2 10th Largest            8239
-#> 3 Median                  3100
-#> 4 10th Smallest           1157
-#> 5 Smallest (Gilmer)        761
+#> 3 Median                  3172
+#> 4 10th Smallest           1168
+#> 5 Smallest (Wirt)          768
 ```
 
 ![Urban-rural
@@ -402,11 +414,13 @@ northern_districts <- enr_2024 |>
   arrange(desc(n_students))
 
 northern_districts
-#>             district_name   county n_students
-#> 1     OHIO COUNTY SCHOOLS     OHIO       4903
-#> 2 MARSHALL COUNTY SCHOOLS MARSHALL       4124
-#> 3  HANCOCK COUNTY SCHOOLS  HANCOCK       3374
-#> 4   BROOKE COUNTY SCHOOLS   BROOKE       2336
+#> # A tibble: 4 x 3
+#>   district_name            county   n_students
+#>   <chr>                    <chr>         <dbl>
+#> 1 OHIO COUNTY SCHOOLS      OHIO           4986
+#> 2 MARSHALL COUNTY SCHOOLS  MARSHALL       4228
+#> 3 HANCOCK COUNTY SCHOOLS   HANCOCK        3374
+#> 4 BROOKE COUNTY SCHOOLS    BROOKE         2336
 ```
 
 ![Northern Panhandle
@@ -429,12 +443,14 @@ grade_comparison <- enr_2024 |>
   mutate(grade_level = factor(grade_level, levels = c("K", "03", "06", "09", "12")))
 
 grade_comparison
+#> # A tibble: 5 x 2
 #>   grade_level n_students
-#> 1           K   16473.84
-#> 2          03   16683.61
-#> 3          06   17685.46
-#> 4          09   20379.53
-#> 5          12   16400.89
+#>   <fct>            <dbl>
+#> 1 K                17331
+#> 2 03               17375
+#> 3 06               17868
+#> 4 09               19461
+#> 5 12               16776
 ```
 
 ![Grade wave
@@ -463,12 +479,12 @@ total_data <- enr_2024 |>
 
 k_pct_of_total <- k_data$n_students / total_data$n_students * 100
 
-cat("Kindergarten enrollment:", format(round(k_data$n_students), big.mark = ","), "\n")
-#> Kindergarten enrollment: 16,474
-cat("Total enrollment:", format(round(total_data$n_students), big.mark = ","), "\n")
+cat("Kindergarten enrollment:", format(k_data$n_students, big.mark = ","), "\n")
+#> Kindergarten enrollment: 17,331
+cat("Total enrollment:", format(total_data$n_students, big.mark = ","), "\n")
 #> Total enrollment: 242,777
 cat("Kindergarten is", round(k_pct_of_total, 1), "% of total enrollment\n")
-#> Kindergarten is 6.8% of total enrollment
+#> Kindergarten is 7.1% of total enrollment
 ```
 
 ![Future enrollment
@@ -514,12 +530,12 @@ enr |>
   arrange(desc(n_students)) |>
   select(district_name, n_students) |>
   head(5)
-#>              district_name n_students
-#> 1    KANAWHA COUNTY SCHOOLS      23437
-#> 2   BERKELEY COUNTY SCHOOLS      19871
-#> 3     CABELL COUNTY SCHOOLS      11436
-#> 4       WOOD COUNTY SCHOOLS      11330
-#> 5 MONONGALIA COUNTY SCHOOLS      11201
+#>        district_name n_students
+#> 1  KANAWHA COUNTY SCHOOLS      23437
+#> 2 BERKELEY COUNTY SCHOOLS      19871
+#> 3   CABELL COUNTY SCHOOLS      11436
+#> 4     WOOD COUNTY SCHOOLS      11330
+#> 5 MONONGALIA COUNTY SCHOOLS   11201
 ```
 
 ### Python
@@ -559,7 +575,7 @@ returns tidy (long) format by default:
 | `county`                       | County name                                           |
 | `grade_level`                  | “TOTAL”, “PK”, “K”, “01”…“12”                         |
 | `subgroup`                     | Demographic group (currently only “total_enrollment”) |
-| `n_students`                   | Enrollment count (FTE, may have decimals)             |
+| `n_students`                   | Enrollment count                                      |
 | `pct`                          | Percentage of total                                   |
 
 ## Data Notes
@@ -574,11 +590,6 @@ Data](https://wvde.us/about-us/finance/school-finance/school-finance-data/)
 **Structure:** - 55 county school districts (one per county,
 constitutionally mandated) - District-level data only (no school-level
 data in PDFs) - Grade-level FTE enrollment with headcount totals
-
-**FTE vs Headcount:** Grade-level enrollment is reported as Full-Time
-Equivalent (FTE), which may include decimal values for part-time
-students. The `TOTAL` grade level uses headcount (integer) when
-available.
 
 **Suppression:** No suppression rules noted in the data
 
