@@ -8,3 +8,4 @@
 ^_pkgdown\.yml$
 ^docs$
 ^vignettes/.*_cache$
+^DATA-CATEGORY-TAXONOMY\.md$
