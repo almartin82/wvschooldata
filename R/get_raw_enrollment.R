@@ -39,7 +39,7 @@ get_raw_enr <- function(end_year) {
 
   # Years with FTE data available (2014+)
   # Note: FTE PDFs for 2010-2013 are no longer available on WVDE website
-  fte_available_years <- 2014L:2025L
+  fte_available_years <- 2014L:2026L
 
   # Download FTE enrollment PDF (has grade breakdowns) if available
   if (end_year %in% fte_available_years) {
@@ -90,10 +90,12 @@ get_wvde_pdf_url <- function(end_year, type = "FTE") {
   # These are verified URLs from WVDE
   # Note: FTE PDFs for 2010-2013 are no longer available on WVDE website
   # Only 2013 headcount is available from pre-2014 years
-  # URLs verified as of January 2026
+  # URLs verified as of March 2026
   # WVDE migrated from wp-content/uploads to sites/default/files
+  # Note: 2026 PDFs use spaces in filenames and YYYY-MM date path format
   url_map <- list(
     "FTE" = list(
+      "26" = "https://wvde.us/sites/default/files/2025-12/FTE%20Enrollment%202nd%20Mo%2026.pdf",
       "25" = "https://wvde.us/sites/default/files/2024/12/FTE-Enrollment-2nd-Mo-25.pdf",
       "24" = "https://wvde.us/sites/default/files/2024/01/FTE-Enrollment-2nd-Mo-24.pdf",
       "23" = "https://wvde.us/sites/default/files/2023/12/FTE-Enrollment-2nd-Mo-23.pdf",
@@ -109,6 +111,7 @@ get_wvde_pdf_url <- function(end_year, type = "FTE") {
       # Note: FTE PDFs for years 10-13 are no longer available on WVDE website
     ),
     "Headcount" = list(
+      "26" = "https://wvde.us/sites/default/files/2025-12/Headcount%20Enroll%20-%202nd%20Mo%2026.pdf",
       "25" = "https://wvde.us/sites/default/files/2024/12/Headcount-Enroll-2nd-Mo-25.pdf",
       "24" = "https://wvde.us/sites/default/files/2024/01/Headcount-Enroll-2nd-Mo-24.pdf",
       "23" = "https://wvde.us/sites/default/files/2023/12/Headcount-Enroll-2nd-Mo-23.pdf",

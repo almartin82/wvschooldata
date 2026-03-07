@@ -18,23 +18,22 @@ test_that("get_available_years returns integer vector", {
   expect_type(years, "integer")
 })
 
-test_that("get_available_years returns exactly 2023 and 2024", {
+test_that("get_available_years returns exactly 2023, 2024, and 2026", {
   years <- get_available_years()
-  expect_equal(years, c(2023L, 2024L))
+  expect_equal(years, c(2023L, 2024L, 2026L))
 })
 
-test_that("get_available_years has length 2", {
+test_that("get_available_years has length 3", {
   years <- get_available_years()
-  expect_equal(length(years), 2L)
+  expect_equal(length(years), 3L)
 })
 
 test_that("get_available_years min is 2023", {
   expect_equal(min(get_available_years()), 2023L)
 })
 
-test_that("get_available_years max is 2024", {
-
-  expect_equal(max(get_available_years()), 2024L)
+test_that("get_available_years max is 2026", {
+  expect_equal(max(get_available_years()), 2026L)
 })
 
 # ==============================================================================
