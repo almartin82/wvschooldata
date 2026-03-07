@@ -95,7 +95,8 @@ administrative structures in the nation.</p>
 <span><span class="va">state_totals</span></span>
 <span><span class="co">#&gt;   end_year n_students change pct_change</span></span>
 <span><span class="co">#&gt; 1     2023     248801     NA         NA</span></span>
-<span><span class="co">#&gt; 2     2024     242777  -6024      -2.42</span></span></code></pre></div>
+<span><span class="co">#&gt; 2     2024     242777  -6024      -2.42</span></span>
+<span><span class="co">#&gt; 3     2026     230714 -12063      -4.97</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">state_totals</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span>, color <span class="op">=</span> <span class="st">"#002855"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -306,7 +307,8 @@ starkest examples of Appalachian population decline.</p>
 <span><span class="va">mcdowell</span></span>
 <span><span class="co">#&gt;   end_year n_students</span></span>
 <span><span class="co">#&gt; 1     2023       2455</span></span>
-<span><span class="co">#&gt; 2     2024       2353</span></span></code></pre></div>
+<span><span class="co">#&gt; 2     2024       2353</span></span>
+<span><span class="co">#&gt; 3     2026       2089</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -419,7 +421,8 @@ largest school district with over 23,000 students.</p>
 <span><span class="va">kanawha</span></span>
 <span><span class="co">#&gt;   end_year n_students</span></span>
 <span><span class="co">#&gt; 1     2023      23974</span></span>
-<span><span class="co">#&gt; 2     2024      23437</span></span></code></pre></div>
+<span><span class="co">#&gt; 2     2024      23437</span></span>
+<span><span class="co">#&gt; 3     2026      22132</span></span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">kanawha</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">end_year</span>, y <span class="op">=</span> <span class="va">n_students</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span>, color <span class="op">=</span> <span class="st">"#B71C1C"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -647,16 +650,16 @@ School Finance Data.</em></p>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] gtable_0.3.6       jsonlite_2.0.0     qpdf_1.4.1         compiler_4.5.2    </span></span>
 <span><span class="co">#&gt;  [5] pdftools_3.7.0     Rcpp_1.1.1         tidyselect_1.2.1   jquerylib_0.1.4   </span></span>
-<span><span class="co">#&gt;  [9] systemfonts_1.3.1  scales_1.4.0       textshaping_1.0.4  yaml_2.3.12       </span></span>
+<span><span class="co">#&gt;  [9] systemfonts_1.3.2  scales_1.4.0       textshaping_1.0.5  yaml_2.3.12       </span></span>
 <span><span class="co">#&gt; [13] fastmap_1.2.0      R6_2.6.1           labeling_0.4.3     generics_0.1.4    </span></span>
 <span><span class="co">#&gt; [17] curl_7.0.0         knitr_1.51         forcats_1.0.1      tibble_3.3.1      </span></span>
 <span><span class="co">#&gt; [21] desc_1.4.3         bslib_0.10.0       pillar_1.11.1      RColorBrewer_1.1-3</span></span>
 <span><span class="co">#&gt; [25] rlang_1.1.7        utf8_1.2.6         cachem_1.1.0       xfun_0.56         </span></span>
-<span><span class="co">#&gt; [29] fs_1.6.6           sass_0.4.10        S7_0.2.1           cli_3.6.5         </span></span>
+<span><span class="co">#&gt; [29] fs_1.6.7           sass_0.4.10        S7_0.2.1           cli_3.6.5         </span></span>
 <span><span class="co">#&gt; [33] withr_3.0.2        pkgdown_2.2.0      magrittr_2.0.4     digest_0.6.39     </span></span>
 <span><span class="co">#&gt; [37] grid_4.5.2         askpass_1.2.1      rappdirs_0.3.4     lifecycle_1.0.5   </span></span>
 <span><span class="co">#&gt; [41] vctrs_0.7.1        evaluate_1.0.5     glue_1.8.0         farver_2.1.2      </span></span>
-<span><span class="co">#&gt; [45] codetools_0.2-20   ragg_1.5.0         httr_1.4.8         rmarkdown_2.30    </span></span>
+<span><span class="co">#&gt; [45] codetools_0.2-20   ragg_1.5.1         httr_1.4.8         rmarkdown_2.30    </span></span>
 <span><span class="co">#&gt; [49] purrr_1.2.1        tools_4.5.2        pkgconfig_2.0.3    htmltools_0.5.9</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
