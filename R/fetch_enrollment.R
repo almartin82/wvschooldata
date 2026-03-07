@@ -17,8 +17,8 @@
 #' of Education (WVDE). Data is sourced from WVDE School Finance Data PDFs
 #' which provide county-level enrollment figures.
 #'
-#' @param end_year A school year. Year is the end of the academic year - eg 2023-24
-#'   school year is year '2024'. Valid values are 2014-2025.
+#' @param end_year A school year. Year is the end of the academic year - eg 2025-26
+#'   school year is year '2026'. Valid values are 2023, 2024, 2026.
 #' @param tidy If TRUE (default), returns data in long (tidy) format with subgroup
 #'   column. If FALSE, returns wide format.
 #' @param use_cache If TRUE (default), uses locally cached data when available.

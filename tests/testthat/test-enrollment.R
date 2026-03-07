@@ -8,7 +8,8 @@ test_that("get_available_years returns expected range", {
   expect_type(years, "integer")
   expect_true(2023 %in% years)
   expect_true(2024 %in% years)
-  expect_equal(length(years), 2)  # 2023-2024 (older PDFs removed from WVDE)
+  expect_true(2026 %in% years)
+  expect_equal(length(years), 3)  # 2023, 2024, 2026 (2025 + older PDFs removed from WVDE)
 })
 
 
