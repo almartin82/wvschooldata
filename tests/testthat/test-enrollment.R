@@ -6,10 +6,12 @@ test_that("get_available_years returns expected range", {
   years <- get_available_years()
 
   expect_type(years, "integer")
+  expect_true(2014 %in% years)
+  expect_true(2020 %in% years)
   expect_true(2023 %in% years)
   expect_true(2024 %in% years)
   expect_true(2026 %in% years)
-  expect_equal(length(years), 3)  # 2023, 2024, 2026 (2025 + older PDFs removed from WVDE)
+  expect_equal(length(years), 10)  # 2014-2020, 2023, 2024, 2026
 })
 
 
@@ -31,8 +33,8 @@ test_that("fetch_enr validates year input", {
 
 
 test_that("fetch_enr_multi validates year input", {
-  expect_error(fetch_enr_multi(c(2010, 2020)), "Invalid years")
-  expect_error(fetch_enr_multi(c(2020, 2030)), "Invalid years")
+  expect_error(fetch_enr_multi(c(2010, 2012)), "Invalid years")
+  expect_error(fetch_enr_multi(c(2028, 2030)), "Invalid years")
 })
 
 
@@ -112,5 +114,8 @@ test_that("fetch_enr returns valid data structure", {
 
     # Should have state aggregate
     expect_true(any(result$type == "State"))
+
+    # All enrollment values should be integers (no decimals)
+    expect_true(all(result$n_students == round(result$n_students)))
   }
 })

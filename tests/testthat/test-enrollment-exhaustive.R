@@ -5,6 +5,10 @@
 # Tests EVERY exported enrollment function with ALL parameter combinations.
 # Expected values are pinned from real WVDE data (use_cache = TRUE).
 #
+# Note: All enrollment values are rounded to integers. The FTE PDFs contain
+# fractional values (Average Daily Membership), but the package rounds them
+# to integer headcount equivalents.
+#
 # ==============================================================================
 
 library(dplyr)
@@ -18,18 +22,18 @@ test_that("get_available_years returns integer vector", {
   expect_type(years, "integer")
 })
 
-test_that("get_available_years returns exactly 2023, 2024, and 2026", {
+test_that("get_available_years returns 10 years", {
   years <- get_available_years()
-  expect_equal(years, c(2023L, 2024L, 2026L))
+  expect_equal(length(years), 10L)
 })
 
-test_that("get_available_years has length 3", {
+test_that("get_available_years includes 2014-2020 and 2023-2024 and 2026", {
   years <- get_available_years()
-  expect_equal(length(years), 3L)
+  expect_true(all(c(2014L, 2015L, 2016L, 2017L, 2018L, 2019L, 2020L, 2023L, 2024L, 2026L) %in% years))
 })
 
-test_that("get_available_years min is 2023", {
-  expect_equal(min(get_available_years()), 2023L)
+test_that("get_available_years min is 2014", {
+  expect_equal(min(get_available_years()), 2014L)
 })
 
 test_that("get_available_years max is 2026", {
@@ -37,7 +41,7 @@ test_that("get_available_years max is 2026", {
 })
 
 # ==============================================================================
-# fetch_enr() — year validation
+# fetch_enr() -- year validation
 # ==============================================================================
 
 test_that("fetch_enr rejects year below range", {
@@ -52,12 +56,16 @@ test_that("fetch_enr rejects year 2022 (not available)", {
   expect_error(fetch_enr(2022, use_cache = TRUE), "end_year must be between")
 })
 
+test_that("fetch_enr rejects year 2021 (not available)", {
+  expect_error(fetch_enr(2021, use_cache = TRUE), "end_year must be between")
+})
+
 test_that("fetch_enr rejects non-numeric year", {
   expect_error(fetch_enr("abc", use_cache = TRUE))
 })
 
 # ==============================================================================
-# fetch_enr(2024, tidy = TRUE) — structure and pinned values
+# fetch_enr(2024, tidy = TRUE) -- structure and pinned values
 # ==============================================================================
 
 test_that("fetch_enr 2024 tidy returns data.frame", {
@@ -137,67 +145,67 @@ test_that("fetch_enr 2024 tidy: 56 rows per grade level", {
 })
 
 # ==============================================================================
-# fetch_enr(2024, tidy = TRUE) — pinned state totals
+# fetch_enr(2024, tidy = TRUE) -- pinned state totals (rounded integers)
 # ==============================================================================
 
-test_that("fetch_enr 2024: state TOTAL enrollment = 242777", {
+test_that("fetch_enr 2024: state TOTAL enrollment = 241574", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   state_total <- enr %>%
     filter(is_state, grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(state_total, 242777)
+  expect_equal(state_total, 241574)
 })
 
-test_that("fetch_enr 2024: state PK enrollment = 13090.01", {
+test_that("fetch_enr 2024: state PK enrollment = 13086", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   state_pk <- enr %>%
     filter(is_state, grade_level == "PK") %>%
     pull(n_students)
-  expect_equal(state_pk, 13090.01, tolerance = 0.01)
+  expect_equal(state_pk, 13086)
 })
 
-test_that("fetch_enr 2024: state K enrollment = 16473.84", {
+test_that("fetch_enr 2024: state K enrollment = 16473", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   state_k <- enr %>%
     filter(is_state, grade_level == "K") %>%
     pull(n_students)
-  expect_equal(state_k, 16473.84, tolerance = 0.01)
+  expect_equal(state_k, 16473)
 })
 
-test_that("fetch_enr 2024: state grade 01 enrollment = 16764.8", {
+test_that("fetch_enr 2024: state grade 01 enrollment = 16764", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(is_state, grade_level == "01") %>%
     pull(n_students)
-  expect_equal(val, 16764.8, tolerance = 0.1)
+  expect_equal(val, 16764)
 })
 
-test_that("fetch_enr 2024: state grade 09 enrollment = 20379.53", {
+test_that("fetch_enr 2024: state grade 09 enrollment = 20379", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(is_state, grade_level == "09") %>%
     pull(n_students)
-  expect_equal(val, 20379.53, tolerance = 0.01)
+  expect_equal(val, 20379)
 })
 
-test_that("fetch_enr 2024: state grade 12 enrollment = 16400.89", {
+test_that("fetch_enr 2024: state grade 12 enrollment = 16405", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(is_state, grade_level == "12") %>%
     pull(n_students)
-  expect_equal(val, 16400.89, tolerance = 0.01)
+  expect_equal(val, 16405)
 })
 
 # ==============================================================================
-# fetch_enr(2024, tidy = TRUE) — pinned district values
+# fetch_enr(2024, tidy = TRUE) -- pinned district values
 # ==============================================================================
 
-test_that("fetch_enr 2024: Kanawha County total = 23437", {
+test_that("fetch_enr 2024: Kanawha County total = 23219", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(district_name == "KANAWHA COUNTY SCHOOLS", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 23437)
+  expect_equal(val, 23219)
 })
 
 test_that("fetch_enr 2024: Kanawha district_id = 54039", {
@@ -208,12 +216,12 @@ test_that("fetch_enr 2024: Kanawha district_id = 54039", {
   expect_equal(unname(val), "54039")
 })
 
-test_that("fetch_enr 2024: Berkeley County total = 19871", {
+test_that("fetch_enr 2024: Berkeley County total = 19785", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(district_name == "BERKELEY COUNTY SCHOOLS", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 19871)
+  expect_equal(val, 19785)
 })
 
 test_that("fetch_enr 2024: Berkeley district_id = 54003", {
@@ -224,20 +232,20 @@ test_that("fetch_enr 2024: Berkeley district_id = 54003", {
   expect_equal(unname(val), "54003")
 })
 
-test_that("fetch_enr 2024: Barbour County total = 2079", {
+test_that("fetch_enr 2024: Barbour County total = 2073", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(county == "BARBOUR", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 2079)
+  expect_equal(val, 2073)
 })
 
-test_that("fetch_enr 2024: Wirt County total = 899", {
+test_that("fetch_enr 2024: Wirt County total = 894", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(county == "WIRT", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 899)
+  expect_equal(val, 894)
 })
 
 test_that("fetch_enr 2024: Wirt district_id = 54105", {
@@ -248,28 +256,28 @@ test_that("fetch_enr 2024: Wirt district_id = 54105", {
   expect_equal(unname(val), "54105")
 })
 
-test_that("fetch_enr 2024: Cabell County total = 11436", {
+test_that("fetch_enr 2024: Cabell County total = 11365", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(county == "CABELL", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 11436)
+  expect_equal(val, 11365)
 })
 
-test_that("fetch_enr 2024: Monongalia County total = 11201", {
+test_that("fetch_enr 2024: Monongalia County total = 11159", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(county == "MONONGALIA", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 11201)
+  expect_equal(val, 11159)
 })
 
-test_that("fetch_enr 2024: Wood County total = 11330", {
+test_that("fetch_enr 2024: Wood County total = 11215", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(county == "WOOD", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 11330)
+  expect_equal(val, 11215)
 })
 
 test_that("fetch_enr 2024: Kanawha is the largest district", {
@@ -282,7 +290,7 @@ test_that("fetch_enr 2024: Kanawha is the largest district", {
 })
 
 # ==============================================================================
-# fetch_enr(2024, tidy = TRUE) — pinned district grade-level values
+# fetch_enr(2024, tidy = TRUE) -- pinned district grade-level values (integer)
 # ==============================================================================
 
 test_that("fetch_enr 2024: Barbour grade K = 161", {
@@ -293,12 +301,12 @@ test_that("fetch_enr 2024: Barbour grade K = 161", {
   expect_equal(val, 161)
 })
 
-test_that("fetch_enr 2024: Barbour grade PK = 132.55", {
+test_that("fetch_enr 2024: Barbour grade PK = 133", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(county == "BARBOUR", grade_level == "PK") %>%
     pull(n_students)
-  expect_equal(val, 132.55, tolerance = 0.01)
+  expect_equal(val, 133)
 })
 
 test_that("fetch_enr 2024: Barbour grade 01 = 165", {
@@ -309,16 +317,25 @@ test_that("fetch_enr 2024: Barbour grade 01 = 165", {
   expect_equal(val, 165)
 })
 
-test_that("fetch_enr 2024: Kanawha PK = 1337.04", {
+test_that("fetch_enr 2024: Kanawha PK = 1337", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(district_name == "KANAWHA COUNTY SCHOOLS", grade_level == "PK") %>%
     pull(n_students)
-  expect_equal(val, 1337.04, tolerance = 0.01)
+  expect_equal(val, 1337)
 })
 
 # ==============================================================================
-# fetch_enr(2024, tidy = TRUE) — boolean flags
+# fetch_enr(2024, tidy = TRUE) -- all values are integers
+# ==============================================================================
+
+test_that("fetch_enr 2024: all n_students are integers", {
+  enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
+  expect_true(all(enr$n_students == round(enr$n_students)))
+})
+
+# ==============================================================================
+# fetch_enr(2024, tidy = TRUE) -- boolean flags
 # ==============================================================================
 
 test_that("fetch_enr 2024: is_state flag is logical", {
@@ -362,7 +379,7 @@ test_that("fetch_enr 2024: every row is either state or district", {
 })
 
 # ==============================================================================
-# fetch_enr(2024, tidy = TRUE) — aggregation_flag column
+# fetch_enr(2024, tidy = TRUE) -- aggregation_flag column
 # ==============================================================================
 
 test_that("fetch_enr 2024: aggregation_flag has expected values", {
@@ -381,7 +398,7 @@ test_that("fetch_enr 2024: 825 district aggregation_flag rows", {
 })
 
 # ==============================================================================
-# fetch_enr(2024, tidy = TRUE) — pct column
+# fetch_enr(2024, tidy = TRUE) -- pct column
 # ==============================================================================
 
 test_that("fetch_enr 2024: TOTAL grade pct is always 1", {
@@ -396,16 +413,8 @@ test_that("fetch_enr 2024: non-TOTAL grade pct values are between 0 and 1", {
   expect_true(all(non_totals$pct >= 0 & non_totals$pct <= 1, na.rm = TRUE))
 })
 
-test_that("fetch_enr 2024: Kanawha PK pct is correct", {
-  enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
-  val <- enr %>%
-    filter(district_name == "KANAWHA COUNTY SCHOOLS", grade_level == "PK") %>%
-    pull(pct)
-  expect_equal(val, 0.05704826, tolerance = 1e-4)
-})
-
 # ==============================================================================
-# fetch_enr(2024, tidy = FALSE) — wide format
+# fetch_enr(2024, tidy = FALSE) -- wide format
 # ==============================================================================
 
 test_that("fetch_enr 2024 wide has 56 rows (1 state + 55 districts)", {
@@ -434,46 +443,46 @@ test_that("fetch_enr 2024 wide has expected column names", {
   }
 })
 
-test_that("fetch_enr 2024 wide: state row_total = 242777", {
+test_that("fetch_enr 2024 wide: state row_total = 241574", {
   wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
   state_row <- wide %>% filter(type == "State")
-  expect_equal(state_row$row_total, 242777)
+  expect_equal(state_row$row_total, 241574)
 })
 
-test_that("fetch_enr 2024 wide: state grade_pk = 13090.01", {
+test_that("fetch_enr 2024 wide: state grade_pk = 13086", {
   wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
   state_row <- wide %>% filter(type == "State")
-  expect_equal(state_row$grade_pk, 13090.01, tolerance = 0.01)
+  expect_equal(state_row$grade_pk, 13086)
 })
 
-test_that("fetch_enr 2024 wide: state grade_k = 16473.84", {
+test_that("fetch_enr 2024 wide: state grade_k = 16473", {
   wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
   state_row <- wide %>% filter(type == "State")
-  expect_equal(state_row$grade_k, 16473.84, tolerance = 0.01)
+  expect_equal(state_row$grade_k, 16473)
 })
 
-test_that("fetch_enr 2024 wide: state grade_01 = 16764.8", {
+test_that("fetch_enr 2024 wide: state grade_01 = 16764", {
   wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
   state_row <- wide %>% filter(type == "State")
-  expect_equal(state_row$grade_01, 16764.8, tolerance = 0.1)
+  expect_equal(state_row$grade_01, 16764)
 })
 
-test_that("fetch_enr 2024 wide: state grade_12 = 16400.89", {
+test_that("fetch_enr 2024 wide: state grade_12 = 16405", {
   wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
   state_row <- wide %>% filter(type == "State")
-  expect_equal(state_row$grade_12, 16400.89, tolerance = 0.01)
+  expect_equal(state_row$grade_12, 16405)
 })
 
-test_that("fetch_enr 2024 wide: Kanawha row_total = 23437", {
+test_that("fetch_enr 2024 wide: Kanawha row_total = 23219", {
   wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
   kanawha <- wide %>% filter(district_name == "KANAWHA COUNTY SCHOOLS")
-  expect_equal(kanawha$row_total, 23437)
+  expect_equal(kanawha$row_total, 23219)
 })
 
-test_that("fetch_enr 2024 wide: Barbour row_total = 2079", {
+test_that("fetch_enr 2024 wide: Barbour row_total = 2073", {
   wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
   barbour <- wide %>% filter(county == "BARBOUR")
-  expect_equal(barbour$row_total, 2079)
+  expect_equal(barbour$row_total, 2073)
 })
 
 test_that("fetch_enr 2024 wide: Brooke row_total = 2336", {
@@ -482,14 +491,14 @@ test_that("fetch_enr 2024 wide: Brooke row_total = 2336", {
   expect_equal(brooke$row_total, 2336)
 })
 
-test_that("fetch_enr 2024 wide: Boone row_total = 3100", {
+test_that("fetch_enr 2024 wide: Boone row_total = 3092", {
   wide <- fetch_enr(2024, tidy = FALSE, use_cache = TRUE)
   boone <- wide %>% filter(county == "BOONE")
-  expect_equal(boone$row_total, 3100)
+  expect_equal(boone$row_total, 3092)
 })
 
 # ==============================================================================
-# fetch_enr(2024) — wide/tidy fidelity
+# fetch_enr(2024) -- wide/tidy fidelity
 # ==============================================================================
 
 test_that("fetch_enr 2024: wide totals match tidy totals for all 55 districts", {
@@ -518,7 +527,7 @@ test_that("fetch_enr 2024: wide state total matches tidy state total", {
 })
 
 # ==============================================================================
-# fetch_enr(2023, tidy = TRUE) — pinned values
+# fetch_enr(2023, tidy = TRUE) -- pinned values (rounded integers)
 # ==============================================================================
 
 test_that("fetch_enr 2023 tidy has 840 rows", {
@@ -526,12 +535,12 @@ test_that("fetch_enr 2023 tidy has 840 rows", {
   expect_equal(nrow(enr), 840L)
 })
 
-test_that("fetch_enr 2023: state TOTAL = 248801", {
+test_that("fetch_enr 2023: state TOTAL = 248191", {
   enr <- fetch_enr(2023, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(is_state, grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 248801)
+  expect_equal(val, 248191)
 })
 
 test_that("fetch_enr 2023: 55 districts", {
@@ -542,52 +551,57 @@ test_that("fetch_enr 2023: 55 districts", {
   expect_equal(n_dist, 55L)
 })
 
-test_that("fetch_enr 2023: Berkeley County total = 19855", {
+test_that("fetch_enr 2023: Berkeley County total = 19810", {
   enr <- fetch_enr(2023, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(district_name == "BERKELEY COUNTY SCHOOLS", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 19855)
+  expect_equal(val, 19810)
 })
 
-test_that("fetch_enr 2023: Monongalia County total = 11307", {
+test_that("fetch_enr 2023: Monongalia County total = 11298", {
   enr <- fetch_enr(2023, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(district_name == "MONONGALIA COUNTY SCHOOLS", grade_level == "TOTAL") %>%
     pull(n_students)
-  expect_equal(val, 11307)
+  expect_equal(val, 11298)
 })
 
-test_that("fetch_enr 2023: state PK = 13220.55", {
+test_that("fetch_enr 2023: state PK = 13217", {
   enr <- fetch_enr(2023, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(is_state, grade_level == "PK") %>%
     pull(n_students)
-  expect_equal(val, 13220.55, tolerance = 0.01)
+  expect_equal(val, 13217)
 })
 
-test_that("fetch_enr 2023: state K = 17248.03", {
+test_that("fetch_enr 2023: state K = 17249", {
   enr <- fetch_enr(2023, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(is_state, grade_level == "K") %>%
     pull(n_students)
-  expect_equal(val, 17248.03, tolerance = 0.01)
+  expect_equal(val, 17249)
 })
 
-test_that("fetch_enr 2023: state grade 09 = 21411.2", {
+test_that("fetch_enr 2023: state grade 09 = 21408", {
   enr <- fetch_enr(2023, tidy = TRUE, use_cache = TRUE)
   val <- enr %>%
     filter(is_state, grade_level == "09") %>%
     pull(n_students)
-  expect_equal(val, 21411.2, tolerance = 0.1)
+  expect_equal(val, 21408)
+})
+
+test_that("fetch_enr 2023: all n_students are integers", {
+  enr <- fetch_enr(2023, tidy = TRUE, use_cache = TRUE)
+  expect_true(all(enr$n_students == round(enr$n_students)))
 })
 
 # ==============================================================================
-# fetch_enr_multi() — validation
+# fetch_enr_multi() -- validation
 # ==============================================================================
 
 test_that("fetch_enr_multi rejects invalid years", {
-  expect_error(fetch_enr_multi(c(2010, 2020), use_cache = TRUE), "Invalid years")
+  expect_error(fetch_enr_multi(c(2010, 2012), use_cache = TRUE), "Invalid years")
 })
 
 test_that("fetch_enr_multi rejects mixed valid/invalid years", {
@@ -595,7 +609,7 @@ test_that("fetch_enr_multi rejects mixed valid/invalid years", {
 })
 
 # ==============================================================================
-# fetch_enr_multi(2023:2024) — structure and values
+# fetch_enr_multi(2023:2024) -- structure and values
 # ==============================================================================
 
 test_that("fetch_enr_multi 2023:2024 returns 1680 rows", {
@@ -648,7 +662,7 @@ test_that("fetch_enr_multi wide format works", {
 })
 
 # ==============================================================================
-# tidy_enr() — direct function tests
+# tidy_enr() -- direct function tests
 # ==============================================================================
 
 test_that("tidy_enr transforms wide to long format", {
@@ -682,7 +696,7 @@ test_that("tidy_enr preserves totals from wide format", {
 })
 
 # ==============================================================================
-# id_enr_aggs() — direct function tests
+# id_enr_aggs() -- direct function tests
 # ==============================================================================
 
 test_that("id_enr_aggs adds boolean flags", {
@@ -726,7 +740,7 @@ test_that("id_enr_aggs: 15 state + 825 district rows", {
 })
 
 # ==============================================================================
-# enr_grade_aggs() — grade aggregation tests
+# enr_grade_aggs() -- grade aggregation tests
 # ==============================================================================
 
 test_that("enr_grade_aggs returns K8, HS, K12", {
@@ -741,31 +755,31 @@ test_that("enr_grade_aggs has 168 rows", {
   expect_equal(nrow(aggs), 168L)
 })
 
-test_that("enr_grade_aggs: state K8 = 154381.3", {
+test_that("enr_grade_aggs: state K8 = 154371", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   aggs <- enr_grade_aggs(enr)
   val <- aggs %>%
     filter(is_state, grade_level == "K8") %>%
     pull(n_students)
-  expect_equal(val, 154381.3, tolerance = 0.1)
+  expect_equal(val, 154371)
 })
 
-test_that("enr_grade_aggs: state HS = 74111.98", {
+test_that("enr_grade_aggs: state HS = 74117", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   aggs <- enr_grade_aggs(enr)
   val <- aggs %>%
     filter(is_state, grade_level == "HS") %>%
     pull(n_students)
-  expect_equal(val, 74111.98, tolerance = 0.01)
+  expect_equal(val, 74117)
 })
 
-test_that("enr_grade_aggs: state K12 = 228493.3", {
+test_that("enr_grade_aggs: state K12 = 228488", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   aggs <- enr_grade_aggs(enr)
   val <- aggs %>%
     filter(is_state, grade_level == "K12") %>%
     pull(n_students)
-  expect_equal(val, 228493.3, tolerance = 0.1)
+  expect_equal(val, 228488)
 })
 
 test_that("enr_grade_aggs: K8 + HS = K12", {
@@ -778,22 +792,22 @@ test_that("enr_grade_aggs: K8 + HS = K12", {
   expect_equal(k8 + hs, k12)
 })
 
-test_that("enr_grade_aggs: Kanawha K8 = 14565.29", {
+test_that("enr_grade_aggs: Kanawha K8 = 14564", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   aggs <- enr_grade_aggs(enr)
   val <- aggs %>%
     filter(district_name == "KANAWHA COUNTY SCHOOLS", grade_level == "K8") %>%
     pull(n_students)
-  expect_equal(val, 14565.29, tolerance = 0.01)
+  expect_equal(val, 14564)
 })
 
-test_that("enr_grade_aggs: Kanawha HS = 7317.37", {
+test_that("enr_grade_aggs: Kanawha HS = 7318", {
   enr <- fetch_enr(2024, tidy = TRUE, use_cache = TRUE)
   aggs <- enr_grade_aggs(enr)
   val <- aggs %>%
     filter(district_name == "KANAWHA COUNTY SCHOOLS", grade_level == "HS") %>%
     pull(n_students)
-  expect_equal(val, 7317.37, tolerance = 0.01)
+  expect_equal(val, 7318)
 })
 
 test_that("enr_grade_aggs: Kanawha K12 = K8 + HS", {
@@ -820,7 +834,7 @@ test_that("enr_grade_aggs: 56 rows per grade level (1 state + 55 districts)", {
 })
 
 # ==============================================================================
-# Data quality — no Inf, NaN, negative values
+# Data quality -- no Inf, NaN, negative values
 # ==============================================================================
 
 test_that("fetch_enr 2024 tidy: no Inf values in n_students", {

@@ -316,11 +316,14 @@ parse_fte_pdf <- function(pdf_path, end_year) {
   # Read PDF text
   text <- pdftools::pdf_text(pdf_path)
 
-  # 2023+ PDFs have a new format with data split across pages 3-4
-  # Check if this is the new format by looking for "Early Childhood" header
-  is_new_format <- any(grepl("Early\\s+Childhood", text, ignore.case = TRUE))
+  # All multi-page PDFs (2014+) have grade-level data split across pages.
+  # Detect by looking for "Childhood" in the text (the "Early Childhood" header).
+  # Note: in some PDFs "Early" and "Childhood" are on separate lines, so we
 
-  if (is_new_format && end_year >= 2023) {
+  # check for "Childhood" alone rather than requiring them adjacent.
+  is_multipage_format <- any(grepl("Childhood", text, ignore.case = TRUE))
+
+  if (is_multipage_format) {
     return(parse_fte_pdf_new_format(text, end_year))
   }
 
@@ -367,12 +370,13 @@ parse_fte_pdf <- function(pdf_path, end_year) {
 }
 
 
-#' Parse FTE enrollment PDF in new 2024+ format
+#' Parse FTE enrollment PDF in multi-page format
 #'
-#' The 2024+ PDFs have a different structure:
-#' - Page 3: Early Childhood, Kindergarten, First through Fifth (7 grade columns)
-#' - Page 4: Sixth through Twelfth, Total (8 columns)
-#' Each district appears on both pages and data must be merged.
+#' WVDE FTE PDFs split grade-level data across two pages. Two layouts exist:
+#' - **2014-2015, 2023+**: Page A has PK through 5th (7 columns), Page B has
+#'   6th through 12th + Total (8 columns). Page A does NOT have "Sixth" in header.
+#' - **2016-2020**: Page A has PK through 6th (8 columns), Page B has 7th through
+#'   12th + Total (7 columns). Page A DOES have "Sixth" in header.
 #'
 #' @param text Character vector of PDF text (one element per page)
 #' @param end_year School year for context
@@ -381,49 +385,55 @@ parse_fte_pdf <- function(pdf_path, end_year) {
 parse_fte_pdf_new_format <- function(text, end_year) {
 
   # West Virginia counties (for validation)
-  wv_counties <- c(
-    "BARBOUR", "BERKELEY", "BOONE", "BRAXTON", "BROOKE",
-    "CABELL", "CALHOUN", "CLAY", "DODDRIDGE", "FAYETTE",
-    "GILMER", "GRANT", "GREENBRIER", "HAMPSHIRE", "HANCOCK",
-    "HARDY", "HARRISON", "JACKSON", "JEFFERSON", "KANAWHA",
-    "LEWIS", "LINCOLN", "LOGAN", "MCDOWELL", "MARION",
-    "MARSHALL", "MASON", "MERCER", "MINERAL", "MINGO",
-    "MONONGALIA", "MONROE", "MORGAN", "NICHOLAS", "OHIO",
-    "PENDLETON", "PLEASANTS", "POCAHONTAS", "PRESTON", "PUTNAM",
-    "RALEIGH", "RANDOLPH", "RITCHIE", "ROANE", "SUMMERS",
-    "TAYLOR", "TUCKER", "TYLER", "UPSHUR", "WAYNE",
-    "WEBSTER", "WETZEL", "WIRT", "WOOD", "WYOMING"
-  )
+  wv_counties <- get_wv_counties()
 
-  # Find the pages with grade-level data
-  # Page 3 has "Early Childhood" through "Fifth"
-  # Page 4 has "Sixth" through "Twelfth" and "Total"
+  # Detect layout by checking if any page has "Sixth" in the SAME page as
+  # "Childhood"/"garten". If so, this is the 2016-2020 layout (8+7 columns).
+  # If Sixth is on a separate page, this is the 2014-2015/2023+ layout (7+8).
+  has_sixth_with_childhood <- FALSE
+  for (page_text in text) {
+    page_lines <- strsplit(page_text, "\n")[[1]]
+    has_childhood <- any(grepl("Childhood", page_lines, ignore.case = TRUE))
+    has_garten <- any(grepl("(garten|First|Second)", page_lines, ignore.case = TRUE))
+    has_sixth <- any(grepl("Sixth", page_lines, ignore.case = TRUE))
+    if (has_childhood && has_garten && has_sixth) {
+      has_sixth_with_childhood <- TRUE
+      break
+    }
+  }
 
-  page3_data <- list()
-  page4_data <- list()
+  # Layout A (2014-2015, 2023+): first_page = 7 cols (PK-5th), second_page = 8 cols (6th-12th+Total)
+  # Layout B (2016-2020): first_page = 8 cols (PK-6th), second_page = 7 cols (7th-12th+Total)
+  is_layout_b <- has_sixth_with_childhood
+
+  first_page_data <- list()
+  second_page_data <- list()
 
   for (page_num in seq_along(text)) {
     page_text <- text[page_num]
     lines <- strsplit(page_text, "\n")[[1]]
     lines <- trimws(lines)
 
-    # Check if this is page 3 (EC through 5th) or page 4 (6th through 12th)
-    # Note: Headers can be split across lines, so check for key words
-    # Page 3 has "Childhood" and "garten" (from "Kindergarten") in header
-    # Page 4 has "Sixth" and "Seventh" in header
-    is_page3_type <- any(grepl("Childhood", lines, ignore.case = TRUE)) &&
-                     any(grepl("(garten|First|Second)", lines, ignore.case = TRUE))
-    is_page4_type <- any(grepl("Sixth", lines, ignore.case = TRUE)) &&
-                     any(grepl("Seventh", lines, ignore.case = TRUE))
+    # Identify page type
+    has_childhood <- any(grepl("Childhood", lines, ignore.case = TRUE))
+    has_garten <- any(grepl("(garten|First|Second)", lines, ignore.case = TRUE))
+    has_seventh <- any(grepl("Seventh", lines, ignore.case = TRUE))
+
+    is_first_page_type <- has_childhood && has_garten
+    is_second_page_type <- has_seventh && !is_first_page_type
+
+    if (!is_first_page_type && !is_second_page_type) next
 
     for (line in lines) {
       # Skip header/title lines
-      if (grepl("^(WEST VIRGINIA|FULL-TIME|CERTIFIED|\\d{4}-\\d{2}|District\\s+Early|District\\s+Sixth|^\\s*$)", line, ignore.case = TRUE)) {
+      if (grepl("^(WEST VIRGINIA|FULL-TIME|CERTIFIED|COUNTY BOARDS|\\d{4}-\\d{2}|District\\s+Early|District\\s+Sixth|County\\s+Early|County\\s+Sixth|County\\s+Childhood|^\\s*$)", line, ignore.case = TRUE)) {
         next
       }
 
+      # Skip lines that are part of the header (grade labels)
+      if (grepl("^(Early|Kinder|garten|Childhood)", line, ignore.case = TRUE)) next
+
       # Try to extract county name from beginning of line
-      # Counties have data that starts with the county name followed by numbers
       county_match <- regmatches(line, regexpr("^[A-Za-z]+", line))
       if (length(county_match) == 0) next
 
@@ -433,52 +443,88 @@ parse_fte_pdf_new_format <- function(text, end_year) {
       # Extract all numbers from the line
       nums <- extract_numbers_from_line(line)
 
-      if (is_page3_type && length(nums) >= 7) {
-        # Page 3: EC, K, 1, 2, 3, 4, 5 (7 values)
-        page3_data[[county_name]] <- nums[1:7]
-      } else if (is_page4_type && length(nums) >= 8) {
-        # Page 4: 6, 7, 8, 9, 10, 11, 12, Total (8 values)
-        page4_data[[county_name]] <- nums[1:8]
+      if (is_first_page_type) {
+        if (is_layout_b && length(nums) >= 8) {
+          # Layout B: PK, K, 1, 2, 3, 4, 5, 6 (8 values)
+          first_page_data[[county_name]] <- nums[1:8]
+        } else if (!is_layout_b && length(nums) >= 7) {
+          # Layout A: PK, K, 1, 2, 3, 4, 5 (7 values)
+          first_page_data[[county_name]] <- nums[1:7]
+        }
+      } else if (is_second_page_type) {
+        if (is_layout_b && length(nums) >= 7) {
+          # Layout B: 7, 8, 9, 10, 11, 12, Total (7 values)
+          second_page_data[[county_name]] <- nums[1:7]
+        } else if (!is_layout_b && length(nums) >= 8) {
+          # Layout A: 6, 7, 8, 9, 10, 11, 12, Total (8 values)
+          second_page_data[[county_name]] <- nums[1:8]
+        }
       }
     }
   }
 
-  if (length(page3_data) == 0 && length(page4_data) == 0) {
+  if (length(first_page_data) == 0 && length(second_page_data) == 0) {
     warning("No data could be parsed from FTE PDF for year ", end_year)
     return(create_empty_fte_df())
   }
 
   # Merge data from both pages
-  all_counties <- unique(c(names(page3_data), names(page4_data)))
+  all_counties <- unique(c(names(first_page_data), names(second_page_data)))
   results <- list()
 
   for (county in all_counties) {
-    p3 <- page3_data[[county]]
-    p4 <- page4_data[[county]]
+    fp <- first_page_data[[county]]
+    sp <- second_page_data[[county]]
 
-    # Default NAs if page data missing
-    if (is.null(p3)) p3 <- rep(NA_real_, 7)
-    if (is.null(p4)) p4 <- rep(NA_real_, 8)
+    if (is_layout_b) {
+      # Layout B (2016-2020): first_page = PK-6th (8), second_page = 7th-12th+Total (7)
+      if (is.null(fp)) fp <- rep(NA_real_, 8)
+      if (is.null(sp)) sp <- rep(NA_real_, 7)
 
-    results[[county]] <- data.frame(
-      county_name = county,
-      grade_pk = p3[1],      # Early Childhood
-      grade_k = p3[2],       # Kindergarten
-      grade_01 = p3[3],      # First
-      grade_02 = p3[4],      # Second
-      grade_03 = p3[5],      # Third
-      grade_04 = p3[6],      # Fourth
-      grade_05 = p3[7],      # Fifth
-      grade_06 = p4[1],      # Sixth
-      grade_07 = p4[2],      # Seventh
-      grade_08 = p4[3],      # Eighth
-      grade_09 = p4[4],      # Ninth
-      grade_10 = p4[5],      # Tenth
-      grade_11 = p4[6],      # Eleventh
-      grade_12 = p4[7],      # Twelfth
-      row_total = p4[8],     # Total
-      stringsAsFactors = FALSE
-    )
+      results[[county]] <- data.frame(
+        county_name = county,
+        grade_pk = fp[1],      # Early Childhood
+        grade_k = fp[2],       # Kindergarten
+        grade_01 = fp[3],      # First
+        grade_02 = fp[4],      # Second
+        grade_03 = fp[5],      # Third
+        grade_04 = fp[6],      # Fourth
+        grade_05 = fp[7],      # Fifth
+        grade_06 = fp[8],      # Sixth
+        grade_07 = sp[1],      # Seventh
+        grade_08 = sp[2],      # Eighth
+        grade_09 = sp[3],      # Ninth
+        grade_10 = sp[4],      # Tenth
+        grade_11 = sp[5],      # Eleventh
+        grade_12 = sp[6],      # Twelfth
+        row_total = sp[7],     # Total
+        stringsAsFactors = FALSE
+      )
+    } else {
+      # Layout A (2014-2015, 2023+): first_page = PK-5th (7), second_page = 6th-12th+Total (8)
+      if (is.null(fp)) fp <- rep(NA_real_, 7)
+      if (is.null(sp)) sp <- rep(NA_real_, 8)
+
+      results[[county]] <- data.frame(
+        county_name = county,
+        grade_pk = fp[1],      # Early Childhood
+        grade_k = fp[2],       # Kindergarten
+        grade_01 = fp[3],      # First
+        grade_02 = fp[4],      # Second
+        grade_03 = fp[5],      # Third
+        grade_04 = fp[6],      # Fourth
+        grade_05 = fp[7],      # Fifth
+        grade_06 = sp[1],      # Sixth
+        grade_07 = sp[2],      # Seventh
+        grade_08 = sp[3],      # Eighth
+        grade_09 = sp[4],      # Ninth
+        grade_10 = sp[5],      # Tenth
+        grade_11 = sp[6],      # Eleventh
+        grade_12 = sp[7],      # Twelfth
+        row_total = sp[8],     # Total
+        stringsAsFactors = FALSE
+      )
+    }
   }
 
   df <- dplyr::bind_rows(results)

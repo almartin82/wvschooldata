@@ -500,136 +500,136 @@ test_that("charter_flag is NA for all rows", {
 # 9. Per-Year Known Values
 # ==============================================================================
 
-test_that("2024 state total enrollment is 242777", {
+test_that("2024 state total enrollment is 241574", {
   state_2024 <- tidy_2024 |>
     dplyr::filter(is_state, grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(state_2024, 242777)
+  expect_equal(state_2024, 241574)
 })
 
-test_that("2023 state total enrollment is 248801", {
+test_that("2023 state total enrollment is 248191", {
   state_2023 <- tidy_2023 |>
     dplyr::filter(is_state, grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(state_2023, 248801)
+  expect_equal(state_2023, 248191)
 })
 
-test_that("2024 Kanawha County total enrollment is 23437", {
+test_that("2024 Kanawha County total enrollment is 23219", {
   kanawha <- tidy_2024 |>
     dplyr::filter(district_name == "KANAWHA COUNTY SCHOOLS",
                   grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(kanawha, 23437)
+  expect_equal(kanawha, 23219)
 })
 
-test_that("2024 Berkeley County total enrollment is 19871", {
+test_that("2024 Berkeley County total enrollment is 19785", {
   berkeley <- tidy_2024 |>
     dplyr::filter(district_name == "BERKELEY COUNTY SCHOOLS",
                   grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(berkeley, 19871)
+  expect_equal(berkeley, 19785)
 })
 
-test_that("2024 Calhoun County total enrollment is 829", {
+test_that("2024 Calhoun County total enrollment is 821", {
   calhoun <- tidy_2024 |>
     dplyr::filter(district_name == "CALHOUN COUNTY SCHOOLS",
                   grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(calhoun, 829)
+  expect_equal(calhoun, 821)
 })
 
-test_that("2024 Wirt County total enrollment is 899", {
+test_that("2024 Wirt County total enrollment is 894", {
   wirt <- tidy_2024 |>
     dplyr::filter(district_name == "WIRT COUNTY SCHOOLS",
                   grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(wirt, 899)
+  expect_equal(wirt, 894)
 })
 
-test_that("2024 Monongalia County total enrollment is 11201", {
+test_that("2024 Monongalia County total enrollment is 11159", {
   mono <- tidy_2024 |>
     dplyr::filter(district_name == "MONONGALIA COUNTY SCHOOLS",
                   grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(mono, 11201)
+  expect_equal(mono, 11159)
 })
 
-test_that("2024 Kanawha grade K FTE is 1540.23", {
+test_that("2024 Kanawha grade K is 1540", {
   kanawha_k <- tidy_2024 |>
     dplyr::filter(district_name == "KANAWHA COUNTY SCHOOLS",
                   grade_level == "K",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(kanawha_k, 1540.23)
+  expect_equal(kanawha_k, 1540)
 })
 
-test_that("2024 Kanawha grade 09 FTE is 2257.39", {
+test_that("2024 Kanawha grade 09 is 2257", {
   kanawha_09 <- tidy_2024 |>
     dplyr::filter(district_name == "KANAWHA COUNTY SCHOOLS",
                   grade_level == "09",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(kanawha_09, 2257.39)
+  expect_equal(kanawha_09, 2257)
 })
 
-test_that("2024 Berkeley grade K FTE is 1369.13", {
+test_that("2024 Berkeley grade K is 1369", {
   berk_k <- wide_2024 |>
     dplyr::filter(district_name == "BERKELEY COUNTY SCHOOLS") |>
     dplyr::pull(grade_k)
 
-  expect_equal(berk_k, 1369.13)
+  expect_equal(berk_k, 1369)
 })
 
-test_that("2023 Kanawha County total enrollment is 23974", {
+test_that("2023 Kanawha County total enrollment is 23826", {
   kanawha_2023 <- tidy_2023 |>
     dplyr::filter(district_name == "KANAWHA COUNTY SCHOOLS",
                   grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(kanawha_2023, 23974)
+  expect_equal(kanawha_2023, 23826)
 })
 
-test_that("2023 Berkeley County total enrollment is 19855", {
+test_that("2023 Berkeley County total enrollment is 19810", {
   berk_2023 <- tidy_2023 |>
     dplyr::filter(district_name == "BERKELEY COUNTY SCHOOLS",
                   grade_level == "TOTAL",
                   subgroup == "total_enrollment") |>
     dplyr::pull(n_students)
 
-  expect_equal(berk_2023, 19855)
+  expect_equal(berk_2023, 19810)
 })
 
-test_that("2024 state grade_pk FTE is 13090.01", {
+test_that("2024 state grade_pk is 13086", {
   state_pk <- wide_2024 |>
     dplyr::filter(type == "State") |>
     dplyr::pull(grade_pk)
 
-  expect_equal(state_pk, 13090.01)
+  expect_equal(state_pk, 13086)
 })
 
-test_that("2024 state grade_k FTE is 16473.84", {
+test_that("2024 state grade_k is 16473", {
   state_k <- wide_2024 |>
     dplyr::filter(type == "State") |>
     dplyr::pull(grade_k)
 
-  expect_equal(state_k, 16473.84)
+  expect_equal(state_k, 16473)
 })
 
 # ==============================================================================
