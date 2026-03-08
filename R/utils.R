@@ -23,24 +23,27 @@ NULL
 #' FTE data). The FTE PDFs for 2010-2013 are no longer available on the
 #' WVDE website.
 #'
-#' @return Integer vector of available years (2023, 2024, 2026)
+#' @return Integer vector of available years (2014-2020, 2023, 2024, 2026)
 #' @export
 #' @examples
 #' get_available_years()
 get_available_years <- function() {
   # WVDE School Finance Data PDFs availability (as of March 2026):
-  # - 2023, 2024, 2026: Available (current format with grade breakdowns)
-  # - 2025: PDFs removed from WVDE website (were at 2024/12/ path)
-  # - 2013-2021: PDFs removed from WVDE website
-  # - 2022: PDF was never published by WVDE
+  # - 2014-2020, 2023, 2024, 2026: FTE + Headcount PDFs available
+  # - 2013: Headcount only (no FTE grade breakdown)
+  # - 2021: PDFs removed from WVDE website (404)
+  # - 2022: PDFs removed from WVDE website (404)
+  # - 2025: PDFs removed from WVDE website (404)
   #
-  # Based on research of https://wvde.us/about-us/finance/school-finance/school-finance-data/
-  #
+  # URL availability verified March 2026 via HTTP HEAD requests.
+  # See get_wvde_pdf_url() for the full URL map.
+
   # Years represent the end of school year:
   # - 2026 = 2025-26 school year
   # - 2024 = 2023-24 school year
-  # - 2023 = 2022-23 school year
-  c(2023L, 2024L, 2026L)
+  # - 2020 = 2019-20 school year
+  # - 2014 = 2013-14 school year
+  c(2014L, 2015L, 2016L, 2017L, 2018L, 2019L, 2020L, 2023L, 2024L, 2026L)
 }
 
 

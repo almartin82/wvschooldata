@@ -95,6 +95,19 @@ process_district_enr <- function(fte_data, headcount_data, end_year) {
     }
   }
 
+  # Round FTE grade-level values to integers.
+  # FTE PDFs report fractional enrollment (Average Daily Membership), but
+  # enrollment counts should be integers. The headcount PDF provides integer
+
+  # totals which we already use for row_total via coalesce above; grade-level
+  # values need rounding too.
+  grade_cols_to_round <- c("grade_pk", "grade_k",
+    paste0("grade_", sprintf("%02d", 1:12)))
+  grade_cols_to_round <- grade_cols_to_round[grade_cols_to_round %in% names(result)]
+  for (col in grade_cols_to_round) {
+    result[[col]] <- round(result[[col]])
+  }
+
   # Standardize column names and add required fields
   result <- result |>
     dplyr::mutate(
@@ -108,12 +121,12 @@ process_district_enr <- function(fte_data, headcount_data, end_year) {
       charter_flag = NA_character_
     )
 
-  # Calculate row_total if not already present
-  if (!"row_total" %in% names(result) || all(is.na(result$row_total))) {
-    grade_cols <- c("grade_pk", "grade_k", paste0("grade_", sprintf("%02d", 1:12)))
-    grade_cols <- grade_cols[grade_cols %in% names(result)]
-    result$row_total <- rowSums(result[, grade_cols, drop = FALSE], na.rm = TRUE)
-  }
+
+  # Recalculate row_total from rounded grade values
+  # This ensures row_total is consistent with the now-integer grade values
+  grade_cols_sum <- c("grade_pk", "grade_k", paste0("grade_", sprintf("%02d", 1:12)))
+  grade_cols_sum <- grade_cols_sum[grade_cols_sum %in% names(result)]
+  result$row_total <- rowSums(result[, grade_cols_sum, drop = FALSE], na.rm = TRUE)
 
   # Select and order columns
   result <- result |>
