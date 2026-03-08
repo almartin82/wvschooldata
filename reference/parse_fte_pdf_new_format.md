@@ -1,12 +1,14 @@
-# Parse FTE enrollment PDF in new 2024+ format
+# Parse FTE enrollment PDF in multi-page format
 
-The 2024+ PDFs have a different structure:
+WVDE FTE PDFs split grade-level data across two pages. Two layouts
+exist:
 
-- Page 3: Early Childhood, Kindergarten, First through Fifth (7 grade
-  columns)
+- **2014-2015, 2023+**: Page A has PK through 5th (7 columns), Page B
+  has 6th through 12th + Total (8 columns). Page A does NOT have "Sixth"
+  in header.
 
-- Page 4: Sixth through Twelfth, Total (8 columns) Each district appears
-  on both pages and data must be merged.
+- **2016-2020**: Page A has PK through 6th (8 columns), Page B has 7th
+  through 12th + Total (7 columns). Page A DOES have "Sixth" in header.
 
 ## Usage
 

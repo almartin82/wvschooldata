@@ -33,10 +33,17 @@ state_totals <- enr |>
          pct_change = round(change / lag(n_students) * 100, 2))
 
 state_totals
-#>   end_year n_students change pct_change
-#> 1     2023     248801     NA         NA
-#> 2     2024     242777  -6024      -2.42
-#> 3     2026     230714 -12063      -4.97
+#>    end_year n_students change pct_change
+#> 1      2014     279960     NA         NA
+#> 2      2015     279133   -827      -0.30
+#> 3      2016     276391  -2742      -0.98
+#> 4      2017     272681  -3710      -1.34
+#> 5      2018     270220  -2461      -0.90
+#> 6      2019     265344  -4876      -1.80
+#> 7      2020     261264  -4080      -1.54
+#> 8      2023     248191 -13073      -5.00
+#> 9      2024     241574  -6617      -2.67
+#> 10     2026     229646 -11928      -4.94
 ```
 
 ``` r
@@ -74,16 +81,16 @@ top_10 <- enr_2024 |>
 
 top_10
 #>                district_name     county n_students
-#> 1     KANAWHA COUNTY SCHOOLS    KANAWHA      23437
-#> 2    BERKELEY COUNTY SCHOOLS   BERKELEY      19871
-#> 3      CABELL COUNTY SCHOOLS     CABELL      11436
-#> 4        WOOD COUNTY SCHOOLS       WOOD      11330
-#> 5  MONONGALIA COUNTY SCHOOLS MONONGALIA      11201
-#> 6     RALEIGH COUNTY SCHOOLS    RALEIGH      10537
-#> 7    HARRISON COUNTY SCHOOLS   HARRISON       9635
-#> 8      PUTNAM COUNTY SCHOOLS     PUTNAM       8806
-#> 9      MERCER COUNTY SCHOOLS     MERCER       8415
-#> 10  JEFFERSON COUNTY SCHOOLS  JEFFERSON       8239
+#> 1     KANAWHA COUNTY SCHOOLS    KANAWHA      23219
+#> 2    BERKELEY COUNTY SCHOOLS   BERKELEY      19785
+#> 3      CABELL COUNTY SCHOOLS     CABELL      11365
+#> 4        WOOD COUNTY SCHOOLS       WOOD      11215
+#> 5  MONONGALIA COUNTY SCHOOLS MONONGALIA      11159
+#> 6     RALEIGH COUNTY SCHOOLS    RALEIGH      10494
+#> 7    HARRISON COUNTY SCHOOLS   HARRISON       9572
+#> 8      PUTNAM COUNTY SCHOOLS     PUTNAM       8764
+#> 9      MERCER COUNTY SCHOOLS     MERCER       8354
+#> 10  JEFFERSON COUNTY SCHOOLS  JEFFERSON       8181
 ```
 
 ``` r
@@ -134,11 +141,11 @@ size_distribution
 #> # A tibble: 5 x 3
 #>   size_category n_districts total_students
 #>   <fct>               <int>          <dbl>
-#> 1 Under 1,000             6           5195
-#> 2 1,000-2,499            19          32739
-#> 3 2,500-4,999            17          63209
-#> 4 5,000-9,999             7          53822
-#> 5 10,000+                 6          87812
+#> 1 Under 1,000             6           5175
+#> 2 1,000-2,499            19          32609
+#> 3 2,500-4,999            17          63011
+#> 4 5,000-9,999             7          53542
+#> 5 10,000+                 6          87237
 ```
 
 ``` r
@@ -187,8 +194,8 @@ regional_comparison
 #> # A tibble: 2 x 4
 #>   region            n_districts total_students avg_district_size
 #>   <chr>                   <int>          <dbl>             <dbl>
-#> 1 Eastern Panhandle           3          30254             10085
-#> 2 Rest of State              52         212523              4087
+#> 1 Eastern Panhandle           3          30094             10031
+#> 2 Rest of State              52         211480              4067
 ```
 
 ``` r
@@ -232,11 +239,11 @@ coal_districts <- enr_2024 |>
 
 coal_districts
 #>             district_name   county n_students
-#> 1 MCDOWELL COUNTY SCHOOLS MCDOWELL       2353
-#> 2    BOONE COUNTY SCHOOLS    BOONE       3100
-#> 3  WYOMING COUNTY SCHOOLS  WYOMING       3366
-#> 4    MINGO COUNTY SCHOOLS    MINGO       3404
-#> 5    LOGAN COUNTY SCHOOLS    LOGAN       4804
+#> 1 MCDOWELL COUNTY SCHOOLS MCDOWELL       2352
+#> 2    BOONE COUNTY SCHOOLS    BOONE       3092
+#> 3  WYOMING COUNTY SCHOOLS  WYOMING       3360
+#> 4    MINGO COUNTY SCHOOLS    MINGO       3400
+#> 5    LOGAN COUNTY SCHOOLS    LOGAN       4791
 ```
 
 ``` r
@@ -270,10 +277,17 @@ mcdowell <- enr |>
   select(end_year, n_students)
 
 mcdowell
-#>   end_year n_students
-#> 1     2023       2455
-#> 2     2024       2353
-#> 3     2026       2089
+#>    end_year n_students
+#> 1      2014       3436
+#> 2      2015       3417
+#> 3      2016       3296
+#> 4      2017       3200
+#> 5      2018       3056
+#> 6      2019       2967
+#> 7      2020       2824
+#> 8      2023       2454
+#> 9      2024       2352
+#> 10     2026       2075
 ```
 
 ------------------------------------------------------------------------
@@ -291,10 +305,10 @@ grade_trends <- enr_2024 |>
 
 grade_trends
 #>   grade_level n_students
-#> 1           K   16473.84
-#> 2          05   17791.03
-#> 3          09   20379.53
-#> 4          12   16400.89
+#> 1           K      16473
+#> 2          05      17791
+#> 3          09      20379
+#> 4          12      16405
 ```
 
 ------------------------------------------------------------------------
@@ -316,9 +330,9 @@ state_avg <- enr_2024 |>
   summarize(avg_enrollment = mean(n_students, na.rm = TRUE))
 
 cat("Berkeley County enrollment:", berkeley$n_students, "\n")
-#> Berkeley County enrollment: 19871
+#> Berkeley County enrollment: 19785
 cat("State average district enrollment:", round(state_avg$avg_enrollment, 0), "\n")
-#> State average district enrollment: 4414
+#> State average district enrollment: 4392
 cat("Berkeley is", round(berkeley$n_students / state_avg$avg_enrollment, 1), "x the state average\n")
 #> Berkeley is 4.5 x the state average
 ```
@@ -340,9 +354,9 @@ grade12_enrollment <- enr_2024 |>
   pull(n_students)
 
 cat("Current Kindergarten enrollment:", format(k_enrollment, big.mark = ","), "\n")
-#> Current Kindergarten enrollment: 16,473.84
+#> Current Kindergarten enrollment: 16,473
 cat("Current 12th grade enrollment:", format(grade12_enrollment, big.mark = ","), "\n")
-#> Current 12th grade enrollment: 16,400.89
+#> Current 12th grade enrollment: 16,405
 cat("K is", round((k_enrollment/grade12_enrollment - 1) * 100, 1), "% different from 12th grade\n")
 #> K is 0.4 % different from 12th grade
 ```
@@ -365,15 +379,15 @@ smallest <- enr_2024 |>
 smallest
 #>                district_name     county n_students
 #> 1      GILMER COUNTY SCHOOLS     GILMER        761
-#> 2     CALHOUN COUNTY SCHOOLS    CALHOUN        829
-#> 3   PENDLETON COUNTY SCHOOLS  PENDLETON        846
-#> 4        WIRT COUNTY SCHOOLS       WIRT        899
-#> 5  POCAHONTAS COUNTY SCHOOLS POCAHONTAS        918
-#> 6      TUCKER COUNTY SCHOOLS     TUCKER        942
+#> 2     CALHOUN COUNTY SCHOOLS    CALHOUN        821
+#> 3   PENDLETON COUNTY SCHOOLS  PENDLETON        843
+#> 4        WIRT COUNTY SCHOOLS       WIRT        894
+#> 5  POCAHONTAS COUNTY SCHOOLS POCAHONTAS        915
+#> 6      TUCKER COUNTY SCHOOLS     TUCKER        941
 #> 7   PLEASANTS COUNTY SCHOOLS  PLEASANTS       1051
 #> 8     WEBSTER COUNTY SCHOOLS    WEBSTER       1116
-#> 9   DODDRIDGE COUNTY SCHOOLS  DODDRIDGE       1156
-#> 10    RITCHIE COUNTY SCHOOLS    RITCHIE       1157
+#> 9   DODDRIDGE COUNTY SCHOOLS  DODDRIDGE       1142
+#> 10    RITCHIE COUNTY SCHOOLS    RITCHIE       1144
 ```
 
 Counties like Wirt, Calhoun, and Pocahontas each maintain a full school
@@ -394,10 +408,17 @@ kanawha <- enr |>
   select(end_year, n_students)
 
 kanawha
-#>   end_year n_students
-#> 1     2023      23974
-#> 2     2024      23437
-#> 3     2026      22132
+#>    end_year n_students
+#> 1      2014      28072
+#> 2      2015      27931
+#> 3      2016      27345
+#> 4      2017      26615
+#> 5      2018      26221
+#> 6      2019      25666
+#> 7      2020      25365
+#> 8      2023      23826
+#> 9      2024      23219
+#> 10     2026      22051
 ```
 
 ``` r
@@ -445,10 +466,10 @@ size_range
 #> # A tibble: 5 x 2
 #>   metric            n_students
 #>   <chr>                  <dbl>
-#> 1 Largest (Kanawha)      23437
-#> 2 10th Largest            8239
-#> 3 Median                  3100
-#> 4 10th Smallest           1157
+#> 1 Largest (Kanawha)      23219
+#> 2 10th Largest            8181
+#> 3 Median                  3092
+#> 4 10th Smallest           1144
 #> 5 Smallest (Wirt)          761
 ```
 
@@ -488,9 +509,9 @@ northern_districts <- enr_2024 |>
 
 northern_districts
 #>             district_name   county n_students
-#> 1     OHIO COUNTY SCHOOLS     OHIO       4903
-#> 2 MARSHALL COUNTY SCHOOLS MARSHALL       4124
-#> 3  HANCOCK COUNTY SCHOOLS  HANCOCK       3374
+#> 1     OHIO COUNTY SCHOOLS     OHIO       4884
+#> 2 MARSHALL COUNTY SCHOOLS MARSHALL       4109
+#> 3  HANCOCK COUNTY SCHOOLS  HANCOCK       3356
 #> 4   BROOKE COUNTY SCHOOLS   BROOKE       2336
 ```
 
@@ -526,11 +547,11 @@ grade_comparison <- enr_2024 |>
 
 grade_comparison
 #>   grade_level n_students
-#> 1           K   16473.84
-#> 2          03   16683.61
-#> 3          06   17685.46
-#> 4          09   20379.53
-#> 5          12   16400.89
+#> 1           K      16473
+#> 2          03      16683
+#> 3          06      17683
+#> 4          09      20379
+#> 5          12      16405
 ```
 
 ``` r
@@ -569,9 +590,9 @@ total_data <- enr_2024 |>
 k_pct_of_total <- k_data$n_students / total_data$n_students * 100
 
 cat("Kindergarten enrollment:", format(k_data$n_students, big.mark = ","), "\n")
-#> Kindergarten enrollment: 16,473.84
+#> Kindergarten enrollment: 16,473
 cat("Total enrollment:", format(total_data$n_students, big.mark = ","), "\n")
-#> Total enrollment: 242,777
+#> Total enrollment: 241,574
 cat("Kindergarten is", round(k_pct_of_total, 1), "% of total enrollment\n")
 #> Kindergarten is 6.8 % of total enrollment
 ```

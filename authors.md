@@ -2,7 +2,7 @@
 
 ## Authors
 
-- **Al Martin**. Author, maintainer.
+- **[Andy Martin](https://github.com/almartin82)**. Author, maintainer.
 
 ## Citation
 
@@ -14,7 +14,7 @@ version 0.2.0, <https://almartin82.github.io/wvschooldata>.
 
     @Manual{,
       title = {wvschooldata: West Virginia School Data},
-      author = {Al Martin},
+      author = {Andy Martin},
       year = {2026},
       note = {R package version 0.2.0},
       url = {https://almartin82.github.io/wvschooldata},
